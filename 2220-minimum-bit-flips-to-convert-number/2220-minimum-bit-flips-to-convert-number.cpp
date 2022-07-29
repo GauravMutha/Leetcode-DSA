@@ -1,11 +1,27 @@
 class Solution {
 public:
     int minBitFlips(int start, int goal) {
-        if(start==goal)return 0;
-        int temp=start^goal;
+        //without bit manipulation --> TC=O(n);
+        
         int steps=0;
-        for(int i=0;i<log2(temp)+1;i++){
-            if((temp&(1<<i))!=0)steps++;
+        while(start && goal){
+            if(start%2 != goal%2){
+                steps++;
+            }
+            start/=2;
+            goal/=2;
+        }
+        while(start){
+            if(start%2){
+                steps++;
+            }
+            start/=2;
+        }
+        while(goal){
+            if(goal%2){
+                steps++;
+            }
+            goal/=2;
         }
         return steps;
     }
