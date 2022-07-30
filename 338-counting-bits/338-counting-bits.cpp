@@ -1,16 +1,18 @@
 class Solution {
 public:
     vector<int> countBits(int n) {
+        //TC----->O(n)
+        
         vector<int>ans;
-        for(int i=0;i<=n;i++){
-            int count=0;
-            for(int k=0;(i==0)?k<1:k<(int)log2(i)+1;k++){
-                int helper=1;
-                helper<<=k;
-                if((helper&i)!=0)count++;
-            }
-            ans.push_back(count);
+        
+        ans.push_back(0);
+        if(n<1)return ans;
+        
+        for(int i=1;i<=n;i++){
+            if(i%2==0)ans.push_back(ans[i/2]);
+            else ans.push_back(ans[i/2]+1);
         }
+        
         return ans;
     }
 };
