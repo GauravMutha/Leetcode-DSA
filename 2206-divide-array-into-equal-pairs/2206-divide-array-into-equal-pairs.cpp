@@ -2,16 +2,16 @@ class Solution {
 public:
     bool divideArray(vector<int>& nums) {
         //TC--->O(nlogn)
-        sort(nums.begin(),nums.end());
+        unordered_map<int,int> m;
         
-        for(int i=0;i<nums.size()-1;){
-            if(nums[i]==nums[i+1])
-                i+=2;
-            else
-                return false;
+        for(int i=0;i<nums.size();i++){
+            m[nums[i]]++;
+        }
+        
+        for(auto it:m){
+            if(it.second%2!=0)return false;
         }
         
         return true;
-        
     }
 };
