@@ -1,12 +1,7 @@
 class Solution {
 public:
     int findComplement(int num) {
-        for(int i=0;i<log2(num)+1;i++){
-            int helper=1;
-            helper<<=i;
-            if(helper&num){num&=~(1<<i);}
-            else{num|=helper;}
-        }
-        return num;
+        int helper=pow(2,(int)(log2(num)+1))-1;
+        return num^helper;
     }
 };
