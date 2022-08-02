@@ -1,18 +1,28 @@
 class Solution {
 public:
     char findTheDifference(string s, string t) {
-        int helper[26]={0},ans=0;
+        int num=0;
+        
         for(int i=0;i<s.length();i++){
-            helper[(s[i]-97)]++;
-        }
-        for(int i=0;i<t.length();i++){
-            helper[(t[i]-97)]--;
-        }
-        for(ans=0;ans<26;ans++){
-            if(helper[ans]!=0){
-                break;
+            int helper=1;
+            helper<<=s[i]-97;
+            if(helper&num){
+                num&=~(1<<(s[i]-97));
+            }
+            else{
+                num|=helper;
             }
         }
-        return (char)(ans+97);
+         for(int i=0;i<t.length();i++){
+            int helper=1;
+            helper<<=t[i]-97;
+            if(helper&num){
+                num&=~(1<<(t[i]-97));
+            }
+            else{
+                num|=helper;
+            }
+        }
+        return (char)((int)log2(num)+97);
     }
 };
