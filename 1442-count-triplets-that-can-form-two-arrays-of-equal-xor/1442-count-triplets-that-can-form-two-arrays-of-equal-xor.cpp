@@ -1,17 +1,14 @@
 class Solution {
 public:
     int countTriplets(vector<int>& arr) {
-        //TC --->O(n^2) SC--->O(n)
-        //This method uses prefix array/vector to store and access xor of subarray pairs
+        //TC --->O(n^2) SC--->O(1)
+        //This method DO NOT use prefix array/vector ,instead it does "on the spot" xor calculation
         int n=arr.size(),count=0;
-        vector<int>prexor(n);
-        prexor[0]=arr[0];
-        for(int i=1;i<n;i++){
-            prexor[i]=prexor[i-1]^arr[i];
-        }
         for(int i=0;i<n;i++){
+            int subarrxor=arr[i];
             for(int k=i+1;k<n;k++){
-                if((prexor[k]^prexor[i]^arr[i])==0){count+=(k-i);}
+                subarrxor^=arr[k];
+                if(subarrxor==0)count+=(k-i);
             }
         }
         return count;
