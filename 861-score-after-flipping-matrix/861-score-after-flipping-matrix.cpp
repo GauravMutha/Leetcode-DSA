@@ -2,7 +2,7 @@ class Solution {
 public:
 int matrixScore(vector<vector<int>>& grid) {
     //TC-->O(m*n) SC-->O(n)
-    //Two pass solution
+    //Two pass solution + No need for column toggling thus reducing time
         int m=grid.size();
         int n=grid[0].size();
         vector<int>vect(n,0);
@@ -22,18 +22,10 @@ int matrixScore(vector<vector<int>>& grid) {
             }
         }
         //column toggle
-        for(int j=0;j<n;j++){
-            if(vect[j]<=(m/2)){
-                for(int i=0;i<m;i++){
-                    grid[i][j]=(!grid[i][j])?1:0;
-                    total+=pow(2,n-j-1)*grid[i][j];
-                }
-            }
-            else{
-                for(int i=0;i<m;i++){
-                    total+=pow(2,n-j-1)*grid[i][j];
-                }
-            }
+        for(int k=0;k<n;k++){
+         if(vect[k]<=(m/2))
+             vect[k]=m-vect[k];
+         total+=pow(2,n-k-1)*vect[k];
         }
         return  total;
     }
