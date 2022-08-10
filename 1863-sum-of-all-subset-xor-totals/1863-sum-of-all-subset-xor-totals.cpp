@@ -1,35 +1,34 @@
 class Solution {
 public:
     int sum=0;
-    
-    void subsets(int ind,vector<int> arr,int n,vector<int> &ds){
-        int num=0;
-        if(ind==n){
+    int subsetXORSum(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>ds;
+        
+        calc(nums,ds,0);
+        return sum;
+    }
+    void calc(vector<int>&nums,vector<int>&ds,int ind){
+        int x=0;
+        if(ind==nums.size()){
             if(ds.size()==0){
-                return;
+                return; 
             }
             else if(ds.size()==1){
-                num=ds[0];
+                x=ds[0];
             }
             else{
-                num=ds[0];
+                x=ds[0];
                 for(int i=1;i<ds.size();i++){
-                    num=ds[i]^num;
+                    x^=ds[i];
                 }
             }
-            sum+=num;
+            sum+=x;
             return;
         }
-    ds.push_back(arr[ind]);
-    (subsets(ind+1,arr,n,ds));
-    ds.pop_back();
-    (subsets(ind+1,arr,n,ds)); 
-}
-    int subsetXORSum(vector<int>& nums) {
-        vector <int> ds;
-        int n=nums.size();
-        subsets(0,nums,n,ds);
-       return sum;
+        ds.push_back(nums[ind]);
+        calc(nums,ds,ind+1);
+        ds.pop_back();
+        calc(nums,ds,ind+1);    
     }
-
 };
