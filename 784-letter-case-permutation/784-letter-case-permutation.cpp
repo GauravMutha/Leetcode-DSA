@@ -1,23 +1,23 @@
 class Solution {
 public:
-vector<string> letterCasePermutation(string s) {
-        string temp;
-        vector<string>ans; vector<int>helper;
-       for(int i=0;i<s.size();i++){
-           int x=s[i];
-           if((x>96&&x<123) || (x>64&&x<91)){
-            temp+=s[i];
-            helper.push_back(i);
-           }
-       }
-        for(int num=0;num<pow(2,temp.size());num++){
-            string temp2=temp; string result=s;;
-            for(int i=0;i<temp.size();i++){
-                if(num&(1<<i)){result[helper[i]]=char(toupper(temp[i]));}
-                else{result[helper[i]]=char(tolower(temp[i]));}
-            }
-            ans.push_back(result);
-        }
-        return ans;
+
+vector<string> letterCasePermutation(string s){
+    vector<string>x;
+    backtrack(s,0,x);
+    return x;
+}
+
+void backtrack(string &s,int i,vector<string>&ans){
+    if(i==s.size()){
+        ans.push_back(s);
+        return;
     }
+    char c=s[i];
+    s[i]=(isupper(c))?tolower(c):toupper(c);
+    backtrack(s,i+1,ans);
+    if(isalpha(c)){
+        s[i]=c;
+        backtrack(s,i+1,ans);
+    }
+}
 };
