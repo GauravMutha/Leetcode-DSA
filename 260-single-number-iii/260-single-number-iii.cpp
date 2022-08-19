@@ -1,18 +1,20 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-        unordered_map<int,int>m;
-        vector<int>ans;
-        for(int i=0;i<nums.size();i++){
-            m[nums[i]]++;
+        vector<int>res(2,0);
+        long int diff=0;
+        for(auto ele:nums){
+            diff^=ele;
         }
-        unordered_map<int, int>::iterator itr;
-        for(itr=m.begin();itr!=m.end();itr++){
-            if((itr->second)==1)ans.push_back(itr->first);
+        diff &= -(diff);
+        
+        for(auto ele:nums){
+            if((diff&ele)>0)res[0]^=ele;
+            else res[1]^=ele;
         }
-        return ans;
+        return res;
     }
 };
 
 //TC--->O(n)
-//SC--->O(n)
+//SC--->O(1)
