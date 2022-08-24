@@ -14,25 +14,14 @@ public:
         for(int i=0;i<words.size();i++)
             dp[i]=hash(words[i]);
         for(int i=0;i<words.size();i++){
-            for(int j=0;j<words.size();j++){
+            for(int j=i+1;j<words.size();j++){
                 val1=dp[i];
                 val2=dp[j];
-                if(!common(val1,val2)){
-                    prod=(words[i].length())*(words[j].length());
-                    maxlen=max(maxlen,prod);
+                if((val1&val2)==0 && words[i].length()*words[j].length()>maxlen){
+                    maxlen=words[i].length()*words[j].length();
                 }
             }
         }
         return maxlen;
-    }
-    
-    bool common(int a , int b){
-        for(int i=0;i<26;i++){
-            int mask=1<<i;
-            if((mask&a)==(mask&b)){
-                if((mask&a)!=0)return true;
-            }
-        }
-        return false;    
     }
 };
