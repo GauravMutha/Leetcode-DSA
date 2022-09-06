@@ -23,6 +23,6 @@ public:
             flag1=back(str,n,ind+1,nums);
         }
         
-        return (flag0 & flag1);
+        return (flag0);
     }
 };
