@@ -1,18 +1,18 @@
 class Solution {
 public:
     string getHappyString(int n, int k) {
-        vector<string>res;
+        string res;
         string temp="";
         generate(res,temp,n,k);
         
-        return (res.size()==k)?res.back():"";
+        return res;
     }
     
-    void generate(vector<string>& res,string& curr,int n,int k){
+    void generate(string& res,string& curr,int n,int& k){
         static vector<char>vect={'a','b','c'};
-        if(res.size()==k)return;
-        if(curr.size()==n){
-            res.push_back(curr);
+        
+        if((curr.size()==n) || res.size()){
+            if(--k==0)res=curr;
             return;
         }
         for(int i=0;i<vect.size();i++){
