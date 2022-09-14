@@ -16,7 +16,9 @@ public:
             return;
         }
         
-        for(int i=start;i<=9;i++){
+        if(ds.size()>k)return;
+        
+        for(int i=start;i<=end;i++){
             ds.push_back(i);
             comsum3(res,k,n-i,i+1,end);
             ds.pop_back();
