@@ -9,7 +9,7 @@ public:
         return ans;
     }
     
-    void solve(int len,int &k,int num,int digit){
+    void solve(int len,int k,int num,int digit){
         if(len==0){
             ans.push_back(num);
             return;
