@@ -1,24 +1,29 @@
 class Solution {
 public:
+    vector<vector<int>>ans;
+    map<int,int>m;
+    
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        vector<vector<int>> ans;
-        perm(0,nums,ans);
+        vector<int>ds;
+        for(auto elem:nums)
+            m[elem]++;
+        permute(ds,nums.size());
         
         return ans;
     }
     
-    void perm(int index,vector<int>nums,vector<vector<int>>& ans){
-        
-        if(index==nums.size()){
-            return ans.push_back(nums);
+    void permute(vector<int>ds,int index){
+        if(index<=0){
+            ans.push_back(ds);
+            return;
         }
-        unordered_set<int>s;
-        for(int i=index;i<nums.size();i++){
-            if(s.find(nums[i])!=s.end())continue;
-            s.insert(nums[i]);
-            swap(nums[index],nums[i]);
-            perm(index+1,nums,ans);
-            swap(nums[index],nums[i]);
+        for(auto &[key,value]:m){
+            if(value<=0)continue;
+            ds.push_back(key);
+            value--;
+            permute(ds,index-1);
+            ds.pop_back();
+            value++;
         }
     }
 };
