@@ -18,7 +18,7 @@ public:
         }
         for(int i=0;i<freq.size();i++){
             if(freq[i])continue;
-            if(i>0 && nums[i]==nums[i-1] && !freq[i-1])continue;
+            if(i>0 && nums[i]==nums[i-1] && freq[i-1])continue;
             freq[i]=1;
             ds.push_back(nums[i]);
             
