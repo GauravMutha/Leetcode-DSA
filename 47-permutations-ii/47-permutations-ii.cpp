@@ -1,29 +1,31 @@
 class Solution {
 public:
     vector<vector<int>>ans;
-    map<int,int>m;
     
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        vector<int>ds;
-        for(auto elem:nums)
-            m[elem]++;
-        permute(ds,nums.size());
+        vector<int>ds; 
+        vector<int>freq(nums.size(),0);
+        sort(nums.begin(),nums.end());
+        permute(ds,nums,freq);
         
         return ans;
     }
     
-    void permute(vector<int>ds,int index){
-        if(index<=0){
+    void permute(vector<int>& ds,vector<int>& nums,vector<int>& freq){
+        if(ds.size()==nums.size()){
             ans.push_back(ds);
             return;
         }
-        for(auto &[key,value]:m){
-            if(value<=0)continue;
-            ds.push_back(key);
-            value--;
-            permute(ds,index-1);
+        for(int i=0;i<freq.size();i++){
+            if(freq[i])continue;
+            if(i>0 && nums[i]==nums[i-1] && !freq[i-1])continue;
+            freq[i]=1;
+            ds.push_back(nums[i]);
+            
+            permute(ds,nums,freq);
+            
             ds.pop_back();
-            value++;
+            freq[i]=0;
         }
     }
 };
