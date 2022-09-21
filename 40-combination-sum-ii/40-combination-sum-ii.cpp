@@ -18,7 +18,7 @@ public:
         if(target<0)
             return;
         
-       for(int i=start;i<candidates.size();i++){
+       for(int i=start;i<candidates.size() && target>=candidates[i];i++){
            if(i>start && candidates[i]==candidates[i-1])continue;
            ds.push_back(candidates[i]);
            comsum2(candidates,ds,target-candidates[i],i+1);
