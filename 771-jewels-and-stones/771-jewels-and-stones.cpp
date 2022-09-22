@@ -2,20 +2,12 @@ class Solution {
 public:
     int numJewelsInStones(string jewels, string stones) {
         int res=0;
-        
-        vector<int>alph(52,0);
-        
-        for(auto c:jewels)
-            (c<=90)?alph[c-65]++:alph[c-71]++;
+        unordered_set<char>uset(jewels.begin(),jewels.end());
         
         for(auto c:stones){
-            if(c<=90){
-                if(alph[c-65])res++;
-            }
-            else{
-                if(alph[c-71])res++;
-            }
+            if(uset.count(c))res++;
         }
+        
         return res;
     }
 };
