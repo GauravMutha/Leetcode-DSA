@@ -4,12 +4,8 @@ public:
         vector<string>res;
         string str="";
         for(char j=s[0];j<=s[3];j++)
-            for(char i=s[1];i<=s[4];i++){
-                str.push_back(j);
-                str.push_back(i);
-                res.push_back(str);
-                str="";
-            }
+            for(char i=s[1];i<=s[4];i++)
+                res.push_back(string(1, j) + i);
         return res;
     }
 };
