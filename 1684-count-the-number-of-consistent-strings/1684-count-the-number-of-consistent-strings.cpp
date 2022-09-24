@@ -1,7 +1,7 @@
 class Solution {
 public:
     int countConsistentStrings(string allowed, vector<string>& words) {
-        int inConsistent=0,hash=0;
+        int inConsistent=0,hash=0,n=words.size();
         
         for(auto c:allowed)
             hash|=(1<<(c-'a'));
@@ -9,10 +9,10 @@ public:
         for(auto w:words)
             for(auto c:w)
                 if(!(hash&(1<<(c-'a')))){
-                    inConsistent++;
+                    n--;
                     break;
                 }
         
-        return (words.size()-inConsistent);
+        return n;
     }
 };
