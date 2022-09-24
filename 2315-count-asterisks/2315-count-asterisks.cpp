@@ -7,7 +7,7 @@ public:
             if(barCount==0 && s[i]=='*')res++;
             else{
                 if(s[i]=='|')barCount++;
-                if(barCount==2)barCount=0;
+                barCount%=2;
             }
         }
         return res;
