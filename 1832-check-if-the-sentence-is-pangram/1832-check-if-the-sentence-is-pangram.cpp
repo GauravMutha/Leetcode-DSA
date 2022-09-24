@@ -1,12 +1,13 @@
 class Solution {
 public:
     bool checkIfPangram(string sentence) {
-        int h=0;
+        set<char>s;
         
         for(auto c:sentence){
-            h|=1<<(c-'a');
-            if(h==67108863) return true;
+            s.insert(c);
+            if(s.size()==26) return true;
         }
+        
         return false;
     }
 };
