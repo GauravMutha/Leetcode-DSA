@@ -1,16 +1,10 @@
 class Solution {
 public:
     string truncateSentence(string s, int k) {
-        string res;
-        int wc=0;
-        for(auto c:s){
-            if(c==32)
-                wc++;
-            if(wc==k)
-                break;
-            res+=c;
-        }
-        
-        return res;
+         for(int i=0;i<s.size();i++){
+             if(s[i]==' ') k--;
+             if(!k) return s.substr(0,i);
+         }
+        return s;
     }
 };
