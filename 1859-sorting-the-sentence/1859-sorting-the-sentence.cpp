@@ -1,8 +1,7 @@
 class Solution {
 public:
     string sortSentence(string s) {
-        int wc=count(s.begin(),s.end(),' ');
-        vector<string>vec(wc+1);
+        vector<string>vec(9);
         string res,temp;
         
         for(int i=0;i<s.size();i++){
