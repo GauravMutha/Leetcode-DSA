@@ -1,14 +1,13 @@
 class Solution {
 public:
     int countMatches(vector<vector<string>>& items, string ruleKey, string ruleValue) {
-        int j=0,count=0;
+        int count=0;
         
-        if(ruleKey[0]=='t') j=0;
-        else if(ruleKey[0]=='c') j=1;
-        else j=2;
-        
-        for(auto vec:items)
-            if(vec[j]==ruleValue)count++;
+        for(int i=0;i<items.size();i++){
+            if(ruleKey[0]=='t' && items[i][0]==ruleValue) count++;
+            else if(ruleKey[0]=='c' && items[i][1]==ruleValue) count++;
+            else if(ruleKey[0]=='n' && items[i][2]==ruleValue) count++;
+        }
         
         return count;
     }
