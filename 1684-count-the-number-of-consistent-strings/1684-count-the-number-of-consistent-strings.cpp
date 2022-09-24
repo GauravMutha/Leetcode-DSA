@@ -1,15 +1,14 @@
 class Solution {
 public:
     int countConsistentStrings(string allowed, vector<string>& words) {
-        int inConsistent=0;
+        int inConsistent=0,hash=0;
         
-        vector<int>vec(26,0);
         for(auto c:allowed)
-            vec[c-'a']++;
+            hash|=(1<<(c-'a'));
         
         for(auto w:words)
             for(auto c:w)
-                if(!vec[c-'a']){
+                if(!(hash&(1<<(c-'a')))){
                     inConsistent++;
                     break;
                 }
