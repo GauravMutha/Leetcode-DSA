@@ -4,11 +4,8 @@ public:
         int barCount=0,res=0;
         
         for(int i=0;i<s.size();i++){
-            if(barCount==0 && s[i]=='*')res++;
-            else{
-                if(s[i]=='|')barCount++;
-                barCount%=2;
-            }
+            if(barCount%2==0 && s[i]=='*')res++;
+            if(s[i]=='|')barCount++;
         }
         return res;
     }
