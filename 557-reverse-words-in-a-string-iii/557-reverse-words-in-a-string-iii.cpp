@@ -1,18 +1,13 @@
 class Solution {
 public:
     string reverseWords(string s) {
-        int l=0,r=0;
-        s.push_back(' ');
-        for(int i=0;i<=s.size();i++){
-            if(s[i]!=32)continue;
-            r=i-1;
-            while(l<r){
-                swap(s[l],s[r]);
-                l++ , r--;
-            }
-            l=i+1;
+        int l=0;
+        for(int r=0;r<s.size();r++){
+            if(s[r]!=32)continue;
+            reverse(s.begin()+l,s.begin()+r);
+            l=r+1;
         }
-        s.pop_back();
+        reverse(s.begin()+l,s.end());
         return s;
     }
 };
