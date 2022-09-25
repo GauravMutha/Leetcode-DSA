@@ -1,15 +1,18 @@
 class Solution {
 public:
     string mergeAlternately(string word1, string word2) {
-        int i=0;
-        string res;
+        int i=0,j=0,sz1=word1.size(),sz2=word2.size();
+        string res(sz1+sz2,' ');
         
-        while((i<word1.size()) && (i<word2.size()))
-            res+= string() + word1[i] + word2[i++];
+        while(i<sz1 || j<sz2){
+            if(i<sz1)
+                res[j+ i++]=word1[i];
+            if(j<sz2)
+                res[i + j++]=word2[j];
+        }
         
-        return res+ word1.substr(i) + word2.substr(i);
+        return res;
     }
 };
 
-//Less Cluttery code which iterates i , j altogether 
-//and also using substr method to merge remaining characters,if any.
+//Single Pass --- Two Pointers + No temporary strings formed for res
