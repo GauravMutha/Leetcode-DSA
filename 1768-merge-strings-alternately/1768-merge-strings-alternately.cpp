@@ -7,13 +7,9 @@ public:
         while((i<word1.size()) && (j<word2.size()))
             res+= string() + word1[i++] + word2[j++];
         
-        for(;i<word1.size();i++)
-            res.push_back(word1[i]);
-        for(;j<word2.size();j++)
-            res.push_back(word2[j]);
-        
-        return res;
+        return res+ word1.substr(i) + word2.substr(j);
     }
 };
 
 //Less Cluttery code which iterates i , j altogether 
+//and also using substr method to merge remaining characters,if any.
