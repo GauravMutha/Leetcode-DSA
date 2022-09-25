@@ -2,7 +2,7 @@ class Solution {
 public:
     bool judgeCircle(string moves) {
         int y=0,x=0;
-        
+        if(moves.size()%2!=0) return false;
         for(int i=0;i<moves.size();i++){
             if(moves[i]=='U') y++;
             
