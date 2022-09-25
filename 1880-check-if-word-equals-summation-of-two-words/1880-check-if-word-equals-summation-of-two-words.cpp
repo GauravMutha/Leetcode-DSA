@@ -1,17 +1,16 @@
 class Solution {
 public:
     bool isSumEqual(string firstWord, string secondWord, string targetWord) {
-        int num1=0,num2=0,num3=0,sz1=firstWord.size(),sz2=secondWord.size(),sz3=targetWord.size();
-        
-        for(int i=0,j=0,k=0; i<sz1 || j<sz2 || k<sz3 ;){
-            if(i<sz1)
-                num1+=(firstWord[i]-'a')*pow(10,sz1-1-i++);
-            if(j<sz2)
-                num2+=(secondWord[j]-'a')*pow(10,sz2-1-j++);
-            if(k<sz3)
-                num3+=(targetWord[k]-'a')*pow(10,sz3-1-k++);
+       int m=max(firstWord.size(),max(secondWord.size(),targetWord.size()));
+        int a=0,b=0,c=0,i=0;
+        while(m)
+        {
+            if(i<firstWord.size())a=a*10+(firstWord[i]-97);
+            if(i<secondWord.size())b=b*10+(secondWord[i]-97);
+            if(i<targetWord.size())c=c*10+(targetWord[i]-97);
+            m--;i++;
         }
-        
-        return (num1+num2)==num3;
+      
+        return ((a+b)==c);
     }
 };
