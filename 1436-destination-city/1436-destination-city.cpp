@@ -1,14 +1,15 @@
 class Solution {
 public:
     string destCity(vector<vector<string>>& paths) {
-        unordered_set<string> uset;
+        map<string,int>map;
         
-        for(auto &start : paths){
-            uset.insert(start[0]);
+        for(auto &vec : paths){
+            map[vec[0]]+=1;
+            map[vec[1]]+=0;
         }
         
-        for(auto &end:paths){
-            if(!uset.count(end[1])) return end[1]; 
+        for(auto &[k,v] : map){
+            if(v==0) return k;
         }
         
         return "";
