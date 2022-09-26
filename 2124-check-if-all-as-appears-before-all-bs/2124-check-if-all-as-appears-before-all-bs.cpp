@@ -1,8 +1,9 @@
 class Solution {
 public:
     bool checkString(string s) {
-        string temp=s;
-        sort(s.begin(),s.end());
-        return (temp == s);
+        for(int i=0;i<s.size()-1;i++)
+            if(s[i]=='b' && s[i+1]=='a') return false;
+        
+        return true;
     }
 };
