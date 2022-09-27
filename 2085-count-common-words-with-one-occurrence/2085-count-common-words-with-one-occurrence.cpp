@@ -1,20 +1,21 @@
 class Solution {
 public:
     int countWords(vector<string>& words1, vector<string>& words2) {
-        int sz1=words1.size(), sz2=words2.size(),count=0;
-        unordered_map<string,int>m1,m2;
+        int count=0;
+        unordered_map<string,int>m1;
         
-        for(int i=0;i<max(sz1,sz2);i++){
-            if(i<sz1)
-                m1[words1[i]]++;
-            if(i<sz2)
-                m2[words2[i]]++;
-        }
+        for(auto w1 : words1)
+            m1[w1]++;
         
-        for(auto &[key,value] : m1)
-            if(value==1 && m2[key]==1) count++;
+        for(auto w2 : words2)
+            if(m1[w2] <2) m1[w2]--;
         
-         return count;
+        for(auto it1=m1.begin();it1!=m1.end();it1++)
+            if((it1->second)==0) count++;
+        
+        return count;
         
     }
 };
+
+//using only one map
