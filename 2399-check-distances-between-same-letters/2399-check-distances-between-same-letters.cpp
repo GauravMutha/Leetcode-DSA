@@ -1,16 +1,18 @@
 class Solution {
 public:
     bool checkDistances(string s, vector<int>& distance) {
-        unordered_map<int,int> m;
-        
+        int d=0;
         for(int i=0;i<s.size();i++){
-            if(m[s[i]]==0) m[s[i]]=i+1;
-            else
-                if(distance[s[i]-'a'] != (i-m[s[i]])) return false;
+            d=distance[s[i]-'a'];
+            
+            if( (i+d+1 > s.size()) || (s[i+d+1] != s[i]) )
+                return false;
+            
+            distance[s[i]-'a']=-1;
         }
         
         return true;
     }
 };
 
-//Using hash map insted of a hash table
+//Reduces Space complexity from O(N) to O(!)
