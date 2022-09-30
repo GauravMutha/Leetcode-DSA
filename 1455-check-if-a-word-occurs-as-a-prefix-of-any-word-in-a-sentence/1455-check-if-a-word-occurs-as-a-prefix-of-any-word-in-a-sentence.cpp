@@ -1,15 +1,20 @@
 class Solution {
 public:
     int isPrefixOfWord(string sentence, string searchWord) {
-        sentence=" " + sentence;
-        int ptr,count=0;
-        for(int i=1;i<sentence.size();i++){
-            if((sentence[i-1]==' ') && ((i+searchWord.size()-1)<sentence.size())){
-                ptr=i , count++;
-                string res=sentence.substr(ptr,searchWord.size());
+        sentence=" "+sentence;
+        string res="";
+        int i=1,r=0,count=0;
+        while(i<sentence.size()){
+            r=i,count++, res="";
+            while((sentence[r]!=' ') && (r<sentence.size())){
+                res+=sentence[r];
+                r++;
                 if(res==searchWord) return count;
             }
+            if(r==sentence.size()) break;
+            if(sentence[r]==' ') i=r+1;
         }
+        
         return -1;
     }
 };
