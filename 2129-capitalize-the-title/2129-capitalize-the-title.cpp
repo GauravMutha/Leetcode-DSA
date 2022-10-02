@@ -3,17 +3,14 @@ public:
     string capitalizeTitle(string title) {
         int l=0,r=0,n=title.size();
         while(r<=n){
-            if((title[r]==' ') || (r==n)){
-                if(r-l>2) title[l]=toupper(title[l]);
-                r++;
-                l=r;
-            }
-            else{
-                title[r]=tolower(title[r]);
-                r++;
-            }
+            l=r;
+            while(r<n && title[r]!=32)
+                title[r]=tolower(title[r]) ,r++;
+            if(r-l>2) 
+                title[l]=toupper(title[l]);
+            r++;
         }
-        
         return title;
     }
+        
 };
