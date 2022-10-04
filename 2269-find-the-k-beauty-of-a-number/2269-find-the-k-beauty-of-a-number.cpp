@@ -1,12 +1,17 @@
 class Solution {
 public:
     int divisorSubstrings(int num, int k) {
-        string test=to_string(num);
-        int count=0;       
-        for(int i=0;i<test.size()-k+1;i++){
-            int val = stoi(test.substr(i,k));
-            if(val) count+=(num%val==0);            
+        int curr=0,pow=1,res=0;
+        
+        for(int n=num;n>0;n/=10){
+            curr+=(n%10)*pow;
+            if(--k>0)
+                pow*=10;
+            else{
+                res+=(curr && (num%curr==0));
+                curr/=10;
+            }
         }
-        return count;
+        return res;
     }
 };
