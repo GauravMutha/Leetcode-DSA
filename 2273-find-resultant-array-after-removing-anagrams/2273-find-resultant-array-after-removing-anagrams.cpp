@@ -1,26 +1,22 @@
 class Solution {
 public:
     vector<string> removeAnagrams(vector<string>& words) {
-        unordered_map<char,int>m1,m2;
-        vector<string>res;
+        vector<string>ans;
         int l=0,r=1;
-        for(auto c:words[0])
-            m1[c]++;
+        string templ=words[0],tempr;
+        sort(begin(templ),end(templ));
         while(r<words.size()){
-            for(auto c:words[r])
-                m2[c]++;
-            if(m1==m2){
-                r++;
-            }
-            else {
-                res.push_back(words[l]);
-                m1=m2;
+            tempr=words[r];
+            sort(begin(tempr),end(tempr));
+            
+            if(templ!=tempr){
+                ans.push_back(words[l]);
                 l=r;
-                r++;
+                templ=tempr;
             }
-            m2.clear();
+            r++;
         }
-        res.push_back(words[l]);
-        return res;
+        ans.push_back(words[l]);
+        return ans;
     }
 };
