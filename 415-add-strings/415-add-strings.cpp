@@ -8,10 +8,10 @@ public:
             val=0,sum=0;
             if(i>=0) val+=num1[i--]-'0';
             if(j>=0) val+=num2[j--]-'0';
-            sum=(val+carry)%10;
+            res.push_back((val+carry)%10 +'0');
             carry=(val+carry)/10;
-            res=to_string(sum)+res;
         }
+        reverse(begin(res),end(res));
         return res;
     }
 };
