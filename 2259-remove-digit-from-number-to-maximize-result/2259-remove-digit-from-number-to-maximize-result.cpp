@@ -1,15 +1,15 @@
 class Solution {
 public:
-    string removeDigit(string number, char digit) {
-        vector<int>hash;
-        int j=0;
-        for(int i=0;i<number.size();i++)
-            if(number[i]==digit) hash.push_back(i);
+    string removeDigit(string n, char d) {
+        int last=-1;
         
-        for(j=0;j<hash.size()-1;j++)
-            if(number[hash[j]+1]>number[hash[j]]) return number.substr(0,hash[j])+number.substr(hash[j]+1);
+        for(int i=0;i<n.size();i++){
+            if(n[i]==d){
+                last=i;
+                if(i<n.size()-1 && n[i+1]>d) return n.substr(0,i)+n.substr(i+1);
+            }
+        }
         
-        return number.substr(0,hash.back()) + number.substr(hash.back()+1);
-    
+        return (n.substr(0,last)+n.substr(last+1));
     }
 };
