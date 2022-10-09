@@ -1,12 +1,12 @@
 class Solution {
 public:
     int maxRepeating(string sequence, string word) {
-        int times=100/word.size(),i=1;
-        string res;
-        for(;i<=times;i++){
-            res+=word;
-            if(sequence.find(res)==-1) break;
+        int count=0;
+        string temp=word;
+        while(sequence.find(temp)!=string::npos){
+            count++;
+            temp+=word;
         }
-        return i-1;
+        return count;
     }
 };
