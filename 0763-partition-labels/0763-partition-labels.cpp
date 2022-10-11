@@ -14,8 +14,7 @@ public:
                 res.push_back(r-l+1);
                 l=i+1;
                 r=m[s[l]];
-            } 
-            else if(m[s[i]]<r) continue;
+            }
             else if(m[s[i]]>r){
                 r=m[s[i]];
             }
