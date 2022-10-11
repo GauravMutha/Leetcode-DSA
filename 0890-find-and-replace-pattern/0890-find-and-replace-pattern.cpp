@@ -2,25 +2,27 @@ class Solution {
 public:
     vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
         vector<string>res;
-        unordered_map<char,char>ms,mp;
+        unordered_map<char,char>m;
         bool flag=true;
         for(auto str : words){
+            vector<bool>visited(26,false);
             flag=true;
             for(int i=0;i<str.size();i++){
-                if(ms.count(str[i]) && ms[str[i]]!=pattern[i] ||
-                  mp.count(pattern[i]) && mp[pattern[i]]!=str[i]){
+                if((m.count(str[i]) && (m[str[i]]!=pattern[i])) ||
+                   ((m.count(str[i])==0) && visited[pattern[i]-'a']) ){
                     flag=false;
                     break;
                 }
-                ms[str[i]]=pattern[i];
-                mp[pattern[i]]=str[i];
+                else{
+                    m[str[i]]=pattern[i];
+                    visited[pattern[i]-'a']=true;
+                }
             }
             if(flag) res.push_back(str);
-            ms.clear() , mp.clear();
+            m.clear();
         }
         return res;
     }
 };
 
-//Former solution was mapping each char of two string to same integer value
-//this solution does the mapping too but char to char.
+//Uses 1 map and one boolean array array insted of 2 maps
