@@ -1,28 +1,23 @@
 class Solution {
 public:
+    string normalise(string str){
+        vector<char>mp(26);
+        char alphabet='a';
+        for(auto c :str)
+            if(!mp[c-'a']) mp[c-'a']=alphabet++;
+        for(auto &c : str)
+            c=mp[c-'a'];
+        
+        return str;
+    }
+    
     vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
         vector<string>res;
-        unordered_map<char,char>m;
-        bool flag=true;
-        for(auto str : words){
-            vector<bool>visited(26,false);
-            flag=true;
-            for(int i=0;i<str.size();i++){
-                if((m.count(str[i]) && (m[str[i]]!=pattern[i])) ||
-                   ((m.count(str[i])==0) && visited[pattern[i]-'a']) ){
-                    flag=false;
-                    break;
-                }
-                else{
-                    m[str[i]]=pattern[i];
-                    visited[pattern[i]-'a']=true;
-                }
-            }
-            if(flag) res.push_back(str);
-            m.clear();
-        }
+        pattern=normalise(pattern);
+        for(auto str : words)
+            if(normalise(str)==pattern) res.push_back(str);
         return res;
     }
 };
-
-//Uses 1 map and one boolean array array insted of 2 maps
+//Normalisation method
+//Uses 1 hash array of size 26
