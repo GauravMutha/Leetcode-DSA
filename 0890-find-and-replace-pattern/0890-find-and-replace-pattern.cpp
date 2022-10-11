@@ -2,20 +2,25 @@ class Solution {
 public:
     vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
         vector<string>res;
-        unordered_map<char,int>m1,m2;
+        unordered_map<char,char>ms,mp;
         bool flag=true;
         for(auto str : words){
             flag=true;
             for(int i=0;i<str.size();i++){
-                if(m1[str[i]]!=m2[pattern[i]]) {
+                if(ms.count(str[i]) && ms[str[i]]!=pattern[i] ||
+                  mp.count(pattern[i]) && mp[pattern[i]]!=str[i]){
                     flag=false;
                     break;
                 }
-                m1[str[i]]=m2[pattern[i]]=i+1;
+                ms[str[i]]=pattern[i];
+                mp[pattern[i]]=str[i];
             }
             if(flag) res.push_back(str);
-            m1.clear() , m2.clear();
+            ms.clear() , mp.clear();
         }
         return res;
     }
 };
+
+//Former solution was mapping each char of two string to same integer value
+//this solution does the mapping too but char to char.
