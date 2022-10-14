@@ -19,13 +19,10 @@ public:
         int count=0,n=num.size(),l,r;
         string source=num;
         while(k--){
-            for(l=n-2;l>=0;l--)
-                if(num[l]<num[l+1]) break;
-            for(r=n-1;r>l;r--)
-                if(num[r]>num[l]) break;
-            swap(num[r],num[l]);
-            reverse(num.begin()+l+1,num.end());
+            next_permutation(begin(num),end(num));
         }
         return (minswaps(source,num));
     }
 };
+
+//now using stl function next_permutation
