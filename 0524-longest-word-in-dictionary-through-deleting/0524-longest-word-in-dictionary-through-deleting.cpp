@@ -12,8 +12,7 @@ public:
         string res="";
         for(auto str : dict){
             if(subset(str,s)){
-                if(str.size() > res.size()) res=str;
-                if(str.size()==res.size() && str.compare(res)<0) res=str;
+                if(str.size() > res.size() || (str.size()==res.size() && str<res)) res=str;
             }
         }
         return res;
