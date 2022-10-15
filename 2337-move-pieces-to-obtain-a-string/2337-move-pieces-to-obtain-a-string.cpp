@@ -1,35 +1,18 @@
 class Solution {
 public:
     bool canChange(string s, string t) {
-        int n=t.size(),i=0,j=0;
-        string a,b;
-        vector<int>ls,lt,rs,rt;
-        for(int i=0;i<n;i++){
-            if(s[i]!='_') a+=s[i];
-            if(t[i]!='_') b+=t[i];
-        }
-        if(a!=b) return false;
+        int i=0,j=0,n=t.size();
         
-        for(int i=0;i<n;i++){
-            if(s[i]=='L') ls.push_back(i);
-            if(t[i]=='L') lt.push_back(i);
-            if(s[i]=='R') rs.push_back(i);
-            if(t[i]=='R') rt.push_back(i);
+        for(;i<n || j<n; i++,j++){
+            while(i<n && s[i]=='_') i++;
+            while(j<n && t[j]=='_') j++;
+            
+            if(i==n || j==n || s[i]!=t[j] || (s[i]=='L' && i<j) || (s[i]=='R' && i>j))
+                break;
         }
         
-        for(int i=0;i<ls.size();i++) if(ls[i]<lt[i]) return false;
-        for(int i=0;i<rs.size();i++) if(rs[i]>rt[i]) return false;
-        
-        return true;
+        return (i==n && j==n);
     }
 };
 
-//4 pass solution
-//we will check twi things :
-//a)relative order of R and L are same in both string
-//b)will store vector indices of R and L separately and then check if 
-//if any index of L in s is less than in t and reverse for r , b return false
-
-//if both a and b condition return true then only the answer is true
-
-//TC-->O(n) SC-->O(n)
+//One pass and SC is improved to O(1)
