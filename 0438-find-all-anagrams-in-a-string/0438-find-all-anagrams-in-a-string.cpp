@@ -2,19 +2,18 @@ class Solution {
 public:
     vector<int> findAnagrams(string s, string p) {
         vector<int>res;
-        unordered_map<char,int>m,pmap;
-        for(auto c : p) pmap[c]++;
+        vector<int>m(26,0),pmap(26,0);
+        for(auto c : p) pmap[c-'a']++;
         int k=p.size();
         for(int r=0;r<s.size();r++){
-            m[s[r]]++;
+            m[s[r]-'a']++;
             if(r>=k){
-                m[s[r-k]]--;
-                if(m[s[r-k]]==0) m.erase(s[r-k]);
+                m[s[r-k]-'a']--;
             }
-            if(m==pmap) res.push_back(r-k+1);
+            if(m==pmap && r>=k-1) res.push_back(r-k+1);
         }
         return res;
     }
 };
 
-//using hash table
+//using hash array instead of map
