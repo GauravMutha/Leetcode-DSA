@@ -8,8 +8,7 @@ public:
                 m[s[r]]++;
                 if(r-l+1==minSize){
                     if(m.size()<=maxLetters){
-                        string temp=s.substr(l,minSize);
-                        freq[temp]++;
+                        freq[s.substr(l,minSize)]++;
                     }
                     m[s[l]]--;
                     if(m[s[l]]==0) m.erase(s[l]);
