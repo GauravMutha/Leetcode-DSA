@@ -11,11 +11,10 @@ public:
                 res=max(res,(r-1)-l+1);
                 hash[s[l]-'A']--;
                 l++;
-                maxFreq=*max_element(begin(hash),end(hash)); //*
             }
         }
         return max(res,(r-1)-l+1);
     }
 };
 
-//* It updates the maxFrequency every time the left pointer is shifted
+//* It keeps the maxFrequency unchanged even when left pointer is shifted
