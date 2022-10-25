@@ -11,13 +11,17 @@
 class Solution {
 public:
     int getDecimalValue(ListNode* head) {
-        string temp="";
+        int res=0;
         struct ListNode* q;
         q=head;
         while(q!=NULL){
-            temp+=(q->val==0) ? '0':'1';
+            if(q->val) res|=1;
+            res<<=1;
             q=q->next;
         }
-        return stoi(temp,0,2);
+        res>>=1;
+        return (res);
     }
 };
+
+//Constant space
