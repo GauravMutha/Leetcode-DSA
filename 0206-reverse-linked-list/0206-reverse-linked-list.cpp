@@ -11,20 +11,19 @@
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
-        vector<int>temp;
-        struct ListNode *p;
+        struct ListNode *p,*q{NULL},*r{NULL};
         p=head;
-        while(p){
-            temp.push_back(p->val);
+        
+        while(p!=NULL){
+            r=q;
+            q=p;
             p=p->next;
+            
+            q->next=r;
         }
-        p=head;
-        for(int i=temp.size()-1;i>=0;i--){
-            p->val=temp[i];
-            p=p->next;
-        }
-        return head;
+        head=q;
+        return q;
     }
 };
 
-//Method 1 -- requires space - o(n) and it is two paas solution
+//Method 1 -- constant SC  and it is one pass solution of O(n) TC 
