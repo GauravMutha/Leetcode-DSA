@@ -9,13 +9,9 @@
 class Solution {
 public:
     void deleteNode(ListNode* node) {
-        struct ListNode* i=node , *j=i->next;
-        
-        while(j!=NULL){
-            i->val=j->val;
-            if(j->next==NULL) i->next=NULL;
-            else i=j ;
-             j=j->next;
-        }
+        node->val=node->next->val;
+        node->next=node->next->next;
     }
 };
+
+//TC improved to O(1)
