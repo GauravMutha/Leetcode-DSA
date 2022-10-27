@@ -12,16 +12,15 @@ class Solution {
 public:
     ListNode* mergeNodes(ListNode* head) {
         struct ListNode *j=head,*i=head;
-        while(i!=NULL && i->next!=NULL){
+        while(i!=NULL){
             int sum=0;
             do{
                 sum+=j->val;
                 j=j->next;
             }while(j!=NULL && j->val!=0);
             i->val=sum;
-            if(j->next==NULL) {i->next=NULL ; break;}
-            i->next=j;
-            i=j;
+            i->next=j->next;
+            i=i->next;
         }
         return head;
     }
