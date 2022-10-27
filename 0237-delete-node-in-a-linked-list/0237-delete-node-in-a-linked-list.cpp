@@ -9,9 +9,8 @@
 class Solution {
 public:
     void deleteNode(ListNode* node) {
-        node->val=node->next->val;
-        node->next=node->next->next;
+        *(node)=*(node->next);
     }
 };
 
-//TC improved to O(1)
+//One liner but does not free the memory
