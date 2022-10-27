@@ -9,8 +9,10 @@
 class Solution {
 public:
     void deleteNode(ListNode* node) {
+        struct ListNode *temp=node->next;
         *(node)=*(node->next);
+        delete temp;
     }
 };
 
-//One liner but does not free the memory
+//O(1) TC  and it also frees up the memory
