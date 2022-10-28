@@ -11,10 +11,11 @@
 class Solution {
 public:
     ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
-        struct ListNode *left=list1,*right1=NULL,*right2=list2;
-        for(int i=0;i<a-1;i++) left=left->next;
-        right1=left;
-        for(int i=a-1;i<b;i++) right1=right1->next;
+        struct ListNode *left=list1,*right1=list1,*right2=list2;
+        for(int i=0;i<b;i++){
+            if(i<a-1) left=left->next;
+            right1=right1->next;
+        }
         while(right2 && right2->next) right2=right2->next;
         
         left->next=list2;
@@ -25,4 +26,4 @@ public:
     }
 };
 
-//3 pass solution
+//2 pass solution
