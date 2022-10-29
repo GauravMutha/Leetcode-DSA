@@ -11,16 +11,17 @@
 class Solution {
 public:
     ListNode* deleteMiddle(ListNode* head) {
-        struct ListNode *node=head;
-        int count=0;
-        for(auto p=head;p!=NULL;p=p->next) count++;
-        if(count<2) return NULL;
-        for(int i=0;i<count/2 -1;i++){
-            node=node->next;
+        struct ListNode *fast=head,*slow=head,*s_tail=NULL;
+        if(head->next==NULL) return NULL;
+        while(fast && fast->next){
+            s_tail=slow;
+            slow=slow->next;
+            fast=fast->next;
+            if(fast && fast->next) fast=fast->next;
         }
-        node->next=node->next->next;
+        s_tail->next=slow->next;
         return head;
     }
 };
 
-//2 pass solution
+//1 pass solution
