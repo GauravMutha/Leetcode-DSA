@@ -11,20 +11,19 @@
 class Solution {
 public:
     ListNode* swapNodes(ListNode* head, int k) {
-        struct ListNode *slow=head,*fast=head , *first=NULL,*second=NULL;
-        for(int i=0;i<k-1;i++){ 
-            fast=fast->next;
+        struct ListNode *first=NULL,*second=NULL;
+        for(auto p=head;p!=NULL;p=p->next){
+            if(second!=NULL) second=second=second->next;
+            
+            if(--k==0){
+                first=p;
+                second=head;
+            }
         }
-        first=fast;
-        while(fast->next!=NULL){
-            fast=fast->next;
-            slow=slow->next;
-        }
-        second=slow;
-        swap(second->val,first->val);
+        swap(first->val,second->val);
         return head;
     }
 };
 
 //THE QUESTION SAYS SWAP THE VALUES OF THE NODES AND THE ENTIRE NODE THEMSELVES!
-//2 pass solution OPTIMIZED
+//1 pass solution
