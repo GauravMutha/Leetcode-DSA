@@ -12,18 +12,13 @@ class Solution {
 public:
     ListNode* swapPairs(ListNode* head) {
         if(head==NULL || head->next==NULL) return head;
-        struct ListNode *back=head, *front=head->next,*pre=NULL,*newHead=head->next;
-        while(front && back){
-            back->next=front->next;
-            front->next=back;
-            if(pre!=NULL) pre->next=front;
-            if(back->next==NULL) break;
-            pre=back;
-            back=back->next;
-            front=back->next;
-        }
-        return newHead;
+        struct ListNode *temp;
+        temp=head->next;
+        
+        head->next=swapPairs(head->next->next);
+        temp->next=head;
+        return temp;
     }
 };
 
-//iterative
+//recursive
