@@ -10,18 +10,24 @@ class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
         struct ListNode *a=headA , *b=headB;
-        unordered_map<ListNode* , int>addressMap;
-        while(a!=NULL){
-            addressMap[a]++;
-            a=a->next;
+        int la=0,lb=0,diff=0;
+        while(a) a=a->next , la++;
+        while(b) b=b->next , lb++;
+        if(a!=b) return NULL;
+        a=headA, b=headB;
+        diff=abs(la-lb);
+        if(la>lb){
+            while(diff--)
+                a=a->next;
         }
-        while(b!=NULL){
-            if(addressMap[b]>0) return b;
-            b=b->next;
+        else {
+            while(diff--)
+                b=b->next;
         }
-        return NULL;
+        while(a!=b)
+            a=a->next , b=b->next;
+        return a;
     }
 };
 
-//Previous solution uses no space
-//this one uses O(n) space where n is the number of nodes in LLA or LLB
+//Bit longer but this uses the constant space + O(n) TC
