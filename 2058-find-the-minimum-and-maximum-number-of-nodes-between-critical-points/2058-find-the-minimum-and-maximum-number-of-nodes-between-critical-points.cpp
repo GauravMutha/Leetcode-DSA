@@ -14,7 +14,7 @@ public:
         vector<int>res(2,-1);
         if(head==NULL && head->next==NULL) return res;
         struct ListNode *p=head->next , *q=head;
-        int pre=0,curr=0,c_pts=0,mindist=INT_MAX;
+        int pre=-1,curr=0,c_pts=0,first=0,mindist=INT_MAX;
         
         //maximum distance
         while(p && p->next){
@@ -22,18 +22,8 @@ public:
             if((p->val<q->val && p->val<p->next->val) || 
               ( p->val>q->val && p->val>p->next->val) ){
                 c_pts++;
-                if(c_pts>1) res[1]=curr-pre;
-                else if(c_pts==1) pre=curr;
-            }
-            q=p;
-            p=p->next;
-        }
-        //minimum distance
-        pre=-1,curr=0,p=head->next,q=head;
-        while(p && p->next){
-            curr++;
-            if((p->val<q->val && p->val<p->next->val) || 
-               (p->val>q->val && p->val>p->next->val) ){
+                if(c_pts>1) res[1]=curr-first;
+                else if(c_pts==1) first=curr;
                 if(pre!=-1) mindist=min(mindist,curr-pre);
                 pre=curr;
             }
