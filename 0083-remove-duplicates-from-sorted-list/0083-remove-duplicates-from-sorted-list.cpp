@@ -11,12 +11,13 @@
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        struct ListNode *p=head,*q=head;
+        struct ListNode *p=head;
         while(p){
-            while(p && p->val==q->val) p=p->next;
-            q->next=p;
-            q=p;
+            while(p->next && p->val==p->next->val) p->next=p->next->next;
+            p=p->next;
         }
         return head;
     }
 };
+
+//single pointer
