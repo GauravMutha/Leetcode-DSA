@@ -9,18 +9,16 @@
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        unordered_map<ListNode* , int>addressMap;
-        int prevSize=0;
-        struct ListNode* p=head;
-        while(p){
-            prevSize=addressMap.size();
-            addressMap[p]++;
-            if(prevSize==addressMap.size()) return true;
-            p=p->next;
-        }
-        return false;
+        if(head==NULL || head->next==NULL) return false;
+        struct ListNode *fast =head , *slow=fast;
+        do{
+            slow=slow->next;
+            fast=fast->next;
+            if(fast) fast=fast->next;
+        }while(slow && fast && slow != fast);
+        return (fast==slow);
     }
 };
-//HASH MAP
+//Two pointers
 
-//SC -> O(N) TC O(N)
+//SC -> O(1) TC O(N)
