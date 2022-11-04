@@ -11,25 +11,29 @@
 class Solution {
 public:
     ListNode* partition(ListNode* head, int x) {
-        vector<int>left,right;
-        struct ListNode *p=head;
-        while(p){
-            if(p->val<x) left.push_back(p->val);
-            else right.push_back(p->val);
-            p=p->next;
+        struct ListNode *small,*large,*small_head,*large_head;
+        small=new ListNode(-1);
+        large= new ListNode(-1);
+        small_head=small;
+        large_head=large;
+        
+        while(head){
+            if(head->val<x){
+                small->next=head;
+                small=small->next;
+                head=head->next;
+                small->next=NULL;
+            }
+            else{
+                large->next=head;
+                large=large->next;
+                head=head->next;
+                large->next=NULL;
+            }
         }
-        p=head;
-        for(auto elem : left){
-            p->val=elem;
-            p=p->next;
-        }
-        for(auto elem : right){
-            p->val=elem;
-            p=p->next;
-        }
-        return head;
+        small->next=large_head->next;
+        return small_head->next;
     }
 };
 
-//uses extra space SC ->O(n) where n is the number of nodes
-//TC-> O(n) 2 pass
+//O(1) space Two pointers
