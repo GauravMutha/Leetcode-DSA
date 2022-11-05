@@ -9,14 +9,19 @@
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        struct ListNode* p=head;
-        unordered_map<ListNode* , int>m;
-        while(p){
-            int prev=m.size();
-            m[p]++;
-            if(m.size()==prev) return p;
-            p=p->next;
+        struct ListNode* fast=head,*slow=head;
+        if(head==NULL) return NULL;
+        do{
+            slow=slow->next;
+            fast=fast->next;
+            if(fast) fast=fast->next;
+        }while(fast && slow && fast!=slow);
+        while(fast && (head != fast) ){
+            head=head->next;
+            fast=fast->next;
         }
-        return NULL;
+        return fast;
     }
 };
+
+//2 pointers with no extra space
