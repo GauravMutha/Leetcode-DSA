@@ -11,18 +11,21 @@
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        if(head==NULL || head->next==NULL) return head;
-        struct ListNode *b=head , *f=head->next , *start ,*startHead;
-        start=new ListNode(-1) , startHead=start;
-        if(b->val != f->val) start->next=b , start=b;
-        while(f && f->next){
-            if(f->val != b->val && f->next->val!=f->val)
-                start->next=f , start=f;
-            b=f;
-            f=f->next;
+        struct ListNode * dummy , *curr;
+        dummy=new ListNode(-1,head);
+        curr=dummy;
+        while(curr->next && curr->next->next){
+            if(curr->next->val == curr->next->next->val){
+                int duplicate=curr->next->val;
+                while(curr->next && curr->next->val==duplicate)
+                    curr->next=curr->next->next;
+            }
+            else{
+                curr=curr->next;
+            }
         }
-        if(b->val != f->val) start->next=f , start=f;
-        start->next=NULL;
-        return startHead->next;
+        return dummy->next;
     }
 };
+
+//Better than previoulsy submitted code
