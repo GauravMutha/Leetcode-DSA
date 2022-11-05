@@ -11,17 +11,17 @@
 class Solution {
 public:
     ListNode* removeElements(ListNode* head, int x) {
-        struct ListNode *start , *start_head;
-        start=new ListNode(-1);
-        start_head=start;
+        struct ListNode *start=NULL , *p=NULL;
         while(head){
             while(head && head->val==x) head=head->next;
-            start->next=head;
-            start=start->next;
-            if(head) head= head->next;
+            if(p==NULL) p=head , start=head;
+            else {
+                p->next=head;
+                p=p->next;
+            }
+            if(head) head=head->next;
         }
-        return start_head->next;
+        return start;
     }
 };
-//dummy node
-//single pointer approach
+//Without dummy
