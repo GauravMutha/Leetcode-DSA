@@ -11,21 +11,23 @@
 class Solution {
 public:
     ListNode* deleteDuplicates(ListNode* head) {
-        struct ListNode * dummy , *curr;
-        dummy=new ListNode(-1,head);
-        curr=dummy;
+        struct ListNode dummy(-1,head) , *curr;
+        curr=&dummy;
         while(curr->next && curr->next->next){
             if(curr->next->val == curr->next->next->val){
                 int duplicate=curr->next->val;
-                while(curr->next && curr->next->val==duplicate)
+                while(curr->next && curr->next->val==duplicate){
+                    struct ListNode *temp=curr->next;
                     curr->next=curr->next->next;
+                    delete temp;
+                }
             }
             else{
                 curr=curr->next;
             }
         }
-        return dummy->next;
+        return dummy.next;
     }
 };
 
-//Better than previoulsy submitted code
+//The same code as previous but IT FREES THE MEMORY to ensure there are memory leaks
