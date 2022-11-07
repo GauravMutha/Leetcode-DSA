@@ -11,19 +11,18 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        struct ListNode *dummy, *p=head;
-        dummy=new ListNode(-100,head);
+        struct ListNode dummy(0,head), *p=head;
         int len=0;
         while(p){
             len++;
             p=p->next;
         }
-        p=dummy;
+        p=&dummy;
         for(int i=1;i<=len-n;i++)
             p=p->next;
         p->next=p->next->next;
-        return dummy->next;
+        return dummy.next;
     }
 };
 
-//2 pass
+//same as previous but static memory for dummy node
