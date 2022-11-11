@@ -6,15 +6,10 @@ public:
         
         for(int i=vec.size()-1;i>=0;i--){
             while(!st.empty() && st.top()>vec[i]) st.pop();
-            if(st.empty()){
-                ans[i]=vec[i];
-            }
-            else{
-                ans[i]=vec[i]-st.top();
-            }
+            ans[i]=vec[i]-((st.empty()) ? 0 : st.top());
             if(st.empty() || st.top()!=vec[i]) st.push(vec[i]);
         }
         return ans;
     }
 };
-//Refactoring previous code
+//Shortening the previous refactored code
