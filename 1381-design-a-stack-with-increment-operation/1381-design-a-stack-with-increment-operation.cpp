@@ -1,32 +1,32 @@
+//LEE'S TRICK FOR LAZY INCREMENT THAT MAKES THE SOLUTION O(1)
 class CustomStack {
 private:
-    int *S;
-    int size=0;
-    int top;
+    vector<int>inc,stack;
+    int n=0;
 public:
     CustomStack(int maxSize) {
-        if(maxSize>1000) return;
-        size=maxSize;
-        S=new int[size];
-        top=-1;
+        n=maxSize;
     }
     
     void push(int x) {
-        if(top==size-1) return;
-        top++;
-        S[top]=x;
+        if(n==stack.size()) return;
+        stack.push_back(x);
+        inc.push_back(0);
     }
     
     int pop() {
-        if(top==-1) return -1;
-        int popped_element=S[top];
-        top--;
-        return popped_element;
+        int i=stack.size()-1;
+        if(i<0) return -1;
+        if(i>0) inc[i-1]+=inc[i];
+        int num=stack[i]+inc[i];
+        inc.pop_back();
+        stack.pop_back();
+        return num;
     }
     
     void increment(int k, int val) {
-       for(int i=0;i<k && i<=top;i++)
-           S[i]+=val;
+        int i=min(k,(int)stack.size())-1;
+        if(i>=0)inc[i]+=val;
     }
 };
 
