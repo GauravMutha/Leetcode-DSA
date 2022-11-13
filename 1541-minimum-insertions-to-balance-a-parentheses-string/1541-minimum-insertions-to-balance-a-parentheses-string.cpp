@@ -1,22 +1,27 @@
 class Solution {
 public:
     int minInsertions(string s) {
-        int ans=0;
-        stack<char>st;
+        int open=0 , openReq=0,closeReq=0;
         for(int i=0;i<s.size();i++){
-            if(s[i]=='(') st.push(s[i]);
+            if(s[i]=='(') open++;
             else{
-                if((i+1)<s.size() && s[i+1]==')'){
-                    if(st.empty()) ans++;
-                    else st.pop();
+                if(i+1<s.size() && s[i+1]==')'){
+                    if(open==0) openReq++;
+                    else open--;
                     i++;
                 }
-                else if((i+1)>=s.size() || s[i+1]=='('){
-                    if(st.empty()) ans+=2;
-                    else ans++,st.pop();
+                else{
+                    if(open==0) openReq++ ,closeReq++;
+                    else open-- , closeReq++;
                 }
             }
         }
-        return ans+(st.size()*2);
+        return (2*open + openReq + closeReq);
     }
 };
+
+//Without Stack
+//SC-->O(1)
+//open is the number of ( 
+//openReq is the number of ( required to balance orphan ))
+//closeReq is the number of ) required to balance
