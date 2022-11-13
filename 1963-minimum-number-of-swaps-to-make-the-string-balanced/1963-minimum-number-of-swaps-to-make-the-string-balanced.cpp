@@ -1,14 +1,15 @@
 class Solution {
 public:
     int minSwaps(string s) {
-        stack<int>st;
+       int closed=0,open=0;
         for(auto c:s){
-            if(c=='[') st.push(c);
-            else if(!st.empty() && c==']') st.pop(); 
+            if(c=='[') open++;
+            else if(c==']' && open<=0) closed++;
+            else if(c==']' && open>0) open--;
         }
-        return (st.size()+1)/2;
+        return (closed+1)/2;
     }
 };
 
-//Solution 1: formula + stack
-//TC -> O(n) SC->O(n)
+//Solution 1: formula + WITHOUT stack
+//TC -> O(n) SC->O(1) 
