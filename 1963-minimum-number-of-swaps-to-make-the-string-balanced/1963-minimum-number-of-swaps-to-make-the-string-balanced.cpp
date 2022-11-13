@@ -1,15 +1,18 @@
 class Solution {
 public:
     int minSwaps(string s) {
-       int closed=0,open=0;
+       int ans=0,balance=0;
         for(auto c:s){
-            if(c=='[') open++;
-            else if(c==']' && open<=0) closed++;
-            else if(c==']' && open>0) open--;
+            if(c=='[') balance++;
+            else balance--;
+            if(balance<0) {
+                ans++;
+                balance=1;
+            }
         }
-        return (closed+1)/2;
+        return ans;
     }
 };
 
-//Solution 1: formula + WITHOUT stack
+//Solution 2: Two pointers
 //TC -> O(n) SC->O(1) 
