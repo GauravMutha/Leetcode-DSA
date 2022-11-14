@@ -4,17 +4,13 @@ public:
         string res="";
         stack<char>st;
         for(int i=0;i<s.size();i++){
-            if(!st.empty() && st.top()==s[i])
-                st.pop();
-            else st.push(s[i]);
+            if(res.size()!=0 && res.back()==s[i])
+                res.pop_back();
+            else res.push_back(s[i]);
         }
-        while(!st.empty()){
-            res+=st.top();
-            st.pop();
-        }
-        reverse(begin(res),end(res));
+        
         return res;
     }
 };
 
-//O(n) space complexity
+//O(1) space complexity --> we make our string res behave like a stack whichw e eventually return hence making the constant SC.
