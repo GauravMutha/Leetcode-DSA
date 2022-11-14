@@ -4,7 +4,6 @@ public:
         vector<int>ans(vec.size(),-1);
         stack<int>st;
         for(int i=vec.size()-1;i>=0;i--){
-            while(!st.empty() && st.top()<=vec[i]) st.pop();
             st.push(vec[i]);
         }
         for(int i=vec.size()-1;i>=0;i--){
@@ -17,4 +16,4 @@ public:
     }
 };
 
-//2 pass
+//2 pass and same as previous except first for loop makes a normal stack instead of monotonic stack//
