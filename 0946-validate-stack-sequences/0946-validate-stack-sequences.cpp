@@ -1,3 +1,4 @@
+//ONLY ONE STATEMENT IS DIFFERENT FROM PREVIOUS CODE --> return statement
 class Solution {
 public:
     bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {       stack<int>st1,st2;
@@ -9,7 +10,7 @@ public:
             while(!st2.empty() && !st1.empty() && (st1.top()==st2.top()))
                  st1.pop(),st2.pop();
         }
-        return (st1==st2);
+        return (st1.empty() && st2.empty());
     }
 };
 
