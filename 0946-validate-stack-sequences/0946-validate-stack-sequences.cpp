@@ -1,16 +1,15 @@
-//ONLY ONE STATEMENT IS DIFFERENT FROM PREVIOUS CODE --> return statement
 class Solution {
 public:
     bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
-        stack<int>st1;
-        for(int i=0,j=0;i<pushed.size();i++){
-            st1.push(pushed[i]);
-            while(j<popped.size() && !st1.empty() && (st1.top()==popped[j])) 
-                 st1.pop(),j++;
+        int i=0;
+        for(int j=0,k=0;j<pushed.size();j++,i++){
+            pushed[i]=pushed[j];
+            while(i>=0 && j<pushed.size() && pushed[i]==popped[k]) i--, k++;
         }
-        return st1.empty();
+        i--;
+        return (i<0);
     }
 };
 
-//TC-->O(n) (2 pass)
-//SC--> O(n) BUT uses only 1 stack
+//TC-->O(n) (1 pass)
+//SC--> O(1) USES NO EXTRA SPACE
