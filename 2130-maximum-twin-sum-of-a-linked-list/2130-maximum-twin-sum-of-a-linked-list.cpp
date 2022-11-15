@@ -10,20 +10,34 @@
  */
 class Solution {
 public:
+   void reverse(ListNode** head) {
+       struct ListNode *curr=*head,*pre=NULL,*front;
+       while(curr){
+           front=curr->next;
+           curr->next=pre;
+           pre=curr;
+           curr=front;
+       }
+       *head=pre;
+    }
+    
     int pairSum(ListNode* head) {
-        vector<int>vec;
-        ListNode *p=head;
+        struct ListNode *fast=head , *slow=head,*p,*q;
         int ans=INT_MIN,len=0;
-        while(p){
-            len++;
-            vec.push_back(p->val);
-            p=p->next;
+        while(fast && fast->next->next){
+            fast=fast->next->next;
+            slow=slow->next;
         }
-        for(int i=0;i<len/2;i++)
-            ans=max(ans,vec[i]+vec[len-1-i]);
+        reverse(&slow);
+        p=slow , q=head;
+        while(p && q){
+            ans=max(ans,p->val+q->val);
+            p=p->next;
+            q=q->next;
+        }
         return ans;
     }
 };
-
-//TC-->O(n) Two pass
-//SC-->O(n)
+//Two pointers
+//TC-->O(n)  (3 pass but only 3*n/2 traversal)
+//SC-->O(1)
