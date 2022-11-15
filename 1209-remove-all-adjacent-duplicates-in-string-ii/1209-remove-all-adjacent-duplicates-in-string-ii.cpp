@@ -1,18 +1,20 @@
 class Solution {
 public:
     string removeDuplicates(string s, int k) {
-        stack<int>count;
-        int i=0;
-        for(int j=0;j<s.size();j++,i++){
-            s[i]=s[j];
-            if(i>0 && s[i-1]==s[i]) count.top()++;
-            else count.push(1);
-            if(count.top()==k) i-=k , count.pop();
+        string res="";
+        stack<pair<char,int>>st;
+        st.push({'#',0}); //to avoid emty stack
+        for(int i=s.size()-1;i>=0;i--){
+            if(st.top().first!=s[i]) st.push({s[i],1});
+            else {
+                st.top().second++;
+                if(st.top().second==k) st.pop();
+            }
         }
-        return s.substr(0,i);
+        while(st.top().first!='#')
+            res.append(st.top().second,st.top().first) , st.pop();
+        return res;
     }
 };
 
-//Two pointers
-//TC---> O(n) (optimised from n*k of last code to n)
-//SC-->O(n)
+//Same as approach 1 and 2 but: it uses only one stack and its TC is O(n) instesd of O(n*k)
