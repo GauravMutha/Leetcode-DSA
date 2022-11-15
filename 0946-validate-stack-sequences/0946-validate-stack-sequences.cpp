@@ -1,18 +1,16 @@
 //ONLY ONE STATEMENT IS DIFFERENT FROM PREVIOUS CODE --> return statement
 class Solution {
 public:
-    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {       stack<int>st1,st2;
-        for(int i=popped.size()-1;i>=0;i--){
-            st2.push(popped[i]);
-        }
-        for(int i=0;i<pushed.size();i++){
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        stack<int>st1;
+        for(int i=0,j=0;i<pushed.size();i++){
             st1.push(pushed[i]);
-            while(!st2.empty() && !st1.empty() && (st1.top()==st2.top()))
-                 st1.pop(),st2.pop();
+            while(j<popped.size() && !st1.empty() && (st1.top()==popped[j])) 
+                 st1.pop(),j++;
         }
-        return (st1.empty() && st2.empty());
+        return st1.empty();
     }
 };
 
 //TC-->O(n) (2 pass)
-//SC--> O(n)
+//SC--> O(n) BUT uses only 1 stack
