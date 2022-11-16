@@ -1,20 +1,30 @@
 class Solution {
 public:
     string reverseParentheses(string s) {
-        stack<int>st;
+        int n=s.size(),j=0;
         string res;
-        for(auto c:s){
-            if(c=='(') st.push(res.length());
-            else if(c==')'){
-                reverse(res.begin()+st.top(),res.end());
+        vector<int>pair(n);
+        stack<int>st;
+        for(int i=0;i<n;i++){
+            if(s[i]=='(') st.push(i);
+            else if(s[i]==')'){
+                j=st.top();
                 st.pop();
+                pair[i]=j;
+                pair[j]=i;
             }
-            else res+=c;
+        }
+        for(int i=0,d=1;i<n;i+=d){
+            if(s[i]=='(' || s[i]==')'){
+                i=pair[i] , d=-d;
+            }
+            else res+=s[i];
         }
         return res;
     }
 };
-//MORE CONCISE Brute Force
+//WORMHOLE APPROACH
+//Optimized
 //1 pass
-//TC-->O(n^2)
+//TC-->O(n)
 //SC-->O(n)
