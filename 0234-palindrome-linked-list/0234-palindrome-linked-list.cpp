@@ -11,28 +11,22 @@
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
-        struct ListNode *f=head,*s=head,*p=NULL;
-        stack<int>st;
         if(head->next==NULL) return true;
-        while(f->next && f->next->next){
+        struct ListNode *f=head,*s=head;
+        stack<int>st;
+        while(f && f->next){
+            st.push(s->val);
             f=f->next->next;
             s=s->next;
         }
-        if(f->next==NULL) *s=*(s->next); 
-        else if(f->next->next==NULL) s=s->next;
-        p=head;
-        bool flag=false;
-        for(;p!=NULL;p=p->next){
-            if(p==s) flag=true;
-            if(!flag) st.push(p->val);
-            else{
-                if(st.top()!=p->val) return false;
-                st.pop();
-            }
+        if(f) s=s->next; //odd length
+        for(;s!=NULL;s=s->next){
+            if(s->val!=st.top()) return false;
+            st.pop();
         }
         return true;
     }
 };
-
-//TC-->O(n) + 2 pass
+//More concise than previous
+//TC-->O(n) + 2 pass;
 //SC-->O(n)
