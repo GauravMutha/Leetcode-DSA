@@ -10,23 +10,31 @@
  */
 class Solution {
 public:
+   void reverse(ListNode** head) {
+       struct ListNode *curr=*head,*pre=NULL,*front;
+       while(curr){
+           front=curr->next;
+           curr->next=pre;
+           pre=curr;
+           curr=front;
+       }
+       *head=pre;
+    }    
+    
     bool isPalindrome(ListNode* head) {
         if(head->next==NULL) return true;
         struct ListNode *f=head,*s=head;
-        stack<int>st;
         while(f && f->next){
-            st.push(s->val);
             f=f->next->next;
             s=s->next;
         }
         if(f) s=s->next; //odd length
-        for(;s!=NULL;s=s->next){
-            if(s->val!=st.top()) return false;
-            st.pop();
+        reverse(&s);
+        for(auto p =head;s!=NULL;s=s->next,p=p->next){
+            if(p->val!=s->val) return false;
         }
         return true;
     }
 };
-//More concise than previous
-//TC-->O(n) + 2 pass;
-//SC-->O(n)
+//TC-->O(n) + 3 pass;
+//SC-->O(1)
