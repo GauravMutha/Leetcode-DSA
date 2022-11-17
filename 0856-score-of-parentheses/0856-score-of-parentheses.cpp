@@ -1,22 +1,21 @@
 class Solution {
 public:
     int scoreOfParentheses(string s) {
-        int curr=0;
-        stack<int>st;
-        for(auto c: s){
-            if(c=='('){
-                st.push(curr);
-                curr=0;
-            }
+        int depth=0,res=0;
+        char prev;
+        
+        for(auto c:s){
+            if(c=='(') depth++;
             else{
-                curr=st.top()+ max(curr*2,1);
-                st.pop();
+                if(prev=='(')  res+=pow(2,depth-1); 
+                depth--;
             }
+            prev=c;
         }
-        return curr;
+        return res;
     }
 };
 
-//Using stack
-//SC-->O(n)
+//WITHOUT STACK
+//SC-->O(1)
 //TC-->O(n)
