@@ -1,22 +1,14 @@
 class Solution {
 public:
     string removeStars(string s) {
-        stack<int>st;
-        int count=0;
-        for(auto c:s){
-            if(c!='*') st.push(c);
-            else if(!st.empty()) st.pop(),count++;
+        int i=0,j=0;
+        for(int j=0;j<s.size();i++,j++){
+            s[i]=s[j];
+            if(s[j]=='*') i-=2;
         }
-        if(st.empty()) return "";
-        int n=st.size();
-        string res(n,' ');
-        for(int i=n-1;i>=0;i--){
-            res[i]=st.top();
-            st.pop();
-        }
-        return res;
+        return s.substr(0,i);
     }
 };
-//2 pass + Uses stack
-//SC-->O(n)
+//1 pass + Two pointers
+//SC-->O(1)
 //TC-->O(n)
