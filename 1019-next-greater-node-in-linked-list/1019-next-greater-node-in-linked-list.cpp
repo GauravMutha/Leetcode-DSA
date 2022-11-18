@@ -11,23 +11,22 @@
 class Solution {
 public:
     vector<int> nextLargerNodes(ListNode* head) {
-        vector<int>vec;
+        vector<int>res;
         stack<int>st;
         
         for(auto p=head;p;p=p->next){
-            vec.push_back(p->val);
+            while(!st.empty() && res[st.top()]<p->val){
+                res[st.top()]=p->val;
+                st.pop();
+            }
+            st.push(res.size());
+            res.push_back(p->val);
         }
-        
-        vector<int>res(vec.size(),0);
-        for(int i=vec.size()-1;i>=0;i--){
-            while(!st.empty() && st.top()<=vec[i]) st.pop();
-            if(!st.empty()) res[i]=st.top();
-            st.push(vec[i]);
-        }
+        while(!st.empty()) res[st.top()]=0 , st.pop();
         return res;
     }
 };
 
-//2 pass
+//1 pass
 //SC-->O(n)
 //TC->O(n)
