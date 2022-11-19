@@ -1,32 +1,29 @@
 class Solution {
 public:
     string decodeString(string s) {
-        stack<string>chars;
-        stack<int>nums;
-        int num=0;
+        stack<string>st; st.push(""); //initialise a stack with empty string
+        string num="";
         string res="";
         for(auto c:s){
-            if(isalpha(c)) res.push_back(c);
-            else if(isdigit(c)) num=num*10 + (c-'0');
+            if(isalpha(c)) st.top()+=c;
+            else if(isdigit(c)) num+=c;
             else if(c=='['){
-                chars.push(res);
-                nums.push(num);
-                res="";
-                num=0;
+                st.push(num);
+                st.push("");
+                num="";
             }
             else{
-                string temp=res;
-                for(int i=0;i<nums.top()-1;i++)
-                    res+=temp;
-                res=chars.top()+res;
-                nums.pop();
-                chars.pop();
+                string temp=st.top() , temp2=temp; st.pop();
+                int n=stoi(st.top()) ; st.pop();
+                for(int i=0;i<n-1;i++)
+                    temp+=temp2;
+                st.top()+=temp;
             }
         }
-        return res;
+        return st.top();
     }
 };
 
-//Uses 2 Stack
+//Uses 1 stack
 //SC-->O(n)
 //TC-->O(n)
