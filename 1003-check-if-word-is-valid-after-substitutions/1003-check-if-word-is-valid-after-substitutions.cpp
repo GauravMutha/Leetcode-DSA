@@ -1,20 +1,18 @@
 class Solution {
 public:
     bool isValid(string s) {
-        stack<char>st;
-        string res="";
+        string res;
         for(int i=0;i<s.size();i++){
-            st.push(s[i]);
             if(s[i]=='c'){
-                res="";
-                while(!st.empty() && res.size()<3)
-                    res+=st.top() , st.pop();
-                if(res!="cba") return false;
+                int n=res.size();
+                if(n<2 || res[n-1]!='b' || res[n-2]!='a') return false;
+                res.pop_back() , res.pop_back();
             }
+            else res.push_back(s[i]);
         }
-        return st.empty();
+        return (res.size()==0);  
     }
 };
-
+//Previous code uses both string and stack BUT THIS uses only string
 //SC-->O(n)
 //TC--> O(n)
