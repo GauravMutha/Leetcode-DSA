@@ -1,18 +1,18 @@
 class Solution {
 public:
     bool isValid(string s) {
-        string res;
-        for(int i=0;i<s.size();i++){
-            if(s[i]=='c'){
-                int n=res.size();
-                if(n<2 || res[n-1]!='b' || res[n-2]!='a') return false;
-                res.pop_back() , res.pop_back();
+        int i=0;
+        for(int j=0;j<s.size();j++,i++){
+            s[i]=s[j];
+            if(s[j]=='c'){
+                if(i<=1 || s[i-1]!='b' || s[i-2]!='a') return false;
+                i-=3;
             }
-            else res.push_back(s[i]);
         }
-        return (res.size()==0);  
+        i--;
+        return (i<0);
     }
 };
-//Previous code uses both string and stack BUT THIS uses only string
-//SC-->O(n)
+//Two pointers + No extra space
+//SC-->O(1)
 //TC--> O(n)
