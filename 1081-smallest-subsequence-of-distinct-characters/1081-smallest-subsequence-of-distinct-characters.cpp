@@ -3,24 +3,22 @@ public:
     string smallestSubsequence(string s) {
         vector<int>freq(26,0);
         vector<bool>visit(26,false);
-        stack<char>st;
+       string res;
         for(auto c:s)
             freq[c-'a']++;
         for(int i=0;i<s.size();i++){
             char c=s[i];
             freq[c-'a']--;
             if(visit[c-'a']) continue;
-            while(!st.empty() && st.top()>c && freq[st.top()-'a']>0)
-                visit[st.top()-'a']=false , st.pop();
-            st.push(c);
+            while(res.size() && res.back()>c && freq[res.back()-'a']>0)
+                visit[res.back()-'a']=false , res.pop_back();
+            res.push_back(c);
             visit[c-'a']=true;
         }
-        string res(st.size(),' ');
-        for(int i=st.size()-1;i>=0;i--) res[i]=st.top(), st.pop();
         return res;
     }
 };
 
-//3 pass
-//SC--> O(n) because of stack
+//2 pass
+//SC--> O(1) NO STACK
 //TC--> O(n)
