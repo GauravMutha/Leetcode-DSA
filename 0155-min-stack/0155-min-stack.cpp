@@ -1,32 +1,29 @@
 class MinStack {
 private:
-    stack<int>st,mini;
+    stack<pair<int,int>>st;
 public:
     MinStack() {
         
     }
     
     void push(int val) {
-        st.push(val);
-        if(mini.empty() || mini.top()>=val) mini.push(val);
+        if(st.empty() || st.top().second>=val) st.push({val,val});
+        else st.push({val,st.top().second});
     }
     
     void pop() {
-        int ans=st.top();
         st.pop();
-        if(ans==mini.top()) mini.pop();
     }
     
     int top() {
-        return st.top(); 
+        return st.top().first; 
     }
     
     int getMin() {
-        return mini.top();
+        return st.top().second;
     }
 };
-//2 stacks
-//SC--> O(n)
+//SC--> O(1) (only 1 stack)
 //TC-->O(1) for all operations
 
 /**
