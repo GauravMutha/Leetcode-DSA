@@ -1,26 +1,16 @@
 class Solution {
 public:
+    int helper(int n , int k){
+        if(n==1) return 0;
+        
+        return (helper(n-1,k)+k)%n;
+    }
     int findTheWinner(int n, int k) {
-        queue<int>q;
-        
-        for(int i=1;i<=n;i++) q.push(i); //queue of n players
-        
-        while(q.size()!=1){
-            int x=(k-1)%q.size();
-            
-            while(x){
-                int temp=q.front();
-                q.pop();
-                q.push(temp);
-                x--;
-            }
-            q.pop();
-        }
-        
-        return q.front();
+        int ans=helper(n,k)+1;
+        return ans;
     }
 };
 
-//USing Queue
+//Using Recursion
 //SC--> O(n)
-//TC-->O(n*k)
+//TC-->O(n)
