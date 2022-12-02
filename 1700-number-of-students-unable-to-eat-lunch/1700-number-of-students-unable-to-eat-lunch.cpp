@@ -1,26 +1,19 @@
 class Solution {
 public:
     int countStudents(vector<int>& stu, vector<int>& sand) {
-        int front =0, ind=0 ,end=0 ,len=sand.size(), res=len;
-        while(res){
-            if(stu[front]==sand[ind]){
-                res--;
-                stu[front]=-1;
-                front=(front+1)%len;
-                ind++;
-            }
-            else{
-                end=front;
-                front=(front+1)%len;
-                while(stu[front]!=sand[ind] && front!=end) front=(front+1)%len;
-                if(front==end) break;
-            }
+        int count[2]={} , len=sand.size() ,ind=0;
+        
+        for(auto type : stu) count[type]++;
+        
+        for(auto type : sand){
+            if(count[type]) count[type]-- , ind++;
+            else break;
         }
-        return res;
+        
+        return len-ind;
     }
 };
 
-//Using two pointer
-//No Queue
+//Order of students does not matter
 //SC-->O(1)
 //TC-->O(n)
