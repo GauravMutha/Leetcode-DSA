@@ -1,20 +1,15 @@
 class Solution {
 public:
-    int timeRequiredToBuy(vector<int>& tickets, int k) {
+    int timeRequiredToBuy(vector<int>& tkt, int k) {
         int time=0;
-        while(tickets[k]){
-            for(int i=0;i<tickets.size();i++){
-                if(tickets[i]==0) continue;
-                tickets[i]--;
-                time++;
-                
-                if(tickets[k]==0) return time;
-            }
+        for(int i=0;i<tkt.size();i++){
+            if(i<=k) time+=min(tkt[i],tkt[k]);
+            else time+=min(tkt[i],tkt[k]-1);
         }
         
         return time;
     }
 };
 
-//TC-->O(m*n)
+//TC-->O(n)
 //SC-->O(1)
