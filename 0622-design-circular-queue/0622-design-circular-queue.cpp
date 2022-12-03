@@ -3,7 +3,7 @@ public:
     int f=0,r=0;
     vector<int>q;
     MyCircularQueue(int k) {
-        for(int i=0;i<=k;i++) q.push_back(-1);
+        q.resize(k+1);
     }
     
     bool enQueue(int value) {
