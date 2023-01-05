@@ -9,25 +9,21 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//BFS
+//DFS
 class Solution {
 public:
+    void dfs(TreeNode* root , int level,map<int,int>&m){
+        if(root==NULL) return;
+        m[level]+=root->val;
+        dfs(root->left,level+1,m);
+        dfs(root->right,level+1,m);
+    }
     int maxLevelSum(TreeNode* root) {
-        queue<TreeNode*>q;
-        q.push(root);
-        TreeNode* temp;
-        int ans=0,maxSum=INT_MIN,level=1;
-        while(q.size()){
-            int sz=q.size(),sum=0;
-            for(int i=0;i<sz;i++){
-                temp=q.front();
-                if(temp->left) q.push(temp->left);
-                if(temp->right) q.push(temp->right);
-                sum+=temp->val;
-                q.pop();
-            }
-            if(sum>maxSum) ans=level , maxSum=sum;
-            level++;
+        int maxSum=INT_MIN,ans=0;
+        map<int,int>m;
+        dfs(root,1,m);
+        for(auto &[key,values]:m){
+            if(values>maxSum) maxSum=values , ans=key;
         }
         return ans;
     }
