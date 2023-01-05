@@ -9,21 +9,26 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS preorder
+//BFS
 class Solution {
 public:
     vector<int> largestValues(TreeNode* root) {
+        if(!root) return {};
+        queue<TreeNode*>q;
         vector<int>ans;
-        dfs(root,0,ans);
+        int sz=0,maxVal;
+        TreeNode* temp;
+        q.push(root);
+        while(!q.empty()){
+            sz=q.size(),maxVal=INT_MIN;
+            for(int i=0;i<sz;i++){
+                temp=q.front() , q.pop();
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+                maxVal=max(maxVal,temp->val);
+            }
+            ans.push_back(maxVal);
+        }
         return ans;
-    }
-    void dfs(TreeNode* curr, int level, vector<int>& vec){
-        if(curr==NULL) return;
-        
-        if(level>=vec.size()) vec.push_back(curr->val);
-        else vec[level]=max(vec[level],curr->val);
-        
-        dfs(curr->left,level+1,vec);
-        dfs(curr->right,level+1,vec);
     }
 };
