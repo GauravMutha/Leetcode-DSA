@@ -9,22 +9,24 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-// dfs preorder
+// BFS
 class Solution {
 public:
-    int ans=0;
-    void dfs(TreeNode* curr, int depth, int& maxDepth){
-        if(curr==NULL) return;
-        if(depth>maxDepth){
-            maxDepth=depth;
-            ans=curr->val;
-        }
-        dfs(curr->left,depth+1,maxDepth);
-        dfs(curr->right,depth+1,maxDepth);
-    }
     int findBottomLeftValue(TreeNode* root) {
-        int depth=0,maxDepth=-1;
-        dfs(root,depth,maxDepth);
+        int ans=0;
+        TreeNode* temp;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(q.size()){
+            ans=q.front()->val;
+            int sz=q.size();
+            for(int i=0;i<sz;i++){
+                temp=q.front();
+                q.pop();
+                if(temp->left) q.push(temp->left);
+                if(temp->right) q.push(temp->right);
+            }
+        }
         return ans;
     }
 };
