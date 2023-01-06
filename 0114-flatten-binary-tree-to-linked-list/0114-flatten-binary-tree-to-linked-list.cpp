@@ -9,23 +9,21 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Stack (Iterative)
+//Morris Traversal
 class Solution {
 public:
     void flatten(TreeNode* root) {
-        if(root==NULL) return;
-        stack<TreeNode*>st;
-        st.push(root);
+        TreeNode* curr=root;
         
-        TreeNode* temp;
-        while(!st.empty()){
-            temp=st.top() , st.pop();
-            
-            if(temp->right) st.push(temp->right);
-            if(temp->left) st.push(temp->left);
-            
-            if(!st.empty()) temp->right=st.top();
-            temp->left=NULL;
+        while(curr){
+            if(curr->left){
+                TreeNode* pre=curr->left;
+                while(pre->right) pre=pre->right;
+                pre->right=curr->right;
+                curr->right=curr->left;
+                curr->left=NULL;
+            }
+            curr=curr->right;
         }
     }
 };
