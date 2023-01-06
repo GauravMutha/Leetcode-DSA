@@ -9,22 +9,23 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+//Stack (Iterative)
 class Solution {
 public:
-    void dfs(TreeNode* curr , vector<TreeNode*>& vec){
-        if(!curr) return;
-        vec.push_back(curr);
-        
-        dfs(curr->left,vec);        
-        dfs(curr->right,vec);
-    }
     void flatten(TreeNode* root) {
-        vector<TreeNode*>vec; 
-        dfs(root,vec);
+        if(root==NULL) return;
+        stack<TreeNode*>st;
+        st.push(root);
         
-        for(int i=0;i<vec.size();i++){
-            vec[i]->right=(i<vec.size()-1) ? vec[i+1] : NULL;
-            vec[i]->left=NULL;
+        TreeNode* temp;
+        while(!st.empty()){
+            temp=st.top() , st.pop();
+            
+            if(temp->right) st.push(temp->right);
+            if(temp->left) st.push(temp->left);
+            
+            if(!st.empty()) temp->right=st.top();
+            temp->left=NULL;
         }
     }
 };
