@@ -9,28 +9,22 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//BFS
 class Solution {
+private:
+    vector<int>ans;
 public:
     vector<int> rightSideView(TreeNode* root) {
-        if(root==NULL) return {};
-        
-        vector<int>ans;
-        queue<TreeNode*>q;
-        q.push(root);
-        TreeNode* temp;
-        
-        while(!q.empty()){
-            int sz=q.size();
-            for(int i=1;i<=sz;i++){
-                temp=q.front() , q.pop();
-                if(temp->left) q.push(temp->left);
-                if(temp->right) q.push(temp->right);
-                
-                if(i==sz) ans.push_back(temp->val);
-            }
-        }
-        
+        vector<bool>visit;
+        dfs(root,visit,0);
         return ans;
+    }
+    
+    void dfs(TreeNode* curr , vector<bool>&visit , int level){
+        if(curr==NULL) return;
+        
+        if(level>=visit.size()) visit.push_back(true) , ans.push_back(curr->val);
+        
+        dfs(curr->right,visit , level+1);
+        dfs(curr->left,visit , level+1);
     }
 };
