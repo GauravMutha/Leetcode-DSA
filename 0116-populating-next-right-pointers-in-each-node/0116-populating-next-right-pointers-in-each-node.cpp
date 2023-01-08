@@ -15,20 +15,21 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-//DFS - Without using extra space - MORE OPTIMIZED  AND CONCISE
+//ACTUAL O(1) space i.e. not even uses sytem stack as it is an iterative solution
+//Somewhat similar to BFS
 class Solution {
 public:
     Node* connect(Node* root) {
-        if(!root) return NULL;
-        auto lChild=root->left , rChild=root->right , nextNode=root->next;
-        
-        if(lChild){
-            lChild->next=rChild;
-            if(nextNode) rChild->next=nextNode->left;
-            
-            connect(lChild);
-            connect(rChild);
+        auto head=root;
+        for(;root;root=root->left){
+            for(auto curr=root;curr;curr=curr->next){
+                if(curr->left){
+                    curr->left->next=curr->right;
+                    if(curr->next) curr->right->next=curr->next->left;
+                }
+                else break;
+            }
         }
-        return root;
+        return head;
     }
 };
