@@ -9,21 +9,27 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//dfs
+//bfs
 //reversing the answer of question 102.Binary Tree Level Order Traversal
 class Solution {
 public:
-    vector<vector<int>>ans;
-    void dfs(TreeNode* curr , int level){
-        if(curr==NULL) return;
-        if(level>=ans.size()) ans.push_back({curr->val});
-        else ans[level].push_back(curr->val);
-        
-        dfs(curr->left,level+1);
-        dfs(curr->right,level+1);
-    }
     vector<vector<int>> levelOrderBottom(TreeNode* root) {
-        dfs(root,0);
+        vector<vector<int>>ans;
+        if(root==NULL) return ans;
+        queue<TreeNode*>q;
+        q.push(root);
+        TreeNode* curr;
+        while(!q.empty()){
+            int sz=q.size();
+            vector<int>vec;
+            for(int i=0;i<sz;i++){
+                curr=q.front() , q.pop();
+                if(curr->left) q.push(curr->left);
+                if(curr->right) q.push(curr->right);
+                vec.push_back(curr->val);
+            }
+            ans.push_back(vec);
+        }
         reverse(begin(ans),end(ans));
         return ans;
     }
