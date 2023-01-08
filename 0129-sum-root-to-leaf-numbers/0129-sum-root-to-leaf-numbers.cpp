@@ -9,21 +9,16 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
+//DFS - Preorder  like previous one - More Concise
 class Solution {
 public:
-    int ans=0;
     int sumNumbers(TreeNode* root) {
-        dfs(root,0);
-        return ans;
+        return dfs(root,0);
     }
-    void dfs(TreeNode* curr,int sum){
-        if(!curr) return; 
-        if(!curr->left && !curr->right){
-            ans+=(curr->val+sum*10);
-        }
-        
-        dfs(curr->left, curr->val+10*sum);
-        dfs(curr->right, curr->val+10*sum);
+    int dfs(TreeNode* curr, int sum){
+        if(!curr) return 0;
+        sum=curr->val+10*sum;
+        if(!curr->left && !curr->right) return sum;
+        return dfs(curr->left,sum) + dfs(curr->right,sum);
     }
 };
