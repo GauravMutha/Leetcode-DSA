@@ -9,34 +9,20 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//BFS
+//DFS -PreOrder- Without helper
 class Solution {
 public:
-    TreeNode* addOneRow(TreeNode* root, int val, int k) {
-        if(k==1){
-            auto new_root=new TreeNode(val,root,NULL);
-            return new_root;
+    TreeNode* addOneRow(TreeNode* root, int val, int d) {
+        if(d==1) return new TreeNode(val,root,NULL);
+        if(d==2){
+            root->left=new TreeNode(val,root->left,NULL);
+            root->right=new TreeNode(val,NULL,root->right);
         }
-        queue<TreeNode*>q;
-        q.push(root);
-        TreeNode* curr=NULL;
-        int level=1;
-        while(!q.empty()){
-            int sz=q.size();
-            for(int i=0;i<sz;i++){
-                curr=q.front() , q.pop();
-                if(level == (k-1)){
-                    auto L=new TreeNode(val,curr->left,NULL);
-                    auto R=new TreeNode(val,NULL,curr->right);
-                    curr->left=L;
-                    curr->right=R;
-                }
-                if(curr->left) q.push(curr->left);
-                if(curr->right) q.push(curr->right);
-            }
-            level++;
-            if(level==k) break;
+        else{
+            if(root->left) addOneRow(root->left,val,d-1);
+            if(root->right) addOneRow(root->right,val,d-1);
         }
+        
         return root;
     }
 };
