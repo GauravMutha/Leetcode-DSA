@@ -15,23 +15,20 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-//DFS - Without using extra space
+//DFS - Without using extra space - MORE OPTIMIZED  AND CONCISE
 class Solution {
 public:
     Node* connect(Node* root) {
-        if(root==NULL) return NULL;
-        dfs(root,NULL,false);
-        return root;
-    }
-    void dfs(Node* curr, Node* parent, bool lchild){
-        if(!curr) return;
-        if(parent){
-            if(!lchild)curr->next=(parent->next) ? parent->next->left : NULL;
-            else curr->next=parent->right;
-        }
-        else curr->next=NULL;
+        if(!root) return NULL;
+        auto lChild=root->left , rChild=root->right , nextNode=root->next;
         
-        dfs(curr->left,curr,true);
-        dfs(curr->right,curr,false);
+        if(lChild){
+            lChild->next=rChild;
+            if(nextNode) rChild->next=nextNode->left;
+            
+            connect(lChild);
+            connect(rChild);
+        }
+        return root;
     }
 };
