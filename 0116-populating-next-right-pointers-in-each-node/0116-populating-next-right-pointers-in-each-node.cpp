@@ -15,25 +15,23 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-//BFS - Using extra space
+//DFS - Without using extra space
 class Solution {
 public:
     Node* connect(Node* root) {
         if(root==NULL) return NULL;
-        queue<Node*>q;
-        q.push(root);
-        while(!q.empty()){
-            Node *curr , *pre=NULL;
-            int sz=q.size();
-            for(int i=0;i<sz;i++){
-                curr=q.front(),q.pop();
-                curr->next=pre;
-                pre=curr;
-                
-                if(curr->right) q.push(curr->right);
-                if(curr->left) q.push(curr->left);
-            }
-        }
+        dfs(root,NULL,false);
         return root;
+    }
+    void dfs(Node* curr, Node* parent, bool lchild){
+        if(!curr) return;
+        if(parent){
+            if(!lchild)curr->next=(parent->next) ? parent->next->left : NULL;
+            else curr->next=parent->right;
+        }
+        else curr->next=NULL;
+        
+        dfs(curr->left,curr,true);
+        dfs(curr->right,curr,false);
     }
 };
