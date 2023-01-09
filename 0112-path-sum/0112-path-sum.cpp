@@ -9,20 +9,13 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+//DFS PREORDER without helper 
 class Solution {
 public:
-    bool flag=false;
-    bool hasPathSum(TreeNode* root, int targetSum) {
-        dfs(root,0,targetSum);
-        return flag;
+    bool hasPathSum(TreeNode* root, int k) {
+        if(!root) return false;
+        if(!root->left && !root->right && root->val==k) return true;
+        
+        return hasPathSum(root->left,k-root->val) || hasPathSum(root->right,k-root->val);
     }
-    void dfs(TreeNode* curr,int sum,int &k){
-        if(!curr) return;
-        sum+=curr->val;
-        if(!curr->left && !curr->right && sum==k) flag=true;
-        else{
-            dfs(curr->left,sum,k);
-            dfs(curr->right,sum,k);
-        }
-     }
 };
