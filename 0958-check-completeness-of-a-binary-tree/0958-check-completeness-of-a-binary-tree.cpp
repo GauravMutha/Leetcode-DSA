@@ -9,24 +9,19 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */ 
-//BFS -1 Pass
+//DFS
+//No extra Space
 class Solution {
 public:
-    bool isCompleteTree(TreeNode* root) {
-        queue<TreeNode*>q;
-        q.push(root);
-        bool pre=true;
-        TreeNode* curr;
-        while(!q.empty()){
-            curr=q.front(), q.pop();
-            if(curr==NULL) pre=false;
-            else{
-                if(pre==false) return false;
-                q.push(curr->left);
-                q.push(curr->right);
-            }
+    int targetHeight=0;
+    bool secondLast=false;
+    bool isCompleteTree(TreeNode* root , int h=0) {
+        if(root==NULL){
+            if(targetHeight==0) targetHeight=h;
+            else if(h==targetHeight-1) secondLast=true;
+            
+            return h==(targetHeight-secondLast);
         }
-        
-        return true;
+        return isCompleteTree(root->left,h+1) && isCompleteTree(root->right,h+1);
     }
 };
