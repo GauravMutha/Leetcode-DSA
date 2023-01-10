@@ -9,29 +9,24 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
+//previous solution was BFS
+//This is DFS
 class Solution {
 public:
-    bool isEvenOddTree(TreeNode* root) {
-        if(root==NULL) return false;
-        queue<TreeNode*>q;
-        q.push(root);
-        TreeNode* curr;
-        int level=0;
-        while(!q.empty()){
-            int pre=(level%2)?INT_MAX:INT_MIN , sz=q.size();
-            for(int i=0;i<sz;i++){
-                curr=q.front() , q.pop();
-                    
-                if(level%2==0 && ((curr->val%2==0) || (pre>=curr->val))
-                || level%2 && ((curr->val%2) || (pre<=curr->val)) )
-                    return false;
-                if(curr->left) q.push(curr->left);
-                if(curr->right) q.push(curr->right);
-                pre=curr->val;
-            }
-            level++;
+    vector<int>vec;
+    bool isEvenOddTree(TreeNode* root,size_t d=0) {
+        if(!root) return true;
+        if(d%2 == root->val%2) return false;
+        
+        if(d<vec.size()){
+            if((d%2==0 && vec[d]>=root->val) || (d%2 && vec[d]<=root->val))
+                return false;
+            vec[d]=root->val;
         }
-        return true;
+        else {
+            vec.push_back(root->val);
+        }
+        
+        return isEvenOddTree(root->left,d+1) && isEvenOddTree(root->right,d+1);
     }
 };
