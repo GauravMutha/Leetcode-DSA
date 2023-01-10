@@ -1,15 +1,13 @@
 class Solution {
 public:
     int maxPower(string s) {
-        int count=1,res=1;
-        
-        for(int i=1;i<s.size();i++){
-            if(s[i]==s[i-1])
-                res=max(res,++count);
-            else 
-                count=1;
+        int l=0,r=1,res=1;
+        while(r<s.size()){
+            if(s[l]==s[r])
+                res=max(res,r-l+1);
+            else l=r;
+            r++;
         }
-        
         return res;
     }
 };
