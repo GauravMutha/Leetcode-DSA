@@ -9,21 +9,10 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//LCA METHOD
+//NO LCA METHOD
+//ROOT TO TARGETS  THEN FILTERING THE PATH STRING
 class Solution {
 public:
-    //FIND LCA
-    TreeNode* find_lca(TreeNode* curr,int &start,int &dest){
-        if(!curr) return NULL;
-        if(curr->val==start || curr->val==dest) return curr;
-        
-        TreeNode *leftRet=find_lca(curr->left,start,dest);
-        TreeNode *rightRet=find_lca(curr->right,start,dest);
-        
-        if(leftRet && rightRet) return curr;
-        
-        return leftRet?leftRet:rightRet;
-    }
     //PATH FOR LCA TO TAREGT NODES WITH VALUE K
     bool traverse(TreeNode* root,string &str,int &k){
         if(!root) return false;
@@ -40,15 +29,17 @@ public:
         return false;
     }
     string getDirections(TreeNode* root, int start, int dest) {
-        TreeNode* lca=find_lca(root,start,dest);
         
         string startString="" , destString="";
-        traverse(lca,startString,start);
-        traverse(lca,destString,dest);
+        traverse(root,startString,start);
+        traverse(root,destString,dest);
         
-        for(auto &c : startString) c='U';
+        int i=0,j=0;
+        for(;i<startString.size() && j<destString.size();i++,j++){
+            if(startString[i]!=destString[j]) break;
+        }
         
-        return startString+destString;
+        return string(startString.size()-i,'U')+destString.substr(j);
         
     }
 };
