@@ -15,31 +15,28 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-//DFS
-//2 recursive functions
+//Purely iterative
+//real O(1)
+//No implicit stack space of recursion even
 class Solution {
 public:
-    Node* exploreForNext(Node* curr){
-        if(!curr) return NULL;
-        else if(curr->left) return curr->left;
-        else if(curr->right) return curr->right;
-        return exploreForNext(curr->next);
-    }
-    void dfs(Node* root){
-        if(!root) return;
-        if(root->left){
-            if(root->right) root->left->next=root->right;
-            else root->left->next=exploreForNext(root->next);
-        }
-        if(root->right){
-            root->right->next=exploreForNext(root->next);
+    Node* connect(Node* root) {
+        auto dummy=new Node(-1);
+        Node *head , *p ,*curr;
+        head=root , p=dummy;
+        while(head){
+            curr=head;
+            while(curr){
+                if(curr->left) p->next=curr->left , p=p->next;
+                if(curr->right) p->next=curr->right , p=p->next;
+                
+                curr=curr->next;
+            }
+            head=dummy->next;
+            dummy->next=NULL;
+            p=dummy;
         }
         
-        dfs(root->right);
-        dfs(root->left);
-    }
-    Node* connect(Node* root) {
-        dfs(root);
         return root;
     }
 };
