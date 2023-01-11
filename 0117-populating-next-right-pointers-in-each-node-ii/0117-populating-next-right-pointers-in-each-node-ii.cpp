@@ -15,26 +15,31 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-//BFS with extra space
-//exactly similar to Question number 116 , its first version.
+//DFS
+//2 recursive functions
 class Solution {
 public:
-    Node* connect(Node* root) {
-        if(root==NULL) return NULL;
-        queue<Node*>q;
-        q.push(root);
-        while(!q.empty()){
-            Node *curr , *pre=NULL;
-            int sz=q.size();
-            for(int i=0;i<sz;i++){
-                curr=q.front(),q.pop();
-                curr->next=pre;
-                pre=curr;
-                
-                if(curr->right) q.push(curr->right);
-                if(curr->left) q.push(curr->left);
-            }
+    Node* exploreForNext(Node* curr){
+        if(!curr) return NULL;
+        else if(curr->left) return curr->left;
+        else if(curr->right) return curr->right;
+        return exploreForNext(curr->next);
+    }
+    void dfs(Node* root){
+        if(!root) return;
+        if(root->left){
+            if(root->right) root->left->next=root->right;
+            else root->left->next=exploreForNext(root->next);
         }
+        if(root->right){
+            root->right->next=exploreForNext(root->next);
+        }
+        
+        dfs(root->right);
+        dfs(root->left);
+    }
+    Node* connect(Node* root) {
+        dfs(root);
         return root;
     }
 };
