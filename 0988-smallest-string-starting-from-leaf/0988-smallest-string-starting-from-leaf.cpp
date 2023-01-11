@@ -10,20 +10,27 @@
  * };
  */
 //DFS Top-Down
-//*Disdvantage-Adding new character in the beginning of string makes it O(n) every time
+//characters are added at the back of string top to down
+//reversing at the end in base cases as we compare leaf to root
+//passing string by reference therefore we pop_back to make same string resuable
 class Solution {
 public:
     string ans="~";
     string smallestFromLeaf(TreeNode* root) {
-        dfs(root,"");
+        string s="";
+        dfs(root,s);
         return ans;
     }
-    void dfs(TreeNode* curr , string s){
+    void dfs(TreeNode* curr , string& s){
         if(!curr) return;
+        s.push_back(curr->val+'a');
         if(!curr->left && !curr->right){
-            ans=min(ans,char(curr->val+'a')+s); //*here
+            string temp=s;
+            reverse(begin(temp),end(temp));
+            ans=min(ans,temp);
         }
-        dfs(curr->left,char(curr->val+'a')+s); //*here
-        dfs(curr->right,char(curr->val+'a')+s); //* and here
+        dfs(curr->left,s);
+        dfs(curr->right,s);
+        s.pop_back();
     }
 };
