@@ -9,18 +9,24 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//LESS OPTIMIZED DFS postorder
-//BOTTOM UP O(N^2)
+//DFS- preorder
+//Using map
 class Solution {
 public:
+    unordered_map<long long,int>m{{0,1}};
     int ans=0;
-    int dfs(TreeNode* root,long long k){
-        if(!root) return 0;
-        
-        return (root->val==k) + dfs(root->left,k-root->val)+dfs(root->right,k-root->val);
+    void dfs(TreeNode* curr, int &k, long long sum){
+        if(!curr) return;
+        sum+=(long long)curr->val;
+        if(m.count(sum-k)) ans+=m[sum-k];
+        m[sum]++;
+        dfs(curr->left,k,sum);
+        dfs(curr->right,k,sum);
+        m[sum]--;
+        if(m[sum]==0) m.erase(sum);
     }
-    int pathSum(TreeNode* root, int targetSum) {
-        if(!root) return 0;
-        return pathSum(root->left,targetSum) + pathSum(root->right,targetSum) +dfs(root,(long long)targetSum);
+    int pathSum(TreeNode* root, int k) {
+        dfs(root,k,0);
+        return ans;
     }
 };
