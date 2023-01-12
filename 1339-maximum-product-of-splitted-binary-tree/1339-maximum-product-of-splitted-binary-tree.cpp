@@ -10,26 +10,23 @@
  * };
  */
 //DFS  post order
-
+//only 1 recursive function
 static int mod= 1e9+7;
 class Solution {
 public:
-    long long ans=INT_MIN;
-    long long calculate(TreeNode* root){
+    long long ans=INT_MIN,total=0;
+    long long dfs(TreeNode* root){
         if(!root) return 0;
-        return (long long)root->val+calculate(root->left)+calculate(root->right);
-    }
-    long long dfs(TreeNode* root,long long &total){
-        if(!root) return 0;
-        long long leftRet=dfs(root->left,total);
-        long long rightRet=dfs(root->right,total);
+        long long leftRet=dfs(root->left);
+        long long rightRet=dfs(root->right);
         ans=max(max(leftRet*(total-leftRet),rightRet*(total-rightRet)),ans);
         
         return leftRet+rightRet+root->val;
     }
     int maxProduct(TreeNode* root) {
-        long long total=calculate(root);
-        dfs(root,total);
+        total=dfs(root);
+        
+        dfs(root);
         
         return ans%mod;
     }
