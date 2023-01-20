@@ -9,19 +9,23 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
+//Iterative
 class Solution {
 public:
     TreeNode* insertIntoBST(TreeNode* root, int val) {
-        if(!root){
-            auto node = new TreeNode(val);
-            return node;
+        TreeNode* curr=root , *node=new TreeNode(val);
+        if(root==NULL) return node;
+        while(curr){
+            if(val<curr->val){
+                if(curr->left) curr=curr->left;
+                else { curr->left=node; break; }
+            }
+            else{
+                if(curr->right) curr=curr->right;
+                else { curr->right=node; break; }
+            }
         }
         
-        if(val<root->val)
-            root->left=insertIntoBST(root->left,val);
-        else 
-            root->right=insertIntoBST(root->right,val);
         
         return root;
     }
