@@ -9,32 +9,18 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Stack+Itertive
+//DFS
 class Solution {
 public:
-    TreeNode* bstFromPreorder(vector<int>& pre){
-        int i=0;
-        stack<TreeNode*>st;
+    int i=0;
+    TreeNode* bstFromPreorder(vector<int>& pre, int maxVal=INT_MAX) {
+        if(i==pre.size() || pre[i]>maxVal) return NULL;
+        
         auto root=new TreeNode(pre[i++]);
-        TreeNode* curr=root;
-        while(i<pre.size()){
-            if(pre[i]<curr->val){
-                st.push(curr);
-                auto node=new TreeNode(pre[i]);
-                curr->left=node;
-                curr=curr->left;
-            }
-            else{
-                while(!st.empty() && pre[i]>st.top()->val){
-                    curr=st.top();
-                    st.pop();
-                }
-                auto node=new TreeNode(pre[i]);
-                curr->right=node;
-                curr=curr->right;
-            }
-            i++;
-        }
+        
+        root->left=bstFromPreorder(pre,root->val);
+        root->right=bstFromPreorder(pre,maxVal);
+        
         return root;
     }
 };
