@@ -9,15 +9,18 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
+//ITERATIVE
 class Solution {
 public:
     TreeNode* searchBST(TreeNode* root, int val) {
-        if(!root) return NULL;
-        if(root->val==val) return root;
-        TreeNode* curr;
-        if(val<root->val) curr=searchBST(root->left,val);
-        else curr=searchBST(root->right,val);
+        TreeNode* curr=root;
+        while(curr){
+            if(val<curr->val)
+                curr=curr->left;
+            else if(val>curr->val)
+                curr=curr->right;
+            else return curr;
+        }
         
         return curr;
     }
