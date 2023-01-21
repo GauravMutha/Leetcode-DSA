@@ -9,14 +9,14 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS- NOT USING BST
+//DFS- BST OPTIMIZED
 class Solution {
 public:
     TreeNode* trimBST(TreeNode* root, int low, int high) {
         if(!root) return NULL;
         
-        auto L= trimBST(root->left,low,high);
-        auto R= trimBST(root->right,low,high);
+        TreeNode* L= (root->val >low) ? trimBST(root->left,low,high) : NULL;
+        TreeNode* R= (root->val<high)? trimBST(root->right,low,high) : NULL;
         
         if(root->val<low) root->left=NULL , root=R;
         else if(root->val>high) root->right=NULL , root=L;
