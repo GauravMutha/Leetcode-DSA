@@ -9,8 +9,9 @@
  */
 //DFS-Preorder serialization
 //seperated by commas
-//During deserialization we are inserting everytime starting from the root making it O(nlogn)
-//using stringstream in deserialization
+//During deserialization we are using a seperate function instead of stringstream to get the int values for nodes from data string
+//O(n)
+//using substr instead of stringstream i.e. sending data string fully in deserialize function
 
 class Codec {
 private:
@@ -23,21 +24,24 @@ private:
         preorder(root->left,res);
         preorder(root->right,res);
     }
-    //constructing bst from preorder
-    TreeNode* insert(TreeNode* root , int val){
-        if (root == NULL) {
-			TreeNode* temp=new TreeNode(val);
-			return temp;
-		}
-    
-		if (val<=root->val)
-			root->left=insert(root->left,val);
-    
-		else
-			root->right=insert(root->right,val);
-    
-		return root;
-}
+    int getValue(string &data , int &pos){
+        pos=data.find(',');
+        return stoi(data.substr(0,pos));
+    }
+    TreeNode* helper(string &data,int maxVal){
+        if(data=="") return NULL;
+        
+        int pos=0;
+        int x=getValue(data,pos);
+        if(x>maxVal) return nullptr;
+        
+        auto node = new TreeNode(x);
+        data=data.substr(pos+1);
+        node->left=helper(data,node->val);
+        node->right=helper(data,maxVal);
+        
+        return node;
+    }
 public:
 
     // Encodes a tree to a single string.
@@ -51,12 +55,7 @@ public:
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
         if(data=="") return nullptr;
-        stringstream s(data);
-        TreeNode* root=NULL;
-        string str;
-        while(getline(s,str,','))
-            root=insert(root,stoi(str));
-        return root;
+        return helper(data,INT_MAX);
     }
 };
 
