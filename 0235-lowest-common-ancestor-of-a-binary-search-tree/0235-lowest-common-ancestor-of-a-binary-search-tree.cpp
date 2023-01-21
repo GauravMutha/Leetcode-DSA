@@ -8,24 +8,19 @@
  * };
  */
 //DFS
-//"BST-OPTIMISED" BY MODIFYING BT VERSION OF THIS QUESTION
+//"BST-OPTIMISED" CONCISE
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
         if(!root) return NULL;
         
-        if(root->val==p->val || root->val==q->val) return root;
+        if(p->val<root->val && q->val<root->val)
+            return lowestCommonAncestor(root->left,p,q);
         
-        TreeNode* L=(root->val > min(p->val,q->val))?
-            lowestCommonAncestor(root->left,p,q):NULL;
-        TreeNode* R=(root->val < max(p->val,q->val))?
-            lowestCommonAncestor(root->right,p,q):NULL;
+        else if(p->val>root->val && q->val>root->val)
+            return lowestCommonAncestor(root->right,p,q);
         
-        if(L && R) return root;
-        
-        if(!L && !R) return NULL;
-        
-        return L ? L : R;
+        else return root;
         
     }
 };
