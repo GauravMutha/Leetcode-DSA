@@ -9,21 +9,20 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Naive DFS
+//DFS
 class Solution {
 public:
-    void inorder(TreeNode* root , vector<int>&vec){
+    void inorder(TreeNode* root , TreeNode* &pre , int &ans){
         if(!root) return;
-        inorder(root->left,vec);
-        vec.push_back(root->val);
-        inorder(root->right,vec);
+        inorder(root->left,pre,ans);
+        if(pre!=NULL) ans=min(ans,abs(pre->val-root->val));
+        pre=root;
+        inorder(root->right,pre,ans);
     }
     int getMinimumDifference(TreeNode* root) {
-        vector<int>vec;
+        TreeNode* pre=NULL;
         int ans=INT_MAX;
-        inorder(root,vec);
-        for(int i=0;i<vec.size()-1;i++)
-            ans=min(ans,abs(vec[i]-vec[i+1]));
+        inorder(root,pre,ans);
         return ans;
     }
 };
