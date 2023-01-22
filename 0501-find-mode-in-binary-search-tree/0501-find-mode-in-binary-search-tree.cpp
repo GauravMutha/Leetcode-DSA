@@ -9,33 +9,41 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+//S.C. -> O(1) excluding the stack space for recursion
 class Solution {
+private:
+    vector<int>res;
+    int pre=-1,count=0,maxCount=0,modeCount=0;
 public:
-    void inorder(TreeNode* root, int &pre , vector<int>&res,int &count,int &maxCount){
-        if(!root) return;
-        inorder(root->left,pre,res,count,maxCount);
-        
-        if(pre==root->val) count++;
-        else count=1;
-        
-        if(count==maxCount){
-            res.push_back(root->val);
+    void handleValue(int val){
+        if(val!=pre){
+            pre=val;
+            count=0;
         }
-        else if(count>maxCount){
-            res={};
-            res.push_back(root->val);
+        count++;
+        if(count>maxCount){
             maxCount=count;
+            modeCount=1;
         }
-        
-        pre=root->val;
-        
-        inorder(root->right,pre,res,count,maxCount);
+        else if(count==maxCount){
+            if(!res.empty()) res[modeCount]=pre;
+            modeCount++;
+        }
+    }
+    void inorder(TreeNode* root){
+        if(!root) return;
+        inorder(root->left);
+        handleValue(root->val);
+        inorder(root->right);
     }
     vector<int> findMode(TreeNode* root) {
-        vector<int>res;
-        int pre=-1, count=1,maxCount=INT_MIN;
-        inorder(root,pre,res,count,maxCount);
-        if(res.size()==0) res.push_back(root->val);
+        inorder(root);
+        res.resize(modeCount);
+
+//Note we are not resetting maxCount as thats one of the main  information from our first pass , to poulate the res vector 
+        modeCount=0 , count=0 , pre=-1;
+        inorder(root);
+        
         return res;
     }
 };
