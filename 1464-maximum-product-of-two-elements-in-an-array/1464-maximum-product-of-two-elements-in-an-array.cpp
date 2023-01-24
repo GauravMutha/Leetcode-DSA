@@ -1,12 +1,16 @@
-//Brute Force O(n^2)
+//Priority Queue -- O(n)
 class Solution {
 public:
     int maxProduct(vector<int>& nums) {
-        int ans=INT_MIN;
-        for(int i=0;i<nums.size()-1;i++){
-            for(int j=i+1;j<nums.size();j++)
-                ans=max((nums[i]-1)*(nums[j]-1),ans);
+        int ans=1;
+        priority_queue<int,vector<int>,greater<int>>minh;
+        for(auto e : nums){
+            minh.push(e);
+            if(minh.size()>2) minh.pop();
         }
+        while(!minh.empty())
+            ans*=(minh.top()-1) , minh.pop();
+        
         return ans;
     }
 };
