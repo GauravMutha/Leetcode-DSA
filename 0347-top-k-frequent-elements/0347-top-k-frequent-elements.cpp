@@ -1,20 +1,23 @@
-//Map + Vector pair + comparator
+//map + vector pair +priority queue(min heap) 
+typedef pair<int,int> pii;
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
+        priority_queue<pii,vector<pii>,greater<pii>>mh;
         unordered_map<int,int>m;
         vector<int>res;
-        vector<pair<int,int>>vec;
+        vector<pii>vec;
         for(auto &e: nums) m[e]++;
         
         for(auto &[num,freq]:m) vec.push_back({freq,num});
         
-        sort(begin(vec),end(vec),[](const auto &a, const auto &b){
-            return a.first>b.first;
-        });
+        for(int i=0;i<vec.size();i++){
+            mh.push(vec[i]);
+            if(mh.size()>k) mh.pop();
+        }
         
-        for(int i=0;i<vec.size() && k;k--,i++)
-            res.push_back(vec[i].second);
+        while(!mh.empty())
+            res.push_back(mh.top().second) ,mh.pop();
         
         return res;
     }
