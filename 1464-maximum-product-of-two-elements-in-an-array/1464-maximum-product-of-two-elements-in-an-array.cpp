@@ -1,16 +1,15 @@
-//Priority Queue -- O(n)
+//TC-->O(N)
+//SC-->O(1)
+//No priority queue
 class Solution {
 public:
     int maxProduct(vector<int>& nums) {
-        int ans=1;
-        priority_queue<int,vector<int>,greater<int>>minh;
-        for(auto e : nums){
-            minh.push(e);
-            if(minh.size()>2) minh.pop();
-        }
-        while(!minh.empty())
-            ans*=(minh.top()-1) , minh.pop();
+        int maxVal1=-1, maxVal2=-1;
         
-        return ans;
+        for(auto n : nums){
+            if(n>maxVal1) maxVal2=maxVal1 , maxVal1=n;
+            else if(n>maxVal2) maxVal2=n;
+        }
+        return (maxVal1-1)*(maxVal2-1);
     }
 };
