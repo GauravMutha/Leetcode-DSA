@@ -1,22 +1,14 @@
-//Map+pair vector + comparator
+//Hash table + comparator
 class Solution {
 public:
     string frequencySort(string s) {
-        unordered_map<char,int>m;
-        vector<pair<int,char>>vec;
-        for(auto c: s) m[c]++;
-        
-        for(auto &[c,freq]:m)
-            vec.push_back({freq,c});
-        
-        sort(begin(vec),end(vec),[](const auto &a,const auto &b){
-            return a.first>b.first;
+        vector<int>hash(128);
+        for(auto c: s) hash[c]++;
+    
+        sort(begin(s),end(s),[&](char a,char b){
+            return ( (hash[a]>hash[b]) || (hash[a]==hash[b] && a<b) );
         });
         
-        string ans;
-        for(auto &[freq,c] : vec)
-            ans.append(freq,c);
-        
-        return ans;
+        return s;
     }
 };
