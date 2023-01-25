@@ -1,24 +1,25 @@
 class SmallestInfiniteSet {
-private : 
-    int ind=1;
-    vector<int>vec = std::vector<int>(1001);
+private:
+    set<int>s;
+    int curr;
 public:
     SmallestInfiniteSet() {
-       vec[0]=-1;
-       for(int i=1;i<=1000;i++) vec[i]=i;
+        curr=1;
     }
     
     int popSmallest() {
-        int ans=vec[ind];
-        vec[ind]=-1;
-        while(ind<vec.size() && vec[ind]==-1) ind++;
-        return ans;
+        if(s.size()){
+            int res=*s.begin();
+            s.erase(res);
+            return res;
+        }
+        curr++;
+        return curr-1;
     }
     
     void addBack(int num) {
-        if(vec[num]!=-1) return;
-        vec[num]=num;
-        if(vec[num]<vec[ind]) ind=num;
+        if(num<curr) s.insert(num);
+        return;
     }
 };
 
