@@ -1,28 +1,24 @@
-//Comparator
-// And priority queue minheap
-typedef pair<int,int> p;
+//Prefix Sum
+//O(n) TC
+//3 pass
 class Solution {
 public:
-    bool carPooling(vector<vector<int>>& trips, int cap) {
-        priority_queue<p,vector<p>,greater<p>>minh;
+    bool carPooling(vector<vector<int>>& vec, int cap) {
+        int in_car=0;
+        auto max_drop = (*std::max_element(begin(vec), end(vec), [](auto& a, auto& b){ return a[2] < b[2]; }))[2];
         
-        for(auto &e : trips) minh.push({e[2],e[0]});
-        sort(begin(trips),end(trips),[](const auto &a,const auto &b){
-            return a[1]<b[1];
-        });
+        vector<int>stops(max_drop+1,0);
         
-        int curr=trips[0][0];
-        if(curr>cap) return false;
-        
-        for(int i=1;i<trips.size();i++){
-            int passenger=trips[i][0] , pickup=trips[i][1];
-            curr+=passenger;
-            while(minh.top().first<=pickup) 
-                curr-=minh.top().second , minh.pop();
-            
-            if(curr>cap) return false;
+        for(int i=0;i<vec.size();i++){
+            stops[vec[i][1]]+=vec[i][0];
+            stops[vec[i][2]]-=vec[i][0];
         }
         
+        for(int i=0;i<stops.size();i++){
+            in_car+=stops[i];
+            if(in_car>cap) return false;
+        }
         return true;
+        
     }
 };
