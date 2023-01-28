@@ -1,33 +1,35 @@
-typedef pair<int,char> p;
+//No Sorting or Priority Queue
+//TC-->O(N)
+//TC-->O(1)
 class Solution {
 public:
     string reorganizeString(string s) {
-        char prev='#';
         vector<int>hash(26,0);
-        priority_queue<p>maxh;
-        for(auto &c : s) hash[c-'a']++;
-        for(int i=0;i<26;i++) if(hash[i]) maxh.push({hash[i],i+'a'});
+        int maxFreq=0,maxLetter=0 , ind=0,sz=s.size();
+        string res(sz,' ');
         
-        int i=0;
-        while(!maxh.empty()){
-            auto [cnt1,c1]=maxh.top(); maxh.pop();
-            if(prev==c1){
-                if(maxh.empty()) return "";
-                auto [cnt2,c2]=maxh.top(); maxh.pop();
-                s[i++]=c2;
-                prev=c2;
-                maxh.push({ cnt1, c1 });
-                cnt2--;
-                if(cnt2>0) maxh.push({cnt2,c2});
-            }
-            else{
-                prev=c1;
-                s[i++]=c1;
-                cnt1--;
-                if(cnt1>0) maxh.push({cnt1,c1});
+        for(auto &c : s) hash[c-'a']++;
+        for(int i=0;i<hash.size();i++){
+            if(hash[i]>maxFreq) maxFreq=hash[i] , maxLetter=i; 
+        }
+        
+        if(maxFreq>(sz+1)/2) return "";
+        
+        while(hash[maxLetter]>0){
+            res[ind]=char(maxLetter+'a');
+            ind+=2;
+            hash[maxLetter]--;
+        }
+        
+        for(int i=0;i<hash.size();i++){
+            while(hash[i]>0){
+                if(ind>=sz) ind=1;
+                res[ind]=char(i+'a');
+                ind+=2;
+                hash[i]--;
             }
         }
         
-        return s;
+        return res;
     }
 };
