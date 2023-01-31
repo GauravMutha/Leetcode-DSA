@@ -1,25 +1,30 @@
-//Priority_queue max heap
+//Priority Queue + min heap
 class Solution {
 public:
     int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
-        priority_queue<int>maxh;
-        int height_difference=0,i=0;
+        priority_queue<int,vector<int>,greater<int>>minh;
+        int jumpHeight=0,n=heights.size() , i=0;
         
-        for(i=0;i<heights.size()-1;i++){
-            height_difference=heights[i+1]-heights[i];
-            
-            if(height_difference<=0) continue;
-            
-            maxh.push(height_difference);
-            bricks-=height_difference;
-            
-            if(bricks<0){
-                bricks+=maxh.top();
-                maxh.pop();
-                ladders--;
-            }
-            if(ladders<0) break;
+        while(i<(n-1) && (size(minh) < ladders)){
+            jumpHeight=heights[i+1]-heights[i];
+            if(jumpHeight>0)
+                minh.push(jumpHeight);
+            i++;
         }
+        
+        while(i<(n-1)){
+            jumpHeight=heights[i+1]-heights[i];
+            if(jumpHeight<=0) {i++ ; continue;}
+            if(!minh.empty() && (jumpHeight > minh.top())){
+                bricks-=minh.top();
+                minh.pop();
+                minh.push(jumpHeight);
+            }
+            else bricks-=jumpHeight;
+            if(bricks<0) return i;
+            i++;
+        }
+        
         return i;
     }
 };
