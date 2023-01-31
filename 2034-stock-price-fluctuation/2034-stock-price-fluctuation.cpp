@@ -1,9 +1,11 @@
-//Multiset and a map
+//2 heaps 2 maps
 class StockPrice {
 private:
-    multiset<int>s;
     unordered_map<int,int>m;
-    int latest=-1;
+    unordered_map<int,int>freq;
+    priority_queue<int>maxh;
+    priority_queue<int,vector<int>,greater<int>>minh;
+    int latest=0 ,latestPrice=0;
 public:
     StockPrice() {
         
@@ -11,28 +13,32 @@ public:
     
     void update(int ts, int price) {
         if(m.count(ts)){
-            int wrongPrice=m[ts];
-            auto it=s.find(wrongPrice);
-            s.erase(it);
+            freq[m[ts]]--;
+            //cleaning old incorrect prices from heaps
+            while(!maxh.empty() && freq[maxh.top()]==0) 
+                maxh.pop();
+            while(!minh.empty() && freq[minh.top()]==0) 
+                minh.pop();
         }
-        
-        latest=max(ts,latest);
         m[ts]=price;
-        s.insert(price);
+        if(freq[price]==0) maxh.push(price) , minh.push(price);
+        freq[price]++; // or freq[m[ts]]++;
+        if(ts>=latest){
+            latest=ts;
+            latestPrice=price;
+        }
     }
     
     int current() {
-        return m[latest];
+        return latestPrice;
     }
     
     int maximum() {
-        auto it=s.rbegin();
-        return *it;
+        return maxh.top();
     }
     
     int minimum() {
-        auto it=s.begin();
-        return *it;
+        return minh.top();
     }
 };
 
