@@ -1,39 +1,34 @@
-//Priority Queue maxheap
-//Same as 767.Reorganize string
-typedef pair<int,int>p;
+//similar to 767.Reorganize string
+//TC--> O(N)
+//SC--> o(1)
 class Solution {
 public:
     vector<int> rearrangeBarcodes(vector<int>& barcodes) {
-        vector<int>res;
         unordered_map<int,int>m;
-        priority_queue<p>maxh;
-        int prev=-1;
+        int maxFreq=-1, maxCode=0 ,sz=barcodes.size(),ind=0;
         
-        //Codes and their frequence are stored
-        for(auto &code : barcodes) m[code]++;
-        //Stored in maxheap
-        for(auto &[num,freq] :m) maxh.push({freq,num});
-        
-        while(!maxh.empty()){
-            auto [cnt1,num1] = maxh.top();
-            maxh.pop();
-            if(prev==num1){
-                auto [cnt2,num2]=maxh.top();
-                maxh.pop();
-                res.push_back(num2);
-                prev=num2;
-                
-                cnt2--;
-                if(cnt2>0) maxh.push({cnt2,num2});
-                maxh.push({cnt1,num1});
-            }
-            else{
-                res.push_back(num1);
-                prev=num1;
-                cnt1--;
-                if(cnt1>0) maxh.push({cnt1,num1});
+        for(auto &code : barcodes){
+            m[code]++;
+            if(m[code]>=maxFreq){
+                maxFreq=m[code];
+                maxCode=code;
             }
         }
-        return res;
+        while(maxFreq>0){
+            barcodes[ind]=maxCode;
+            ind+=2;
+            maxFreq--;
+        }
+        m.erase(maxCode);
+        for(auto &[code,freq]:m){
+            while(freq>0){
+                if(ind>=sz) ind=1;
+                barcodes[ind]=code;
+                ind+=2;
+                freq--;
+            }
+        }
+        
+        return barcodes;
     }
 };
