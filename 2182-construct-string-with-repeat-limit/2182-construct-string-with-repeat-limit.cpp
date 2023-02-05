@@ -1,30 +1,29 @@
-//USing ordered map
+//Without map
+//O(N)
 class Solution {
 public:
     string repeatLimitedString(string s, int limit) {
+        vector<int>hash(26,0);
         string res="";
-        map<char,int ,greater<char>>m;
-        int cnt=0,freq=0;
-        char ch;
-        for(auto &c : s) m[c]++;
+        int i=0;
+        bool onlyOne=false;
+        for(auto &ch : s) hash[ch-'a']++;
         
-        
-        while(!m.empty()){
-            ch=m.begin()->first , freq=m.begin()->second;
-            m.erase(m.begin());
-            cnt=0;
-            while(freq>0){
-                cnt++;
-                if(cnt>limit){
-                    if(m.empty()) return res;
-                    res.push_back(m.begin()->first);
-                    m.begin()->second--;
-                    if(m.begin()->second==0) m.erase(m.begin());
-                    cnt=1;
+        while(true){
+            i=25;
+            onlyOne=false;
+            for(;i>=0;i--){
+                if(res.size()>0 && (res.back()-'a')==i && hash[i]){
+                    onlyOne=true;
+                    continue;
                 }
-                res.push_back(ch);
-                freq--;
+                if(hash[i]>0) break;
             }
+            if(i<0) break;
+            
+            int freq= onlyOne ? 1 : min(hash[i],limit);
+            hash[i]-=freq;
+            while(freq--) res.push_back(i+'a');
         }
         
         return res;
