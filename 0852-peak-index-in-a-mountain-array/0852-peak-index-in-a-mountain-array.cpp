@@ -1,13 +1,14 @@
+//concise than previous solution
+//we can remove the first and last element by setting our start and end values in that manner
 class Solution {
 public:
     int peakIndexInMountainArray(vector<int>& arr) {
-        int start=0,end=arr.size()-1,mid=0;
+        int start=1,end=arr.size()-2,mid=0;
         
         while(start<=end){
             mid=start+ (end-start)/2;
             
-            if((mid-1)<0) return end;
-            else if(arr[mid-1]<arr[mid] && arr[mid+1]<arr[mid])
+            if(arr[mid-1]<arr[mid] && arr[mid+1]<arr[mid])
                 return mid;
             
             if(arr[mid-1] <arr[mid] && arr[mid+1]>arr[mid])
