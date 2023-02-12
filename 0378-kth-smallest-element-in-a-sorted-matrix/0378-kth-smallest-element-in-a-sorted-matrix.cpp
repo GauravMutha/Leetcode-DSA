@@ -1,24 +1,28 @@
-//min heap 
-//kth smallest amongst m sorted rows
-//SC-->O(N)
-//TC-->O((n+k)*logn)
+//O((n+n)*log(diff))
+// diff is the difference between minimum and maximum element of matrix
+//or simply the search space length in which we ar apllying binary search
 class Solution {
+private:
+    int countLessOrEqual(vector<vector<int>>& matrix,int x){
+        int col=matrix.size()-1,count=0;
+        for(int row=0;row<matrix.size();row++){
+            while(col>=0 && matrix[row][col]>x) col--;
+            count+=(col+1); // because col is an index of zero indexed based matrix
+        }
+        return count;
+    }
 public:
     int kthSmallest(vector<vector<int>>& matrix, int k) {
-        priority_queue<vector<int>,vector<vector<int>>,greater<>> minh;
-        vector<int>vec;
-        //n equal to matrix[0].size() too as it is nXn matrix
-        int n=matrix.size(),ans=0; 
-        for(int r=0;r<min(n,k);r++)
-            minh.push({matrix[r][0],r,0});
+        int m=matrix.size(), ans=0;
+        int start=matrix[0][0] , end=matrix[m-1][m-1] , mid=0;
         
-        while(k--){
-            vec=minh.top(), minh.pop();
-            ans=vec[0];
-            int currR=vec[1];
-            int currCol=vec[2];
-            if(currCol+1 < n)
-                minh.push({matrix[currR][currCol+1],currR,currCol+1});
+        while(start<=end){
+            mid=(end+start)/2;
+            if(countLessOrEqual(matrix,mid)>=k){
+                ans=mid;
+                end=mid-1;
+            }
+            else start=mid+1;
         }
         
         return ans;
