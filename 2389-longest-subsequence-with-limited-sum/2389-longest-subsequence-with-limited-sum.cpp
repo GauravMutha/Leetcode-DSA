@@ -1,5 +1,4 @@
-//sorting + linear search
-//brute force
+//sorting + binary search
 class Solution {
 public:
     vector<int> answerQueries(vector<int>& nums, vector<int>& queries) {
@@ -10,9 +9,13 @@ public:
             sum+=nums[i] , preSum[i]=sum;
         
         for(int i=0;i<queries.size();i++){
-            for(int j=0;j<nums.size();j++){
-                if(preSum[j]<=queries[i]) res[i]=(j+1);
-                else break;
+            int start=0 , end=preSum.size()-1, target=queries[i];;
+            while(start<=end){
+                int mid=start+ (end-start)/2;
+                
+                if(preSum[mid]<=target)
+                    res[i]=mid+1 , start=mid+1;
+                else end=mid-1;
             }
         }
         return res;
