@@ -1,20 +1,14 @@
-//two pointers
-//TC--> O(m*log(n)) m is the size of nums1 , n is of nums2
+/*Binary search but we use lower_bound function instead of explicitly doing Binar search*/
 class Solution {
 public:
-    int maxDistance(vector<int>& nums1, vector<int>& nums2) {
-        int maxDist=0,low=0,high=0,sz1=nums1.size(),sz2=nums2.size(),res=0;
+    int maxDistance(vector<int>& n1, vector<int>& n2) {
+        int maxDist=0,sz1=n1.size(),sz2=n2.size(),res=0;
         
-        for(int i=0;i<nums1.size();i++){
-            int mid=0 , low=i,high=nums2.size()-1;
-            while(low<=high){
-                mid=low + (high-low)/2;
-                if(nums2[mid]>=nums1[i])
-                    maxDist=max(mid-i,maxDist) , low=mid+1;
-                else high=mid-1;
-            }
-            res=max(res,maxDist);
+        for(int i=0;i<n1.size();i++){
+            int it=lower_bound(rbegin(n2),rend(n2),n1[i])-n2.rbegin();
+            int j=sz2-it-1;
+            if(j>=i) maxDist=max(maxDist,j-i);
         }
-        return res;
+        return maxDist;
     }
 };
