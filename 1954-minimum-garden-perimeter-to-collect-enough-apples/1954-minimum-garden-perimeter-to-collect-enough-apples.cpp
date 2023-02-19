@@ -1,7 +1,9 @@
+//TESTING THE APPROAXIMATE UPPER BOUND
+//THIS TIME THE HIGH IS 1e5
 class Solution {
 public:
     long long minimumPerimeter(long long neededApples) {
-        long low=1 , high=1000000;
+        long low=1 , high=100000;
         long mid=0 ,apples=0;
         long ans=0;
         while(low<=high){
