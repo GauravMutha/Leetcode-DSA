@@ -1,5 +1,5 @@
 bool cmp(pair<int,string> a,pair<int,string> b){
-    return a.first<b.first;
+    return a.first<=b.first;
 }
 class TimeMap {
 private:
@@ -14,7 +14,7 @@ public:
     }
     
     string get(string key, int ts) {
-        auto it=upper_bound(begin(m[key]),end(m[key]),pair<int,string>(ts,""),cmp);
+        auto it=lower_bound(begin(m[key]),end(m[key]),pair<int,string>(ts,""),cmp);
         if(it==m[key].begin()) return "";
         it--;
         return it->second;
