@@ -1,18 +1,18 @@
+//SAME AS PREVIOUS but more concise
 class Solution {
 private:
     bool validate(vector<int>q,int maxProduct,int totalShops){
-        int shopCount=0,i=0;
-        while(i<q.size() && shopCount<totalShops){
-            if(q[i]>maxProduct) q[i]-=maxProduct;
-            else q[i]=0 , i++;
-            shopCount++;
+        for(int i=0;i<q.size();i++){
+            
+            totalShops-=ceil((double)q[i]/maxProduct);
+            
+            if(totalShops<0) return false;
         }
-        if(i<q.size()) return false;
         return true;
     }
 public:
     int minimizedMaximum(int n, vector<int>& q) {
-        int low=0,high=*max_element(begin(q),end(q));
+        int low=1,high=*max_element(begin(q),end(q));
         int ans=0;
         
         while(low<=high){
