@@ -1,18 +1,20 @@
-//Binary search + Two pointers / expanding sliding window
-//O(log(n) + k)
+// priority queue maxheap O(nlog(k))
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
         vector<int>res;
-        int R=lower_bound(begin(arr),end(arr),x)-begin(arr);
-        int L=R-1;
+        priority_queue<pair<int,int>>maxh;
         
-        while(k--){
-            if(R>=arr.size() || (L>=0 && abs(x-arr[L])<=abs(arr[R]-x)) )
-                L--;
-            else R++;
+        for(int i=0;i<arr.size();i++){
+            maxh.push({abs(arr[i]-x),i});
+            if(maxh.size()>k) maxh.pop();
         }
-        L++;
-        return vector<int>(begin(arr)+L ,begin(arr)+R);
+        
+        while(!maxh.empty()){
+            res.push_back(arr[maxh.top().second]);
+            maxh.pop();
+        }
+        sort(res.begin(),res.end());
+        return res;
     }
 };
