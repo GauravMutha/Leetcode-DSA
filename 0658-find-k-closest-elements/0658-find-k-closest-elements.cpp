@@ -1,20 +1,17 @@
-// priority queue maxheap O(nlog(k))
+//Two pointers / shrinking sliding window
+//O(n)
 class Solution {
 public:
     vector<int> findClosestElements(vector<int>& arr, int k, int x) {
         vector<int>res;
-        priority_queue<pair<int,int>>maxh;
-        
-        for(int i=0;i<arr.size();i++){
-            maxh.push({abs(arr[i]-x),i});
-            if(maxh.size()>k) maxh.pop();
+        int l=0,r=arr.size()-1;
+        while((r-l+1)>k){
+            if(abs(x-arr[l])<=abs(x-arr[r])) r--;
+            else l++;
         }
+        for(int i=l;i<=r;i++)
+            res.push_back(arr[i]);
         
-        while(!maxh.empty()){
-            res.push_back(arr[maxh.top().second]);
-            maxh.pop();
-        }
-        sort(res.begin(),res.end());
         return res;
     }
 };
