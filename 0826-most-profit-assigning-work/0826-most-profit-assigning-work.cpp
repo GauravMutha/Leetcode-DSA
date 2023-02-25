@@ -1,25 +1,25 @@
-//map+binary search(lower_bound)
+//vector of pairs + sorting + two pointers
+//instead of map + ----------+ instead of binary search
 class Solution {
 public:
     int maxProfitAssignment(vector<int>& diff, vector<int>& profit, vector<int>& worker) {
-        map<int,int>m;
-        int totalProfit=0, maxProfit=-1;
         
-        //sorts job difficulties with their profit
-        for(int i=0;i<diff.size();i++)
-            m[diff[i]]=max(m[diff[i]],profit[i]);
-        //within map itself , we make values as prefix array of maxProfit
-        for(auto it=m.begin();it!=m.end();it++){
-            maxProfit=max(maxProfit,it->second);
-            it->second=maxProfit;
+        vector<pair<int,int>>jobs;
+        for(int i=0;i<diff.size();i++){
+            jobs.push_back({diff[i],profit[i]});
         }
         
-        for(int i=0;i<worker.size();i++){
-            auto it=m.upper_bound(worker[i]);
-            it--;
-            totalProfit+=it->second;
-        }
+        sort(begin(worker),end(worker));
+        sort(begin(jobs),end(jobs));
         
-        return totalProfit;
+        int j=0,maxProfit=0,res=0,n=jobs.size(); //index for jobs
+        for(auto &ability : worker){
+            while(j<n && jobs[j].first<=ability){
+                maxProfit=max(maxProfit,jobs[j].second);
+                j++;
+            }
+            res+=maxProfit;
+        }
+        return res;
     }
 };
