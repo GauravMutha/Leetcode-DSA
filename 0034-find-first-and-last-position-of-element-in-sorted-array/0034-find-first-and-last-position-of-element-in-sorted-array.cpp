@@ -1,26 +1,23 @@
+//concise than previous
 class Solution {
-public:
-    vector<int> searchRange(vector<int>& nums, int target) {
-        int lb=-1,ub=-1;
-        
+private:
+    int lowerBound(vector<int>&nums,int k){
         int low=0,high=nums.size()-1;
+        
         while(low<=high){
             int mid=low+(high-low)/2;
             
-            if(nums[mid]==target) lb=mid;
-            if(nums[mid]>=target) high=mid-1;
+            if(nums[mid]>=k) high=mid-1;
             else low=mid+1;
         }
-        if(lb==-1) return vector<int>{-1,-1};
-        low=0,high=nums.size()-1;
-        while(low<=high){
-            int mid=low+(high-low)/2;
-            
-            if(nums[mid]==target) ub=mid;
-            if(nums[mid]<=target) low=mid+1;
-            else high=mid-1;
-            
-        }
+        
+        return low;
+    }
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int lb=lowerBound(nums,target);
+        if(lb>=nums.size() || nums[lb]!=target) return vector<int>{-1,-1};
+        int ub=lowerBound(nums,target+1)-1;
         
         return vector<int>{lb,ub};
     }
