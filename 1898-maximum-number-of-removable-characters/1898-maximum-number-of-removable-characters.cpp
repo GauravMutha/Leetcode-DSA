@@ -12,7 +12,7 @@ public:
             int mid=low+(high-low)/2,j=0;
             
             for(int i=0;i<s.size() && j<p.size();i++){
-                if(m[i]>=mid && s[i]==p[j]) j++;
+                if(m[i]>(mid-1) && s[i]==p[j]) j++;
             }
             if(j==p.size()) low=mid+1 , ans=mid;
             else high=mid-1;
