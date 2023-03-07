@@ -1,5 +1,5 @@
 //MERGE SORT
-//Recursive
+//Iterative
 //Extra Space
 class Solution {
 public:
@@ -21,18 +21,17 @@ public:
         
         for(int i=low;i<=high;i++) arr[i]=temp[i-low];
     }
-    void mergeSort(vector<int>&arr,int low,int high){
-        if(low>=high) return;
-        
-        int mid=low+(high-low)/2;
-        
-        mergeSort(arr,low,mid);
-        mergeSort(arr,mid+1,high);
-        merge(arr,low,mid,high);
-    }
     vector<int> sortArray(vector<int>& arr) {
-        int low=0,high=arr.size()-1;
-        mergeSort(arr,low,high);
+        int currSize,n=arr.size(),pass=0;
+        for(currSize=1;currSize<n;currSize*=2){
+            for(int left=0; left<n-1; left+=2*currSize){
+                
+                int mid=min(left+currSize-1,n-1);
+                int right=min(left+2*currSize-1,n-1);
+                
+                merge(arr,left,mid,right);
+            }
+        }
         return arr;
     }
 };
