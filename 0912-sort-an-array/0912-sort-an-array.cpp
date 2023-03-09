@@ -1,4 +1,4 @@
-//Bucket sort using vector of Linked Lists
+//Radix Sort using vectors of linked lists
  // Definition for singly-linked list.
 struct Node {
     int val;
@@ -9,31 +9,40 @@ struct Node {
 };
 class Solution {
 public:
-    vector<int> sortArray(vector<int>& nums) {
-        int n=nums.size();
-        int minVal=*min_element(begin(nums),end(nums));
-        int maxVal=*max_element(begin(nums),end(nums));
-        vector<Node*>bucket(maxVal-minVal+1,0);
-        
+    void radixSort(vector<int>&nums,int factor){
+        vector<Node*>bucket(10,nullptr);
         for(auto &num : nums){
-            auto newNode=new Node(num-minVal);
-            if(bucket[num-minVal]==nullptr)
-                bucket[num-minVal]=newNode;
+            auto newNode=new Node(num);
+            if(bucket[(num/factor)%10]==nullptr)
+                bucket[(num/factor)%10]=newNode;
             else{
-                auto tNode=bucket[num-minVal]->tail;
+                auto tNode=bucket[(num/factor)%10]->tail;
                 tNode->next=newNode;
-                bucket[num-minVal]->tail=newNode;
+                bucket[(num/factor)%10]->tail=newNode;
             }
         }
+        
         int i=0;
         for(auto &ptr : bucket){
             if(ptr==nullptr) continue;
             auto curr=ptr;
             while(curr!=nullptr){
-                nums[i++]=curr->val+minVal;
+                nums[i++]=curr->val;
                 curr=curr->next;
             }
         }
+    }
+    vector<int> sortArray(vector<int>& nums) {
+        int n=nums.size(),factor=1;
+        int maxVal=INT_MIN,minVal=*min_element(begin(nums),end(nums));
+        
+        for(auto &num : nums) num-=minVal , maxVal=max(num,maxVal);
+        
+        while(maxVal/factor){
+            radixSort(nums,factor);
+            factor*=10;
+        }
+        for(auto &num : nums) num+=minVal;
         return nums;
     }
 };
