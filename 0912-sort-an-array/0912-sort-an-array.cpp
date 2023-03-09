@@ -1,20 +1,38 @@
-//Counting Sort
+//Bucket sort using vector of Linked Lists
+ // Definition for singly-linked list.
+struct Node {
+    int val;
+    Node *next;
+    Node *tail;
+    Node() : val(0), next(nullptr), tail(this) {}
+    Node(int x) : val(x), next(nullptr), tail(this) {}
+};
 class Solution {
 public:
     vector<int> sortArray(vector<int>& nums) {
         int n=nums.size();
         int minVal=*min_element(begin(nums),end(nums));
         int maxVal=*max_element(begin(nums),end(nums));
-        vector<int>freq(maxVal-minVal+1,0);
+        vector<Node*>bucket(maxVal-minVal+1,0);
         
-        for(int i=0;i<n;i++){
-            freq[nums[i]-minVal]++;
+        for(auto &num : nums){
+            auto newNode=new Node(num-minVal);
+            if(bucket[num-minVal]==nullptr)
+                bucket[num-minVal]=newNode;
+            else{
+                auto tNode=bucket[num-minVal]->tail;
+                tNode->next=newNode;
+                bucket[num-minVal]->tail=newNode;
+            }
         }
-        int j=0;
-        for(int i=0;i<freq.size();i++){
-            if(freq[i]==0) continue;
-            int x=freq[i];
-            while(x--) nums[j++]=i+minVal;
+        int i=0;
+        for(auto &ptr : bucket){
+            if(ptr==nullptr) continue;
+            auto curr=ptr;
+            while(curr!=nullptr){
+                nums[i++]=curr->val+minVal;
+                curr=curr->next;
+            }
         }
         return nums;
     }
