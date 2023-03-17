@@ -1,21 +1,21 @@
 //BFS
-//Unordered set instead of reached count
+//uses reached count just like dfs approach
 class Solution {
 public:
     bool canVisitAllRooms(vector<vector<int>>& rooms) {
-        unordered_set<int>reached;
+        int reached=0;
+        vector<bool>visited(rooms.size());
         queue<int>q({0});
         
         while(!q.empty()){
             int room=q.front();
-            q.pop() , reached.insert(room);
+            if(visited[room]==false) reached++;
+            q.pop(), visited[room]=true;
             for(auto adj : rooms[room]){
-                /*since room adj might have keys of the already visited room
-                hence the following condition avoids pushing such rooms in queue*/
-                if(reached.find(adj)==reached.end())
+                if(visited[adj]==false)
                     q.push(adj);
             }
         }
-        return (reached.size()==rooms.size());
+        return (reached==rooms.size());
     }
 };
