@@ -1,3 +1,4 @@
+/*A slight change in initParentAndMake function where we directly set parent of boundary dots to 0 instead of calling union*/
 //Disjoint Sets + Union Find approach
 class Solution {
 private:
@@ -6,6 +7,7 @@ private:
 public:
     // intitalise parent and rank
     void initParentAndRank(int dots){
+        rank[0]++;
         for(int i=0;i<(dots*dots);i++){
             parent[i]=i;
         }
@@ -13,7 +15,7 @@ public:
             for(int j=0;j<dots;j++){
                 if(i==0 || j==0 || i==dots-1 || j==dots-1){
                     int dotNumber=i*dots+j;
-                    if(dotNumber!=0) doUnion(0,dotNumber);
+                    if(dotNumber!=0) parent[dotNumber]=0;
                 }
             }
         }
