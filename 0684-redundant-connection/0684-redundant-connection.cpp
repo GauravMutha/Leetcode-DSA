@@ -1,44 +1,57 @@
-//Disjoint set + Union Find
-//O(e*log(n)) n is number of node and e is number of edges
+//Single  dfs with graph making
+//Better solution than Union find because UF was O(N*log(N))
+//O(N)
 class Solution {
-public:
-    int findParent(int node,vector<int>& parent){
-        if(parent[node]==node){
-            return node;
+private:
+    int  cycleStart=-1;
+    unordered_set<int>cycleNodes;
+    void makeGraph(vector<vector<int>>& graph,vector<vector<int>>& edges){
+        for(int i=0;i<edges.size();i++){
+            int v=edges[i][1];
+            int u=edges[i][0];
+            
+            graph[u].push_back(v);
+            graph[v].push_back(u);
         }
-        //path compression optimisation before returning
-        int temp=findParent(parent[node],parent);
-        parent[node]=temp;
-        return temp;
     }
-    bool doUnion(int x,int y,vector<int>& parent,vector<int>& rank){
-        int xParent=findParent(x,parent);
-        int yParent=findParent(y,parent);
-        
-        //if parents are equal for x and y nodes
-        if(xParent==yParent){
-            return true;
+public:
+    void dfs(int curr,int parent,vector<int>& visited,vector<vector<int>>& graph){
+        if(visited[curr]==true) {
+            cycleStart=curr;
+            return;
         }
-        //Union by rank optimisation
-        //if parents are not equal for x and y nodes
-        if(rank[xParent]<rank[yParent])
-            parent[xParent]=yParent;
-        else if(rank[yParent]<rank[xParent])
-            parent[yParent]=xParent;
-        else 
-            parent[yParent]=xParent , rank[xParent]++;
-        return false;
+        visited[curr]=true;
+        for(auto &adjNode : graph[curr]){
+            if(adjNode==parent) 
+                continue;
+            //If cycle is not empty then no need for traversing further so need for anymore dfs calls
+            if(cycleNodes.empty()) 
+                dfs(adjNode,curr,visited,graph);
+            
+            if(cycleStart != -1) 
+                cycleNodes.insert(curr);
+            
+            if(cycleStart==curr){
+                cycleStart=-1;
+                return;
+            }
+        }
     }
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n=edges.size();
-        vector<int>ans(2);
-        vector<int>parent(n+1),rank(n+1,0);
-        for(int i=0;i<=n;i++) parent[i]=i;
+        vector<int>visited(n+1,false);
+        vector<vector<int>>graph(n+1);
         
-        for(int i=0;i<n;i++){
-            if(doUnion(edges[i][0],edges[i][1],parent,rank))
-               ans=edges[i];
-        }       
-        return ans; //code excution will never reach here
+        makeGraph(graph,edges);
+        
+        dfs(1,-1,visited,graph);
+        
+        for(int i=edges.size()-1;i>=0;i--){
+            
+            if(cycleNodes.count(edges[i][0]) && cycleNodes.count(edges[i][1])) 
+                return edges[i];
+        }
+        
+        return {};
     }
 };
