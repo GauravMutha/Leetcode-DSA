@@ -1,32 +1,51 @@
-//#1(d) DFS - without making making a graph
-//Counting components
-//TC-->O(n^2) SC-->O(1)
-typedef vector<vector<int>> vvi;
+//DSU
+//O(N) , most optimised
 class Solution {
 public:
-    void dfs(int i,vvi& stones,vector<bool>&visited){
-        visited[i]=true;
-        
-        for(int j=0;j<stones.size();j++){
-            int iRow=stones[i][0] , iCol=stones[i][1];
-            int jRow=stones[j][0] , jCol=stones[j][1];
-            
-            if(i!=j && (iRow==jRow || jCol==iCol) && !visited[j]){
-                dfs(j,stones,visited);
-            }
+    //finding parent
+    int findParent(int node,vector<int>& parent){
+        if(parent[node]==node){
+            return node;
         }
+        //path compression optimisation before returning
+        int temp=findParent(parent[node],parent);
+        parent[node]=temp;
+        return temp;
     }
-    int removeStones(vvi& stones) {
-        int n=stones.size()  ,components=0;
-        vvi graph(n);
-        vector<bool>visited(n,false);
+    void doUnion(int x,int y,vector<int>& parent,vector<int>& rank){
+        int xParent=findParent(x,parent);
+        int yParent=findParent(y,parent);
         
-        for(int i=0;i<n;i++){
-            if(!visited[i]){
-                dfs(i,stones,visited);
-                components++;
-            } 
+        if(xParent==yParent)
+            return;
+        
+        if(rank[xParent]<rank[yParent])
+            parent[xParent]=yParent;
+        else if(rank[yParent]<rank[xParent])
+            parent[yParent]=xParent;
+        else 
+            parent[yParent]=xParent , rank[xParent]++;
+    }
+    int removeStones(vector<vector<int>>& stones) {
+        unordered_map<int,bool>validNodes;
+        int maxRow=0,maxCol=0 , components=0;
+        for(auto &coordinate : stones){
+            maxRow=max(coordinate[0],maxRow);
+            maxCol=max(coordinate[1],maxCol);
         }
-        return n-components;
+        int n=maxRow+maxCol+2;
+        vector<int>parent(n),rank(n,0);
+        for(int i=0;i<n;i++) parent[i]=i;
+        
+        for(int i=0;i<stones.size();i++){
+            int nodeRow=stones[i][0] ,nodeCol=stones[i][1]+maxRow+1;
+            validNodes[nodeRow]=true , validNodes[nodeCol]=true;
+            doUnion(nodeRow,nodeCol,parent,rank);
+        }
+        
+        for(auto &[node,val] : validNodes){
+            if(findParent(node,parent)==node) components++;
+        }
+        return (stones.size()-components);
     }
 };
