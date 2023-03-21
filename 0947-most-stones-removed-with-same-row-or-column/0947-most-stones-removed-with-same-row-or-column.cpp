@@ -1,4 +1,4 @@
-//DSU
+//DSU (more familiar)
 //O(N) , most optimised
 class Solution {
 public:
@@ -27,7 +27,6 @@ public:
             parent[yParent]=xParent , rank[xParent]++;
     }
     int removeStones(vector<vector<int>>& stones) {
-        unordered_map<int,bool>validNodes;
         int maxRow=0,maxCol=0 , components=0;
         for(auto &coordinate : stones){
             maxRow=max(coordinate[0],maxRow);
@@ -39,12 +38,11 @@ public:
         
         for(int i=0;i<stones.size();i++){
             int nodeRow=stones[i][0] ,nodeCol=stones[i][1]+maxRow+1;
-            validNodes[nodeRow]=true , validNodes[nodeCol]=true;
             doUnion(nodeRow,nodeCol,parent,rank);
         }
         
-        for(auto &[node,val] : validNodes){
-            if(findParent(node,parent)==node) components++;
+        for(int i=0;i<parent.size();i++){
+            if(parent[i]==i && rank[i]>0) components++;
         }
         return (stones.size()-components);
     }
