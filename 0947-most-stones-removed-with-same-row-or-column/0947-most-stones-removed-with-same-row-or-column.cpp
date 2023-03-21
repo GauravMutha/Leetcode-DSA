@@ -1,20 +1,20 @@
-//#1(a) DFS - Explicitly making a graph
-//Counting components
+//#1(b) DFS - Explicitly making a graph
+//It is Counting components , 1(a) was counting nodes
 //TC-->O(n^2) SC-->O(n^2)
 class Solution {
 private:
-    int res=0;
+    int components=0;
 public:
-    void dfs(int curr,int& count,vector<vector<int>>& graph,vector<bool>&visited){
+    void dfs(int curr,vector<vector<int>>& graph,vector<bool>&visited){
         visited[curr]=true;
-        count++;
         
         for(auto& adjNode : graph[curr]){
             if(!visited[adjNode])
-                dfs(adjNode,count,graph,visited);
+                dfs(adjNode,graph,visited);
         }
     }
     int removeStones(vector<vector<int>>& stones) {
+        if(stones.size()==1) return 0; //only one stone, cannot be removed
         int n=stones.size();
         vector<vector<int>> graph(n);
         vector<bool>visited(n,false);
@@ -32,12 +32,14 @@ public:
         }
         
         for(int i=0;i<n;i++){
-            int count=0; //nodes counter in a single component
             if(!visited[i]){
-                dfs(i,count,graph,visited);
-                res+=(count-1); //root of any component will not be deleted hence -1
+                dfs(i,graph,visited);
+                components++;
             } 
         }
-        return res;
+        /*component count is bascially counting roots of components
+        which will be left behind always , so n-components is all
+        the stones that has beem removed*/
+        return n-components;
     }
 };
