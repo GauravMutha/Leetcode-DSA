@@ -1,12 +1,27 @@
-//BFS
+//DFS optimised
+//Approach similar to previous BFS solution
+typedef vector<vector<int>> vvi;
 class Solution {
+    int ans=0;
 public:
-    int minReorder(int n, vector<vector<int>>& connections) {
-        int ans=0;
-        vector<vector<int>>dirGraph(n) , reverse(n);
+    void dfs(int node, vvi & dirGraph, vvi & reverse, vector<bool>& visited){
+        visited[node]=true;
+        
+        for(auto &adjNode : dirGraph[node]){
+            if(!visited[adjNode]){
+                ans++;
+                dfs(adjNode,dirGraph,reverse,visited);
+            }
+        }
+        for(auto adjNode : reverse[node]){
+            if(!visited[adjNode]){
+                dfs(adjNode,dirGraph,reverse,visited);
+            }
+        }
+    }
+    int minReorder(int n,vvi& connections) {
+        vvi dirGraph(n) , reverse(n);
         vector<bool>visited(n,false);
-        queue<int>q;
-        q.push({0});
         
         for(int i=0;i<connections.size();i++){
             
@@ -17,21 +32,8 @@ public:
             reverse[v].push_back(u);            
         }
         
-        while(!q.empty()){
-            int node=q.front();
-            q.pop();
-            visited[node]=true;
-            
-            for(auto &adjNode : dirGraph[node]){
-                if(!visited[adjNode]){
-                    ans++;
-                    q.push(adjNode);
-                }
-            }
-            for(auto &adjNode : reverse[node]){
-                if(!visited[adjNode]) q.push(adjNode);
-            }
-        }
+        dfs(0,dirGraph,reverse,visited);
+        
         return ans;
     }
 };
