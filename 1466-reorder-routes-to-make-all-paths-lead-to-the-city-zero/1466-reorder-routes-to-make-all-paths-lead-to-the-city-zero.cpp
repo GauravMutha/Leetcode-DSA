@@ -1,42 +1,37 @@
-//DFS
+//BFS
 class Solution {
-private:
-    vector<vector<int>>dirn;
-    vector<int>parent;
-    vector<bool>visited;
-    int count=0;
 public:
-    void dfs(int curr,int parent,vector<vector<int>>& graph){
-        visited[curr]=true;
-        
-        if(parent!=-1){
-            if(find(begin(dirn[curr]),end(dirn[curr]),parent)==dirn[curr].end())
-                count++;
-        }
-            
-        for(auto &adjNode: graph[curr]){
-            if(!visited[adjNode]) 
-                dfs(adjNode,curr,graph);
-        }
-    }
     int minReorder(int n, vector<vector<int>>& connections) {
-        vector<vector<int>>graph(n);
+        int ans=0;
+        vector<vector<int>>dirGraph(n) , reverse(n);
+        vector<bool>visited(n,false);
+        queue<int>q;
+        q.push({0});
         
-        parent.resize(n);
-        visited.resize(n);
-        dirn.resize(n);
-        //make undirected 'graph' and directed map 'dirn'
         for(int i=0;i<connections.size();i++){
+            
             int u=connections[i][0];
             int v=connections[i][1];
             
-            graph[u].push_back(v);
-            graph[v].push_back(u);
-            
-            dirn[u].push_back(v);
+            dirGraph[u].push_back(v);
+            reverse[v].push_back(u);            
         }
-        dfs(0,-1,graph);
         
-        return count;
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+            visited[node]=true;
+            
+            for(auto &adjNode : dirGraph[node]){
+                if(!visited[adjNode]){
+                    ans++;
+                    q.push(adjNode);
+                }
+            }
+            for(auto &adjNode : reverse[node]){
+                if(!visited[adjNode]) q.push(adjNode);
+            }
+        }
+        return ans;
     }
 };
