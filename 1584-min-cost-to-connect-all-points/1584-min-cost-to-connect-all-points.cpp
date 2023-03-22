@@ -1,27 +1,56 @@
-//prim
-typedef pair<int,int>pii;
+//kruskal
+//using a vector then sorting it instead of heap that gave TLE
 class Solution {
 public:
     int minCostConnectPoints(vector<vector<int>>& points) {
-        int n=points.size() , connected=0 ,curr=0,next=0,dist=0,res=0;
-        vector<bool>visited(n);
-        priority_queue<pii,vector<pii>,greater<pii>>pq;
+        int n=points.size(),dist=0,res=0;
+        vector<vector<int>>edges;
         
-        while(++connected<n){
-            visited[curr]=true;
-            for(next=0;next<n;next++){
-                if(!visited[next]){
-                    dist=abs(points[curr][0]-points[next][0])+abs(points[curr][1]-points[next][1]);
-                    pq.push({dist,next});
-                }
+        vector<int>parent(n),rank(n,0);
+        for(int i=0;i<n;i++) parent[i]=i;
+        
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                dist=abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1]);
+                
+                edges.push_back(vector<int>({dist,i,j}));
             }
-            
-            while(visited[pq.top().second]) pq.pop();
-            curr=pq.top().second;
-            res+=pq.top().first;
-            pq.pop();
         }
         
+        sort(edges.begin(), edges.end());
+        
+        for(int i=0;i<edges.size();i++){
+            int dist=edges[i][0] , u=edges[i][1] , v=edges[i][2];
+            
+            if(doUnion(u,v,parent,rank)) res+=dist;
+        }
         return res;
+    }
+    
+    int findParent(int node,vector<int>& parent){
+        if(parent[node]==node){
+            return node;
+        }
+        
+        int temp=findParent(parent[node],parent);
+        parent[node]=temp;
+        return temp;
+    }
+    
+    bool doUnion(int x,int y,vector<int>& parent,vector<int>& rank){
+        int xParent=findParent(x,parent);
+        int yParent=findParent(y,parent);
+        
+        if(xParent==yParent)
+            return false;
+        
+        if(rank[xParent]<rank[yParent])
+            parent[xParent]=yParent;
+        else if(rank[yParent]<rank[xParent])
+            parent[yParent]=xParent;
+        else 
+            parent[yParent]=xParent , rank[xParent]++;
+        
+        return true;
     }
 };
