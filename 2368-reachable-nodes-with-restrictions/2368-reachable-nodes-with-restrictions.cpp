@@ -1,5 +1,6 @@
-//DFS + Set
-//O(e*log(n)+n) e is the number of edges
+//DFS without set
+//marking restricted node as visited
+//O(e+n) ,where e is the number of edges
 class Solution {
 public:
     int ans=0;
@@ -12,15 +13,13 @@ public:
         }
     }
     int reachableNodes(int n, vector<vector<int>>& edges, vector<int>& restricted) {
-        set<int>red; //stores unreachable node
         vector<vector<int>> graph(n);
         vector<bool>visited(n,false);
         
-        for(auto &elem: restricted) red.insert(elem);
+        for(auto &node: restricted) visited[node]=true;
         
         for(int i=0;i<edges.size();i++){
             int u=edges[i][0] , v=edges[i][1];
-            if(red.find(u)!=red.end() || red.find(v)!=red.end()) continue;
             graph[u].push_back(v);
             graph[v].push_back(u);
         }
