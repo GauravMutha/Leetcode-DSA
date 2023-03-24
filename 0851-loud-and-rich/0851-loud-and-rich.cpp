@@ -1,11 +1,13 @@
-//DFS
+//DFS (it corrects the first submission that gave wrong answer)
+//O(N^2)
 class Solution {
 public:
-    int dfs(int curr,vector<vector<int>>& graph,vector<int>& quiet,vector<int>& ans){
-        if(ans[curr]!=-1) return ans[curr];
+    int dfs(int curr,vector<vector<int>>& graph,vector<int>& quiet,vector<bool>& visited,vector<int>& ans){
         int bestNode=curr;
+        if (visited[curr]) return ans[curr];
+        visited[curr]=true;
         for(auto &adjNode: graph[curr]){
-            int retNode=dfs(adjNode,graph,quiet,ans);
+            int retNode=dfs(adjNode,graph,quiet,visited,ans);
             if(quiet[retNode]<quiet[bestNode])
                 bestNode=retNode;
         }
@@ -15,7 +17,7 @@ public:
     vector<int> loudAndRich(vector<vector<int>>& richer, vector<int>& quiet) {
         int n=quiet.size();
         vector<vector<int>>graph(n);
-        vector<int>ans(n,-1);
+        vector<int>ans(n);
         vector<bool>visited(n);
         
         for(int i=0;i<richer.size();i++){
@@ -24,7 +26,8 @@ public:
         }
         
         for(int i=0;i<n;i++){
-            dfs(i,graph,quiet,ans);
+            if(!visited[i])
+                dfs(i,graph,quiet,visited,ans);
         }
         return ans;
     }
