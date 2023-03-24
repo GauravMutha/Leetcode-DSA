@@ -1,22 +1,29 @@
-//DFS
+//BFS
 class Solution {
 private:
     
     unordered_map<string,vector<pair<string,double>>>graph;
     vector<double>res;
-    double ans=0;
+    double ans;
 
 public:
     
-    void dfs(string curr,string dest,double calc,unordered_map<string,bool>& visited){
-        visited[curr]=true;
-        if(curr==dest){
-            ans=calc;
-            return;
-        }
-        for(auto &[adjNode,val]: graph[curr]){
-            if(!visited[adjNode]){
-                dfs(adjNode,dest,calc*val,visited);
+    void bfs(string src,string dest){
+        unordered_map<string,bool>visited;
+        queue<pair<string,double>>q;
+        q.push({src,1.0});
+        
+        while(!q.empty()){
+            string curr=q.front().first;
+            double calc=q.front().second;
+            q.pop();
+            if(curr==dest){
+                ans=calc;
+                return;
+            }
+            for(auto &[adjNode,val]:graph[curr]){
+                if(!visited[adjNode])
+                    q.push({adjNode,calc*val}) , visited[adjNode]=true;
             }
         }
     }
@@ -33,9 +40,8 @@ public:
         for(int i=0;i<queries.size();i++){
             string src=queries[i][0] , dest=queries[i][1];
             ans=-1;
-            unordered_map<string,bool>visited;
-            if(graph.find(src)!=graph.end()){
-                dfs(src,dest,1.0,visited);
+            if(graph.find(src)!=graph.end() && graph.find(dest)!=graph.end() ){
+                bfs(src,dest);
             }
             res.push_back(ans);
         }
