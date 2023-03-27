@@ -1,51 +1,39 @@
-//Djikstra
-typedef pair<int,int> pii;
+//Floyd Warshall algorithm
+//O(N^3)
 class Solution {
 public:
-    int djikstra(int src,int n,int k,vector<vector<pii>>& graph){
+    int findTheCity(int n, vector<vector<int>>& edges, int k) {
+        int res=0,minCount=INT_MAX;
+        vector<vector<int>>matrix(n,vector<int>(n,INT_MAX));
+        for(int i=0;i<edges.size();i++){
+            int u=edges[i][0] , v=edges[i][1] , w=edges[i][2];
+            matrix[u][v]=w;
+            matrix[v][u]=w;
+        }
         
-        priority_queue<pii,vector<pii>,greater<pii>>pq;
-        vector<int>distances(n,INT_MAX);
-        
-        //these two lines below are specifically for this question
-        int cityCount=0;
-        vector<bool>counted(n,false);
-        
-        distances[src]=0;
-        pq.push({0,src});
-        while(!pq.empty()){
-            auto [dist,curr]=pq.top();
-            pq.pop();
-            
-            for(auto &[adjNode,wt]: graph[curr]){
-                if (dist + wt < distances[adjNode]) {
-                    distances[adjNode] = dist + wt;
-                    pq.push({distances[adjNode], adjNode});
-                    if (distances[adjNode] <= k && !counted[adjNode]) {
-                        cityCount++;
-                        counted[adjNode] = true;
-                    }
+        for(int k=0;k<n;k++){
+            //k is the "via" node
+            int cityCount=0;
+            for(int j=0;j<n;j++){
+                for(int i=0;i<n;i++){
+                    if(i==j) 
+                        matrix[i][j]=0;
+                    else if(matrix[i][k]==INT_MAX || matrix[k][j]==INT_MAX)
+                        continue;
+                    else
+                        matrix[i][j]=min(matrix[i][j],matrix[i][k]+matrix[k][j]);
                 }
-                
             }
         }
-        return max(cityCount-1,0);
-    }
-    int findTheCity(int n, vector<vector<int>>& edges, int threshold) {
-        int res=0,minCount=INT_MAX;
-        vector<vector<pii>>graph(n);
-        for(int i=0;i<edges.size();i++){
-            int u=edges[i][0] , v=edges[i][1] ,w=edges[i][2];
-            
-            graph[u].push_back({v,w});
-            graph[v].push_back({u,w});
+        for(int i=0;i<n;i++){
+            int cityCount=0;
+            for(int j=0;j<n;j++){
+                if(i!=j && matrix[i][j]<=k) 
+                    cityCount++;
+            }
+            if(cityCount<=minCount) res=i , minCount=cityCount;
         }
         
-        for(int i=0;i<n;i++){
-            int cityCount=djikstra(i,n,threshold,graph);
-            if(cityCount<=minCount)
-                res=i,minCount=cityCount;
-        }
         return res;
     }
 };
