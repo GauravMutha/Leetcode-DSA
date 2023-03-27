@@ -1,13 +1,15 @@
-//DFS-Coloring Graph
+//DFS-Coloring Graph Intuitive version
 // No color is -1 , white is 1 amd black is 0;
 class Solution {
 public:
     bool dfsColoring(int curr,int color,vector<int>& colors,vector<vector<int>>& graph){
-        if(colors[curr]!=-1) return colors[curr]==color;
         colors[curr]= color;
         for(auto adjNode: graph[curr]){
-            if(!dfsColoring(adjNode,!color,colors,graph))
-               return false;
+            if(colors[adjNode]==-1){
+                if(!dfsColoring(adjNode,!color,colors,graph))
+                    return false;
+            }
+            else if(colors[adjNode]==colors[curr]) return false;
         }
         
         return true;
