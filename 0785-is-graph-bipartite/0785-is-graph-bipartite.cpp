@@ -1,31 +1,25 @@
-//BFS-Coloring Graph
+//DFS-Coloring Graph
 // No color is -1 , white is 1 amd black is 0;
 class Solution {
 public:
-    bool isBipartite(vector<vector<int>>& graph) {    
+    bool dfsColoring(int curr,int color,vector<int>& colors,vector<vector<int>>& graph){
+        if(colors[curr]!=-1) return colors[curr]==color;
+        colors[curr]= color;
+        for(auto adjNode: graph[curr]){
+            if(!dfsColoring(adjNode,!color,colors,graph))
+               return false;
+        }
+        
+        return true;
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
         int n=graph.size();
         vector<int>colors(n,-1);
-        queue<int>q;
         
-        //multiple components possible hence this for loop
         for(int i=0;i<n;i++){
-            if(colors[i]!=-1) continue;//already colored node
+            if(colors[i]!=-1) continue;
             
-            q.push(i);
-            colors[i]=1; //start node can be colored with any of the color
-            while(!q.empty()){
-                int curr=q.front() , currColor=colors[curr];
-                q.pop();
-                for(auto &adjNode : graph[curr]){
-                    int adjColor=colors[adjNode];
-                    
-                    if(adjColor==-1) {
-                        colors[adjNode]=!currColor;
-                        q.push(adjNode);
-                    }
-                    else if(adjColor==currColor) return false;
-                }
-            }
+            if(!dfsColoring(i,1,colors,graph)) return false;
         }
         
         return true;
