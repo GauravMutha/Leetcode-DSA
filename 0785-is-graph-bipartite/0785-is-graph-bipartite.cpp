@@ -1,27 +1,40 @@
-//DFS-Coloring Graph Intuitive version
-// No color is -1 , white is 1 amd black is 0;
+//DSU
 class Solution {
 public:
-    bool dfsColoring(int curr,int color,vector<int>& colors,vector<vector<int>>& graph){
-        colors[curr]= color;
-        for(auto adjNode: graph[curr]){
-            if(colors[adjNode]==-1){
-                if(!dfsColoring(adjNode,!color,colors,graph))
-                    return false;
-            }
-            else if(colors[adjNode]==colors[curr]) return false;
+    int findParent(int node,vector<int>& parent){
+        if(parent[node]==node){
+            return node;
         }
+        int temp=findParent(parent[node],parent);
+        parent[node]=temp;
+        return temp;
+    }
+    void doUnion(int x,int y,vector<int>& parent,vector<int>& rank){
+        int xParent=findParent(x,parent);
+        int yParent=findParent(y,parent);
         
-        return true;
+        if(xParent==yParent){
+            return;
+        }
+        if(rank[xParent]<rank[yParent])
+            parent[xParent]=yParent;
+        else if(rank[yParent]<rank[xParent])
+            parent[yParent]=xParent;
+        else 
+            parent[yParent]=xParent , rank[xParent]++;
     }
     bool isBipartite(vector<vector<int>>& graph) {
         int n=graph.size();
-        vector<int>colors(n,-1);
+        vector<int>parent(n),rank(n,0);
+        
+        for(int i=0;i<n;i++) parent[i]=i;
         
         for(int i=0;i<n;i++){
-            if(colors[i]!=-1) continue;
-            
-            if(!dfsColoring(i,1,colors,graph)) return false;
+            for(int j=0;j<graph[i].size();j++){
+                if(parent[i]==parent[graph[i][j]]) return false;
+                
+                doUnion(graph[i][0],graph[i][j],parent,rank);
+            }
         }
         
         return true;
