@@ -1,20 +1,10 @@
-//DFS-Coloring Graph Intuitive version
+//BFS-Coloring Graph
 // No color is -1 , white is 1 amd black is 0;
 class Solution {
 public:
-    bool dfsColoring(int curr,int color,vector<int>& colors,vector<vector<int>>& graph){
-        colors[curr]= color;
-        for(auto adjNode: graph[curr]){
-            if(colors[adjNode]==-1){
-                if(!dfsColoring(adjNode,!color,colors,graph))
-                    return false;
-            }
-            else if(colors[adjNode]==colors[curr]) return false;
-        }
-        
-        return true;
-    }
     bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        vector<int>colors(n+1,-1);
+        queue<int>q;
         vector<vector<int>>graph(n+1);
         for(int i=0;i<dislikes.size();i++){
             int u=dislikes[i][0] , v=dislikes[i][1];
@@ -22,12 +12,26 @@ public:
             graph[u].push_back(v);
             graph[v].push_back(u);
         }
-        vector<int>colors(n+1,-1);
         
+        //multiple components possible hence this for loop
         for(int i=0;i<=n;i++){
-            if(colors[i]!=-1) continue;
+            if(colors[i]!=-1) continue;//already colored node
             
-            if(!dfsColoring(i,1,colors,graph)) return false;
+            q.push(i);
+            colors[i]=1; //start node can be colored with any of the color
+            while(!q.empty()){
+                int curr=q.front() , currColor=colors[curr];
+                q.pop();
+                for(auto &adjNode : graph[curr]){
+                    int adjColor=colors[adjNode];
+                    
+                    if(adjColor==-1) {
+                        colors[adjNode]=!currColor;
+                        q.push(adjNode);
+                    }
+                    else if(adjColor==currColor) return false;
+                }
+            }
         }
         
         return true;
