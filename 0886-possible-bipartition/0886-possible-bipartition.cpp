@@ -1,11 +1,32 @@
-//BFS-Coloring Graph
-// No color is -1 , white is 1 amd black is 0;
+//DSU
 class Solution {
 public:
+    int findParent(int node,vector<int>& parent){
+        if(parent[node]==node){
+            return node;
+        }
+        int temp=findParent(parent[node],parent);
+        parent[node]=temp;
+        return temp;
+    }
+    void doUnion(int x,int y,vector<int>& parent,vector<int>& rank){
+        int xParent=findParent(x,parent);
+        int yParent=findParent(y,parent);
+        
+        if(xParent==yParent){
+            return;
+        }
+        if(rank[xParent]<rank[yParent])
+            parent[xParent]=yParent;
+        else if(rank[yParent]<rank[xParent])
+            parent[yParent]=xParent;
+        else 
+            parent[yParent]=xParent , rank[xParent]++;
+    }
     bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
-        vector<int>colors(n+1,-1);
-        queue<int>q;
         vector<vector<int>>graph(n+1);
+        vector<int>parent(n+1),rank(n+1,0);
+        
         for(int i=0;i<dislikes.size();i++){
             int u=dislikes[i][0] , v=dislikes[i][1];
             
@@ -13,24 +34,14 @@ public:
             graph[v].push_back(u);
         }
         
-        //multiple components possible hence this for loop
+        
+        for(int i=0;i<=n;i++) parent[i]=i;
+        
         for(int i=0;i<=n;i++){
-            if(colors[i]!=-1) continue;//already colored node
-            
-            q.push(i);
-            colors[i]=1; //start node can be colored with any of the color
-            while(!q.empty()){
-                int curr=q.front() , currColor=colors[curr];
-                q.pop();
-                for(auto &adjNode : graph[curr]){
-                    int adjColor=colors[adjNode];
-                    
-                    if(adjColor==-1) {
-                        colors[adjNode]=!currColor;
-                        q.push(adjNode);
-                    }
-                    else if(adjColor==currColor) return false;
-                }
+            for(int j=0;j<graph[i].size();j++){
+                if(parent[i]==parent[graph[i][j]]) return false;
+                
+                doUnion(graph[i][0],graph[i][j],parent,rank);
             }
         }
         
