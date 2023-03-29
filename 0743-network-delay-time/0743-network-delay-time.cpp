@@ -1,33 +1,18 @@
-//Djikstra
-//BFS
-typedef pair<int,int>pii;
+//Bellman Ford
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        vector<vector<pair<int,int>>>graph(n+1);
-        vector<int>distances(n+1,INT_MAX);
-        priority_queue<pii,vector<pii>,greater<pii>>pq;
-        for(int i=0;i<times.size();i++){
-            int u=times[i][0], v=times[i][1] , w=times[i][2];
-            
-            graph[u].push_back({v,w});
-        }
-        distances[k]=0;
-        pq.push({distances[k],k});
-        
-        while(!pq.empty()){
-            auto [dist,curr]=pq.top();
-            pq.pop();
-            
-            for(auto [adjNode,w]:graph[curr]){
-                if((dist+w)<distances[adjNode]){
-                    distances[adjNode]=dist+w;
-                    pq.push({distances[adjNode],adjNode});
-                }
+        vector<int>dist(n+1,INT_MAX);
+        dist[k]=0; //k is source node
+        for(int i=0;i<n-1;i++){
+            for(int i=0;i<times.size();i++){
+                int u=times[i][0] , v=times[i][1] , w=times[i][2];
+                
+                if(dist[u]!=INT_MAX && dist[u]+w<dist[v])
+                    dist[v]=dist[u]+w;
             }
         }
-        
-        int minTime= *max_element(begin(distances)+1,end(distances));
+        int minTime= *max_element(begin(dist)+1,end(dist));
         
         return (minTime==INT_MAX)?-1:minTime;
     }
