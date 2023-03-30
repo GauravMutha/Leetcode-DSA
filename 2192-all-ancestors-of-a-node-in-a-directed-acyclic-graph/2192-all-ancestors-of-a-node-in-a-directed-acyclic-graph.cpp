@@ -1,14 +1,13 @@
-//Simple DFS with visited array
+//Simple DFS WITHOUT visited array
 //Brute force type
 //TC-> O(N^2)
 class Solution {
 public:
-    void dfs(int curr,const int start,vector<bool>& visited,vector<vector<int>>& graph,vector<vector<int>>& ans){
-        visited[curr]=true;
+    void dfs(int curr,const int start,vector<vector<int>>& graph,vector<vector<int>>& ans){
         for(auto ch:graph[curr]){
-            if(!visited[ch]){
+            if(ans[ch].size()==0 || ans[ch].back()!=start){
                 ans[ch].push_back(start);
-                dfs(ch,start,visited,graph,ans);
+                dfs(ch,start,graph,ans);
             }
         }
     }
@@ -19,8 +18,7 @@ public:
             graph[u].push_back(v);
         }
         for(int i=0;i<n;i++){
-            vector<bool>visited(n,false);
-            dfs(i,i,visited,graph,ans);
+            dfs(i,i,graph,ans);
         }
         return ans;
     }
