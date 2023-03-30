@@ -1,36 +1,32 @@
-//BFS Kahn's Algorithm
+// DFS Reversed graph  + Using visited array for count sort 
+//TC ~ O(n^2)
 class Solution {
 public:
+    void dfs(int curr,vector<bool>& visited,vector<vector<int>>&graph){
+        visited[curr]=true;
+        for(auto adj:graph[curr]){
+            if(!visited[adj]) 
+                dfs(adj,visited,graph);
+        }
+    }
     vector<vector<int>> getAncestors(int n, vector<vector<int>>& edges) {
-        vector<set<int>>setVector(n); //initial res but is a vector of set
-        vector<int>indeg(n);
-        queue<int>q;
-        vector<vector<int>>graph(n),res2(n); //this res2 is what we will return
+        vector<vector<int>>graph(n),res(n);
         for(int i=0;i<edges.size();i++){
             int u=edges[i][0] , v=edges[i][1];
-            graph[u].push_back(v);
-            indeg[v]++;
+            graph[v].push_back(u);
         }
+        
         for(int i=0;i<n;i++){
-            if(indeg[i]==0) q.push(i);
+            vector<bool>visited(n,false);
+            /*visited picks children of ith node which are parents in          
+            normal graph; in COUNT SORT manner so it wiil store
+            child in pth index of visited vector.Its applicable as 
+            all node are positive and unique*/ 
+            dfs(i,visited,graph);
+            for(int j=0;j<n;j++) 
+                if(visited[j]==true && j!=i) res[i].push_back(j);
         }
-        while(!q.empty()){
-            int curr=q.front();
-            q.pop();
-            
-            for(auto adjNode: graph[curr]){
-                setVector[adjNode].insert(curr);
-                for(auto it:setVector[curr])
-                    setVector[adjNode].insert(it);
-                
-                indeg[adjNode]--;
-                if(indeg[adjNode]==0) q.push(adjNode);
-            }
-            
-        }
-        for(int i=0;i<n;i++){
-            res2[i]=vector<int>(setVector[i].begin(),setVector[i].end());
-        }
-        return res2;
+        
+        return res;
     }
 };
