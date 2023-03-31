@@ -1,4 +1,5 @@
 //Djikstra Algorithm - Slightly modified
+//Using set for better performance
 class Solution {
 public:
     double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
@@ -6,7 +7,7 @@ public:
         vector<double>probabilities(n,double(0.0));
         vector<bool>visited(n,false);
         vector<vector<pair<int,double>>>graph(n);
-        priority_queue<pair<double,int>>pq; //max heap
+        multiset<pair<double,int>>st;
         for(int i=0;i<edges.size();i++){
             int u=edges[i][0],v=edges[i][1];
             double w=succProb[i];
@@ -16,17 +17,21 @@ public:
         }
         
         probabilities[start]=1.0;
-        pq.push({probabilities[start],start});
+        st.insert({probabilities[start],start});
         
-        while(!pq.empty()){
-            auto [p,curr]=pq.top();
-            pq.pop();
-            if(!visited[curr]){
+        while(!st.empty()){
+            auto it=(st.rbegin());
+            int curr=it->second;
+            double p=it->first;
+            st.erase(*it);
+            if(visited[curr]==false){
                 visited[curr]=true;
                 for(auto &[adjNode,w]: graph[curr]){
-                    if(double(w*p) > probabilities[adjNode]){
+                    if(w*p > probabilities[adjNode]){
+                        if(probabilities[adjNode]!=0) 
+                            st.erase({probabilities[adjNode],adjNode});
                         probabilities[adjNode]=w*p;
-                        pq.push({w*p,adjNode});
+                        st.insert({w*p,adjNode});
                     }
                 }
             }
