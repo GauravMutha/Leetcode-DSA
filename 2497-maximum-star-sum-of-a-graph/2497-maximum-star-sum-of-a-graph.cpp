@@ -1,8 +1,16 @@
-//Sort STL using comparator
+//Priority queue , min heap , max k element concept
 class Solution {
 public:
+    int processPQ(priority_queue<int,vector<int>,greater<int>>&pq){
+        int sum=0;
+        while(!pq.empty()){
+            if(pq.top()>0) sum+=pq.top();
+            pq.pop();
+        }
+        return sum;
+    }
     int maxStarSum(vector<int>& vals, vector<vector<int>>& edges, int k) {
-        int res=INT_MIN,sum=0,n=vals.size();
+        int res=INT_MIN,n=vals.size();
         vector<vector<int>>graph(n);
         
         for(int i=0;i<edges.size();i++){
@@ -11,16 +19,15 @@ public:
             graph[u].push_back(v);
             graph[v].push_back(u);
         }
-        auto comp = [&](const int& a, const int& b) {
-            return vals[a]>vals[b];
-        };
-        for(int i=0;i<n;i++){
-            sum=vals[i];
-            sort(graph[i].begin(), graph[i].end(),comp);
-            for(int j=0;j<min(int(graph[i].size()),k);j++)
-                sum=max(sum,sum+vals[graph[i][j]]);
+        for(int curr=0;curr<n;curr++){
+            priority_queue<int,vector<int>,greater<int>> pq;
+            for(auto adj : graph[curr]){
+                pq.push(vals[adj]);
+                if(pq.size()>k) pq.pop();
+            }
+            int sumFromNeighbours=processPQ(pq);
             
-            res=max(res,sum);
+            res=max(res,vals[curr]+sumFromNeighbours);
         }
         
         return res;
