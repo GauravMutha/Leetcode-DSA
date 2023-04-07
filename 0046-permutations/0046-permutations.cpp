@@ -1,30 +1,22 @@
 //Re//
-//using visited array method
+//using swapping method
 class Solution {
 private:
     vector<vector<int>>ans;
 public:
-    void helper(vector<int>& ds,vector<bool>& vis,vector<int>& nums){
-        if(ds.size()>=nums.size()){
-            ans.push_back(ds);
+    void helper(int pos,vector<int>& nums){
+        if(pos>=nums.size()){
+            ans.push_back(nums);
             return;
         }
-        for(int i=0;i<nums.size();i++){
-            if(vis[i]) continue;
-            
-            vis[i]=true;
-            ds.push_back(nums[i]);
-            
-            helper(ds,vis,nums);
-            
-            vis[i]=false;
-            ds.pop_back();
+        for(int i=pos;i<nums.size();i++){
+            swap(nums[i],nums[pos]);
+            helper(pos+1,nums);
+            swap(nums[i],nums[pos]);
         }
     }
     vector<vector<int>> permute(vector<int>& nums) {
-        vector<int>ds;
-        vector<bool>visited(nums.size());
-        helper(ds,visited,nums);
+        helper(0,nums);
         
         return ans;
     }
