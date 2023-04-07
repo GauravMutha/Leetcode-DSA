@@ -12,7 +12,7 @@ public:
         
         for(int i=0;i<nums.size();i++){
             if(visited[i]) continue;
-            if(i>0 && nums[i]==nums[i-1] && !visited[i-1]) continue;
+            if(i>0 && nums[i]==nums[i-1] && visited[i-1]) continue;
 //so we take the duplicate only if its previous similar element has been taken
             visited[i]=true;
             ds.push_back(nums[i]);
