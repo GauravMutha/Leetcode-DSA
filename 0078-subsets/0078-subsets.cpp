@@ -1,20 +1,21 @@
 //Re//
-//Iterative
+//A slightly different implementation of backtracking
 class Solution {
+private:
+    vector<vector<int>>ans;
 public:
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>>ans;
-        ans.push_back({});
-        
-        for(auto num : nums){
-            int n=ans.size();
-            vector<int>ds;
-            for(int i=0;i<n;i++){
-                ds=ans[i];
-                ds.push_back(num);
-                ans.push_back(ds);
-            }
+    void helper(int pos,vector<int>& ds,vector<int>& nums){
+        ans.push_back(ds);
+        for(int i=pos;i<nums.size();i++){
+            ds.push_back(nums[i]);
+            helper(i+1,ds,nums);
+            ds.pop_back();
         }
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int>ds;
+        helper(0,ds,nums);
+        
         return ans;
     }
 };
