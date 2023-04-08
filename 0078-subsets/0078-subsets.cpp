@@ -1,24 +1,18 @@
-//Simple concept of "to pick or to not pick"
-class Solution {        
-private:
-vector<vector<int>>ans;
-
+//Re//
+//Using bit manipulation
+class Solution {
 public:
-    void helper(int i, vector<int>& ds,vector<int>& nums){
-        if(i>=nums.size()){
-            ans.push_back(ds);
-            return;
-        }
-        ds.push_back(nums[i]);
-        helper(i+1,ds,nums);
-        ds.pop_back();
-        helper(i+1,ds,nums);
-    }
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<int>ds;
+        vector<vector<int>>ans;
+        int n=nums.size();
         
-        helper(0,ds,nums);
-        
+        for(int x=0;x<pow(2,n);x++){
+            vector<int>ds;
+            for(int i=0;i<n;i++)
+                if(x&(1<<i)) ds.push_back(nums[i]);
+            
+            ans.push_back(ds);
+        }
         return ans;
     }
 };
