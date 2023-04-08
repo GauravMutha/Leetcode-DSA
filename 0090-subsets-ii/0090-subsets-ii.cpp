@@ -1,21 +1,17 @@
 //Re//
-//Sorting
+//Sorting but the backtracking is slightly different
 class Solution {
 private:
     vector<vector<int>>ans;
 public:
-    void helper(int i,vector<int>& ds, vector<int>& nums){
-        if(i>=nums.size()){
-            ans.push_back(ds);
-            return;
+    void helper(int pos,vector<int>& ds, vector<int>& nums){
+        ans.push_back(ds);
+        for(int i=pos;i<nums.size();i++){
+            if(i!=pos && nums[i]==nums[i-1]) continue;
+            ds.push_back(nums[i]);
+            helper(i+1,ds,nums);
+            ds.pop_back();
         }
-        ds.push_back(nums[i]);
-        helper(i+1,ds,nums);
-        ds.pop_back();
-        int x=nums[i];
-        while(i<nums.size()-1 && x==nums[i+1]) 
-            i++;
-        helper(i+1,ds,nums);
     }
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
         /*
