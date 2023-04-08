@@ -1,17 +1,19 @@
 //Re//
-//Using bit manipulation
+//Iterative
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
         vector<vector<int>>ans;
-        int n=nums.size();
+        ans.push_back({});
         
-        for(int x=0;x<pow(2,n);x++){
+        for(auto num : nums){
+            int n=ans.size();
             vector<int>ds;
-            for(int i=0;i<n;i++)
-                if(x&(1<<i)) ds.push_back(nums[i]);
-            
-            ans.push_back(ds);
+            for(int i=0;i<n;i++){
+                ds=ans[i];
+                ds.push_back(num);
+                ans.push_back(ds);
+            }
         }
         return ans;
     }
