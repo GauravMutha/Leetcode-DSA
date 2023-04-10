@@ -1,27 +1,27 @@
 //Re//
-//Using a for loop in helper
-//sorting
+//classic two recursive calls for pick and not pick
+//no for loops
 class Solution {
 private:
     vector<vector<int>>ans;
 public:
-    void helper(int ind,int sum,vector<int>& ds,vector<int>& nums,int k){
-        if(sum>=k){
-            if(sum==k) ans.push_back(ds);
+    void helper(int i,int target,vector<int>& ds,vector<int>& nums){
+        if(target==0){
+            ans.push_back(ds);
             return;
         }
-        for(int i=ind;i<nums.size();i++){
-            sum+=nums[i];
-            ds.push_back(nums[i]);
-            helper(i,sum,ds,nums,k);
-            sum-=nums[i];
-            ds.pop_back();
-        }
+        if(target<0 || i>=nums.size()) return;
+        
+        
+        ds.push_back(nums[i]);
+        helper(i,target-nums[i],ds,nums);
+        ds.pop_back();
+        helper(i+1,target,ds,nums);
     }
     vector<vector<int>> combinationSum(vector<int>& nums, int target) {
         sort(nums.begin(),nums.end());
         vector<int>ds;
-        helper(0,0,ds,nums,target);
+        helper(0,target,ds,nums);
         return ans;
     }
 };
