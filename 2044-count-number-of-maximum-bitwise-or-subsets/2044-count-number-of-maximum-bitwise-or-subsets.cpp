@@ -1,30 +1,30 @@
+//Re//
+//Simple concept of subsets printing
+//Classic two rec calls pick not pick method
 class Solution {
+private:
+    int count=0;
 public:
-    //Using Bit manipulation
-    //This solution has TC---->O(n*2^n) same as last one.
-    //But here we use bit manipulation so that resuces SC to O(1)
-    int res=0,maxi=INT_MIN;
-    int countMaxOrSubsets(vector<int>& nums) {
-        calc(nums);
-        return res+1;
-    }
-   void calc(vector<int> &nums)
-{
-    for (int num = 1; num < pow(2, nums.size()); num++)
-    {
-        int x = 0;
-        for (int i = 0; i < nums.size(); i++)
-        {
-            if (num & (1 << i))
-                x |= nums[i];
+    void helper(int i,int or_sum,vector<int>& nums,int k){
+        if(i>=nums.size()){
+            if(or_sum==k) count++;
+            return;
         }
-        checker(x);
-    }
-}
+        int tempSum=or_sum;
+        tempSum|=nums[i];
+     
+        helper(i+1,tempSum,nums,k);
     
-    void checker(int x){
-        if(x>maxi){res=0; maxi=x;}
-        else if(x<maxi)return;
-        else if(x==maxi)res++;
+        helper(i+1,or_sum,nums,k);
+    }
+    int countMaxOrSubsets(vector<int>& nums) {
+        int maxOR=0;
+        vector<int>ds;
+        for(int i=0;i<nums.size();i++){
+            maxOR|=nums[i];
+        }
+        helper(0,0,nums,maxOR);
+        
+        return count;
     }
 };
