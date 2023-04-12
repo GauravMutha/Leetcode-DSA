@@ -1,32 +1,29 @@
 class Solution {
+private:
+    int count=0;
+// vector<vector<int>>ans;
 public:
-    int numTilePossibilities(string tiles) {
-        unordered_set<string> res;
-        vector<int>freq(tiles.size(),0);
-        perm(tiles,res,freq);
-        
-        return res.size();
+    void helper(unordered_map<char,int>& freq,string& tiles){
+        count++;
+        set<char>taken;
+        for(auto ch : tiles){
+            if(taken.count(ch)) continue;
+            if(freq[ch]==0) continue;
+            taken.insert(ch);
+            freq[ch]--;
+            helper(freq,tiles);
+            freq[ch]++;
+        }
     }
-    
-    void perm(string& tiles,unordered_set<string>& res,vector<int>& freq){
-        static string ds;
-        if(ds.size()){
-            res.insert(ds);
+    int numTilePossibilities(string tiles) {
+        string ds="";
+        unordered_map<char,int>m;
+        for(int i=0;i<tiles.size();i++){
+            m[tiles[i]]++;
         }
-       
-        for(int i=0;i<freq.size();i++){
-            char prevchar;
-            while(prevchar==tiles[i])continue;
-            if(!freq[i]){
-                ds+=(tiles[i]);
-                freq[i]=1;
-                
-                perm(tiles,res,freq);
-                
-                if(ds.empty())prevchar=ds.back();
-                ds.pop_back();
-                freq[i]=0;
-            }
-        }
+        
+        helper(m,tiles);
+        
+        return count-1;
     }
 };
