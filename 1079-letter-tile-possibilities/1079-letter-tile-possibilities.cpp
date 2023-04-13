@@ -1,28 +1,26 @@
+//Re//
+//Using simple hash array instead of map and it avoids set
 class Solution {
 private:
     int count=0;
-// vector<vector<int>>ans;
 public:
-    void helper(unordered_map<char,int>& freq,string& tiles){
+    void helper(vector<int>& freq,string& tiles){
         count++;
-        set<char>taken;
-        for(auto ch : tiles){
-            if(taken.count(ch)) continue;
-            if(freq[ch]==0) continue;
-            taken.insert(ch);
-            freq[ch]--;
+        for(int i=0;i<26;i++){
+            if(freq[i]==0) continue;
+            freq[i]--;
             helper(freq,tiles);
-            freq[ch]++;
+            freq[i]++;
         }
     }
     int numTilePossibilities(string tiles) {
         string ds="";
-        unordered_map<char,int>m;
+        vector<int>freq(26,0);
         for(int i=0;i<tiles.size();i++){
-            m[tiles[i]]++;
+            freq[tiles[i]-'A']++;
         }
         
-        helper(m,tiles);
+        helper(freq,tiles);
         
         return count-1;
     }
