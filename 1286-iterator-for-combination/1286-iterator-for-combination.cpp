@@ -1,22 +1,20 @@
 //Simple concepts of subset I
 //Preprocessing to store all the given length subsets/combinations
-//Using single recursion call in for loop
+//using classic two recursion call method
 class CombinationIterator {
 private:
     int itr=0;
     vector<string>allCombinations;
-    void helper(int pos,string &ds,string & str,int sz){
-        if(ds.size()>=sz){
+    void helper(int i,string &ds,string characters,int sz){
+        if(i>=characters.size()){
             if(ds.size()==sz) 
                 allCombinations.push_back(ds);
             return;
         }
-        for(int i=pos;i<str.size();i++){
-            if(ds.back()==str[i]) continue;
-            ds.push_back(str[i]);
-            helper(i+1,ds,str,sz);
-            ds.pop_back();
-        }
+        ds.push_back(characters[i]);
+        helper(i+1,ds,characters,sz);
+        ds.pop_back();
+        helper(i+1,ds,characters,sz);
     }
 public:
     CombinationIterator(string characters, int combinationLength) {
