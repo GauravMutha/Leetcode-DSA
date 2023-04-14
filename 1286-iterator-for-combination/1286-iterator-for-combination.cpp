@@ -1,33 +1,30 @@
-//Simple concepts of subset I
-//Preprocessing to store all the given length subsets/combinations
-//using classic two recursion call method
+//DYNAMIC GENERATION using bit manipulation (on the fly)
 class CombinationIterator {
 private:
-    int itr=0;
-    vector<string>allCombinations;
-    void helper(int i,string &ds,string characters,int sz){
-        if(i>=characters.size()){
-            if(ds.size()==sz) 
-                allCombinations.push_back(ds);
-            return;
-        }
-        ds.push_back(characters[i]);
-        helper(i+1,ds,characters,sz);
-        ds.pop_back();
-        helper(i+1,ds,characters,sz);
-    }
+    int mask=0,targetSz=0;
+    string s;
 public:
     CombinationIterator(string characters, int combinationLength) {
-        string ds;
-        helper(0,ds,characters,combinationLength);
+        s=characters;
+        mask=pow(2,characters.size())-1;
+        targetSz=combinationLength;
     }
     
     string next() {
-         return allCombinations[itr++];
+        while(mask && __builtin_popcount(mask)!=targetSz) mask--;
+        string ans;
+        for(int i=0;i<s.size();i++){
+            if(mask&(1<<(s.size()-i-1)))
+                ans.push_back(s[i]);
+        }
+        mask--;
+        return ans;
     }
     
     bool hasNext() {
-        return itr<allCombinations.size();
+        while(mask && __builtin_popcount(mask)!=targetSz) mask--;
+        if(!mask) return false;
+        return true;
     }
 };
 
