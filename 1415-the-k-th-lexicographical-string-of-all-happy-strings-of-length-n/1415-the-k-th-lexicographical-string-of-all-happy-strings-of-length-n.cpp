@@ -1,25 +1,29 @@
+//Re//
+//Permutation
+
 class Solution {
+private:
+    string ans="";
+    int count=0;
 public:
-    string getHappyString(int n, int k) {
-        string res;
-        string temp="";
-        generate(res,temp,n,k);
-        
-        return res;
-    }
-    
-    void generate(string& res,string& curr,int n,int& k){
-        static vector<char>vect={'a','b','c'};
-        
-        if((curr.size()==n) || res.size()){
-            if(--k==0)res=curr;
+    void helper(string &ds, int len , int k){
+        if(ans.size()!=0) return;
+        if(ds.size()==len){
+            count++;
+            if(count==k) ans=ds;
             return;
         }
-        for(int i=0;i<vect.size();i++){
-            if(curr.size() && (curr.back()==vect[i]))continue;
-            curr+=vect[i];
-            generate(res,curr,n,k);
-            curr.pop_back();
+        for(char ch='a';ch<='c' && ans.size()==0;ch++){
+            if(ds.size()>0 && ch==ds.back()) continue;
+            ds.push_back(ch);
+            helper(ds,len,k);
+            ds.pop_back();
         }
+    }
+    string getHappyString(int n, int k) {
+        string ds;
+        helper(ds,n,k);
+        
+        return ans;
     }
 };
