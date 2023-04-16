@@ -1,36 +1,34 @@
+//Simple backtracking
 class Solution {
 public:
-    int getMaximumGold(vector<vector<int>>& grid) {
-        int m=grid.size();
-        int n=grid[0].size();
-        int maxgold=0;
-        vector<bool>vec(n,false);
-        vector<vector<bool>>visited(m,vec);
+    int travel(int i , int j ,int r, int c, vector<vector<bool>>& vis,vector<vector<int>>& grid){
+        if(i<0 || j<0 || i>=r || j>=c || vis[i][j] || grid[i][j]==0) 
+            return 0;
         
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(grid[i][j]!=0){
-                    int sum=travel(grid,visited,i,j);
-                    
-                    maxgold=max(sum,maxgold);
+        vis[i][j]=true;
+        
+        int right=travel(i,j+1,r,c,vis,grid);
+        int left=travel(i,j-1,r,c,vis,grid);
+        int up=travel(i-1,j,r,c,vis,grid);
+        int down=travel(i+1,j,r,c,vis,grid);
+        
+        int maxCollection=max(max(right,left),max(up,down));
+        vis[i][j]=false;
+        return maxCollection + grid[i][j];
+    }
+    int getMaximumGold(vector<vector<int>>& grid) {
+        int ans=0 , r=grid.size() , c=grid[0].size() ;
+        vector<vector<bool>>vis(r,vector<bool>(c,false));
+        
+        for(int i=0;i<r;i++){
+            for(int j=0;j<c;j++){
+                if(grid[i][j]){
+                    int gold=travel(i,j,r,c,vis,grid);
+                    ans=max(ans,gold);
                 }
             }
         }
-        return maxgold;
-    }
-    
-    int travel(vector<vector<int>>& grid,vector<vector<bool>>& visited,int i,int j){
-        if(i<0 || i>=grid.size() || j<0 || j>=grid[0].size() || visited[i][j]==true || grid[i][j]==0)
-            return 0;
         
-        visited[i][j]=true;
-        
-        int down= travel(grid,visited,i+1,j);
-        int left= travel(grid,visited,i,j-1);
-        int right= travel(grid,visited,i,j+1);
-        int up= travel(grid,visited,i-1,j);
-        
-        visited[i][j]=false;
-        return max(down,max(left,max(up,right)))+grid[i][j];
+        return ans;
     }
 };
