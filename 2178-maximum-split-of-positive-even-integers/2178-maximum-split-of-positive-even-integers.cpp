@@ -1,22 +1,19 @@
-//Simple Backtracking similar to printing subsets.
-//classic two recursion call pick not pick method
+//Greedy
+//No Recursion
 class Solution {
-private: 
-    vector<long long>ans;
 public:
-    bool helper(long long i,long long target){
-        if(target==0) return true;
-        if(target<i) return false;
-        ans.push_back(i);
-        if(helper(i+2,target-i)) return true;
-        ans.pop_back();
-        return helper(i+2,target);
-    }
     vector<long long> maximumEvenSplit(long long finalSum) {
         if(finalSum%2) return {};
-        vector<long long>ds;
-        helper(2,finalSum);
+        vector<long long>ans;
+        long long currSum=0,i=2;
+        while((currSum+i)<=finalSum){
+            ans.push_back(i);
+            currSum+=i;
+            i+=2;
+        }
+        ans[ans.size()-1]+=(finalSum-currSum);
         
         return ans;
+        
     }
 };
