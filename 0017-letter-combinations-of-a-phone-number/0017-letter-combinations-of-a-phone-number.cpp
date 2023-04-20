@@ -1,4 +1,5 @@
 //BFS
+//Using queues instead of vectors + the vector::swap method
 class Solution {
 public:
     vector<string> letterCombinations(string digits) {
@@ -7,19 +8,18 @@ public:
         
         deque<string>q;
         vector<string>pad={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-        q.push_back("");
-        
+        vector<string>ans={""},next;
         for(auto &d : digits){
             int padNum=d-'0';
-            int sz=q.size();
-            for(int i=0;i<sz;i++){
-                string curr=q.front();
-                q.pop_front();
+            for(int i=0;i<ans.size();i++){
+                string curr=ans[i];
                 for(auto ch : pad[padNum])
-                    q.push_back(curr+ch);
-            } 
+                    next.push_back(curr+ch);
+            }
+            ans.swap(next);
+            next.clear();
         }
         
-        return vector<string>(q.begin(),q.end());
+        return ans;
     }
 };
