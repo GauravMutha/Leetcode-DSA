@@ -1,35 +1,35 @@
 //Similar to 1219.Path with Maximum Gold
+//More concise + Without using  visited boolean array and a string ds
 class Solution {
 private:
     int m,n,found=0;
 public:
-    bool helper(int i,int j,string &ds,vector<vector<char>>&mat,string &target,vector<vector<bool>>& vis){
+    bool helper(int i,int j,int count,vector<vector<char>>&mat,string &target){
         
-        if(ds.size()==target.size()) return true;
+        if(count==target.size()) return true;
         
-        if(i<0 || j<0 || i>=m || j>=n || vis[i][j]) return false;
-        if(mat[i][j]!=target[ds.size()]) return false;
+        if(i<0 || j<0 || i>=m || j>=n || mat[i][j]=='*') return false;
+        if(mat[i][j]!=target[count]) return false;
+        char letter=mat[i][j];
+        count++;
+        mat[i][j]='*'; //way of marking taken character in matrix
         
-        ds.push_back(mat[i][j]);
-        vis[i][j]=true;
+        if(helper(i-1,j,count,mat,target)||  
+            helper(i+1,j,count,mat,target)||  
+            helper(i,j+1,count,mat,target)|| 
+            helper(i,j-1,count,mat,target)) return true;
         
-        if(helper(i-1,j,ds,mat,target,vis)) return true; //top
-        if(helper(i+1,j,ds,mat,target,vis)) return true; //bottom
-        if(helper(i,j+1,ds,mat,target,vis)) return true; //right
-        if(helper(i,j-1,ds,mat,target,vis)) return true; //left
-        
-        ds.pop_back();
-        vis[i][j]=false;
+        count--;
+        mat[i][j]=letter; //way of unmarking a character and make it available for use
         
         return false;
     }
     bool exist(vector<vector<char>>& mat, string word) {
         m=mat.size(),n=mat[0].size();
-        string ds="";
-        vector<vector<bool>>vis(m,vector<bool>(n,false));
+
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-                if(helper(i,j,ds,mat,word,vis)) return true;
+                if(helper(i,j,0,mat,word)) return true;
             }
         }
         return false;
