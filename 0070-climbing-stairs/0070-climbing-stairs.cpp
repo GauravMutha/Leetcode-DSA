@@ -1,21 +1,17 @@
-//Memoization(td) but this time we go from highest stair to lowest one
-//k denotes final stair
+//Tabulation(bottom up)
+//solving from lowest subproblem (final stair =0) to higher subproblems
 //TC-->O(n)
 //SC-->O(n)
 
 class Solution {
 public:
-    int helper(vector<int>& dp,int k){
-        if(k==1 || k==0) return 1;
-        
-        if(dp[k]!=-1) return dp[k];
-        int oneStep=helper(dp,k-1);
-        int twoStep=helper(dp,k-2);
-        
-        return dp[k]=oneStep+twoStep;
-    }
     int climbStairs(int n) {
-        vector<int>dp(n+1,-1);
-        return helper(dp,n);
+        vector<int>dp(n+1);
+        dp[0]=dp[1]=1;
+        for(int i=2;i<=n;i++){
+            dp[i]=dp[i-1]+dp[i-2];
+        }
+        
+        return dp.back();
     }
 };
