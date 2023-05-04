@@ -1,21 +1,21 @@
-//Memoization(td)
+//Memoization(td) but this time we go from highest stair to lowest one
+//k denotes final stair
 //TC-->O(n)
 //SC-->O(n)
 
 class Solution {
 public:
-    int helper(vector<int>& dp,int step,int finalStair){
-        if(step==finalStair) return 1;
-        if(step>finalStair) return 0;
+    int helper(vector<int>& dp,int k){
+        if(k==1 || k==0) return 1;
         
-        if(dp[step]!=-1) return dp[step];
-        int oneStep=helper(dp,step+1,finalStair);
-        int twoStep=helper(dp,step+2,finalStair);
+        if(dp[k]!=-1) return dp[k];
+        int oneStep=helper(dp,k-1);
+        int twoStep=helper(dp,k-2);
         
-        return dp[step]=oneStep+twoStep;
+        return dp[k]=oneStep+twoStep;
     }
     int climbStairs(int n) {
         vector<int>dp(n+1,-1);
-        return helper(dp,0,n);
+        return helper(dp,n);
     }
 };
