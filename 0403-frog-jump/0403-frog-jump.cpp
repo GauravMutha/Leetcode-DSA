@@ -1,4 +1,4 @@
-//Memoization Approach 1
+//Memoization approach 2
 class Solution {
 public:
     map<pair<int,int>,bool>dp;
@@ -8,13 +8,11 @@ public:
         
         if(dp.find({currPos,prevJump}) != dp.end()) return dp[{currPos,prevJump}];
         
-        if(currPos==0) 
-            return dp[{currPos,prevJump}]=helper(currPos+1,1,st,finalStone);
+        if(currPos==0) return dp[{currPos,prevJump}]=helper(currPos+1,1,st,finalStone);
         else {
-            if(prevJump>1){
-                if(helper(currPos+prevJump-1,prevJump-1,st,finalStone))
-                    return dp[{currPos,prevJump}]=true;
-            } 
+            if(prevJump>1 && helper(currPos+prevJump-1,prevJump-1,st,finalStone)){
+                return dp[{currPos,prevJump}]=true;
+            }
             if(helper(currPos+prevJump,prevJump,st,finalStone))
                 return dp[{currPos,prevJump}]=true;
             if(helper(currPos+prevJump+1,prevJump+1,st,finalStone)) 
