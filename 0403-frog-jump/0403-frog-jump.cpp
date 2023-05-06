@@ -1,25 +1,31 @@
+//Memoization Approach 1
 class Solution {
 public:
-  bool canCross(vector<int>& stones) {
-        int N = stones.size();
-        vector<vector<bool>> dp(N, vector<bool> (N+1, false));
-        dp[0][1] = true;
+    map<pair<int,int>,bool>dp;
+    int helper(int currPos,int prevJump,set<int>& st,int finalStone){
+        if(st.find(currPos)==st.end() || currPos>finalStone) return false;
+        if(currPos==finalStone) return true;
         
-        for(int i = 1; i < N; ++i){
-            for(int j = 0; j < i; ++j){
-                int diff = stones[i] - stones[j];
-                if(diff > N || !dp[j][diff]) 
-                    continue;
-                
-                if(i == N - 1) 
-                    return true;
-                
-                dp[i][diff] = true;
-                if(diff - 1 >= 0) dp[i][diff - 1] = true;
-                if(diff + 1 <= N) dp[i][diff + 1] = true;
-            }
+        if(dp.find({currPos,prevJump}) != dp.end()) return dp[{currPos,prevJump}];
+        
+        if(currPos==0) 
+            return dp[{currPos,prevJump}]=helper(currPos+1,1,st,finalStone);
+        else {
+            if(prevJump>1){
+                if(helper(currPos+prevJump-1,prevJump-1,st,finalStone))
+                    return dp[{currPos,prevJump}]=true;
+            } 
+            if(helper(currPos+prevJump,prevJump,st,finalStone))
+                return dp[{currPos,prevJump}]=true;
+            if(helper(currPos+prevJump+1,prevJump+1,st,finalStone)) 
+                return dp[{currPos,prevJump}]=true;
         }
+        return dp[{currPos,prevJump}]=false;
 
-        return false;
-  }
+    }
+    bool canCross(vector<int>& stones) {
+        int finalStone=stones.back();
+        set<int>st(stones.begin(),stones.end());
+        return helper(0,1,st,finalStone);
+    }
 };
