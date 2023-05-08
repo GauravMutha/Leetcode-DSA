@@ -8,18 +8,22 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-//#3 Reversal by addresses of nodes - iterative
+//#3 Reversal by addresses of nodes - recursive
 class Solution {
 public:
-    ListNode* reverseList(ListNode* head) {
-        if(head==NULL || head->next== NULL) return head;
-        ListNode *p=nullptr,*q=head,*r=head->next;
-        while(q!=NULL){
-            q->next=p;
-            p=q;
-            q=r;
-            if(r) r=r->next;
+    ListNode* helper(ListNode* curr,ListNode* &head){
+        if(curr==nullptr) return nullptr;
+        auto retNode=helper(curr->next,head);
+        if(!retNode) head=curr;
+        else {
+            retNode->next=curr;
+            curr->next=nullptr;
         }
-        return p;
+        return curr;
+    }
+    ListNode* reverseList(ListNode* head) {
+        auto curr=head;
+        helper(curr,head);
+        return head;
     }
 };
