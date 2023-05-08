@@ -1,25 +1,20 @@
 //Backtracking style memoization
+//Alternate implementation
 class Solution {
 public:
-    int helper(int ind,int total,vector<int>& nums,vector<int>& dp){
+    int helper(int ind,vector<int>& nums,vector<int>& dp){
         if(ind>=nums.size())
             return 0;
-        int sum=0;
+        if(dp[ind]!=-1) return dp[ind];
         
-        for(int i=ind;i<nums.size();i++){
-            if(dp[i]==-1){
-                total=helper(i+2,total,nums,dp)+nums[i];
-                dp[i]=total;
-            }
-            else total=dp[i];
-            
-            sum=max(total,sum);
-        }
-        return sum;
+        int pick=helper(ind+2,nums,dp)+ nums[ind];
+        int notPick=helper(ind+1,nums,dp);
         
+        dp[ind]= max(pick,notPick);
+        return max(pick,notPick);
     }
     int rob(vector<int>& nums) {
-        vector<int>dp(100,-1);
-        return helper(0,0,nums,dp);
+        vector<int>dp(nums.size(),-1);
+        return helper(0,nums,dp);
     }
 };
