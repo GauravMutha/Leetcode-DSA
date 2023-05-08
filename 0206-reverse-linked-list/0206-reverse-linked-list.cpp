@@ -8,29 +8,18 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-//REVISE
-//#2-> Reversal by values without using explicit space - using recursion
+//#3 Reversal by addresses of nodes - iterative
 class Solution {
 public:
-    int halfNodes=0;
-    void helper(ListNode* &f , ListNode* &b,int count){
-        if(b==nullptr){
-            halfNodes=count/2;
-            return;
-        }
-        count++;
-        helper(f,b->next,count);
-        if(count>halfNodes){
-            swap(f->val,b->val);
-            f=f->next;
-        }
-    } 
     ListNode* reverseList(ListNode* head) {
-        auto f=head;
-        auto b=head;
-        helper(f,b,0);
-        
-        return head;
-        
+        if(head==NULL || head->next== NULL) return head;
+        ListNode *p=nullptr,*q=head,*r=head->next;
+        while(q!=NULL){
+            q->next=p;
+            p=q;
+            q=r;
+            if(r) r=r->next;
+        }
+        return p;
     }
 };
