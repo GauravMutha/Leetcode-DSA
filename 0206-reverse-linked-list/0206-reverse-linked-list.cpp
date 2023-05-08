@@ -1,30 +1,30 @@
-// *
-//  * Definition for singly-linked list.
-//  * struct ListNode {
-//  *     int val;
-//  *     ListNode *next;
-//  *     ListNode() : val(0), next(nullptr) {}
-//  *     ListNode(int x) : val(x), next(nullptr) {}
-//  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
-//  * };
-
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+//REVISE
+//#1 -> Reversal by values using extra space
 class Solution {
 public:
-    void recReverse(ListNode* q,ListNode* p,ListNode* &j){
-        if(p!=NULL){
-            recReverse(p,p->next,j);
-            p->next=q;
-        }
-        else {
-            j=q;
-        }
-    }
     ListNode* reverseList(ListNode* head) {
-        struct ListNode* q=NULL,*j=NULL;
-        recReverse(q,head,j);
-        head=j;
+        auto ptr=head;
+        vector<int>values;
+        while(ptr!=NULL){
+            values.push_back(ptr->val);
+            ptr=ptr->next;
+        }
+        int i=values.size()-1;
+        ptr=head;
+        while(ptr!=NULL){
+            ptr->val=values[i--];
+            ptr=ptr->next;
+        }
         return head;
     }
 };
-
-//Method 2 -- constant SC  and it is one pass solution of O(n) TC recusrive
