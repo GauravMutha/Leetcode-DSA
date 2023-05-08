@@ -9,22 +9,28 @@
  * };
  */
 //REVISE
-//#1 -> Reversal by values using extra space
+//#2-> Reversal by values without using explicit space - using recursion
 class Solution {
 public:
+    int halfNodes=0;
+    void helper(ListNode* &f , ListNode* &b,int count){
+        if(b==nullptr){
+            halfNodes=count/2;
+            return;
+        }
+        count++;
+        helper(f,b->next,count);
+        if(count>halfNodes){
+            swap(f->val,b->val);
+            f=f->next;
+        }
+    } 
     ListNode* reverseList(ListNode* head) {
-        auto ptr=head;
-        vector<int>values;
-        while(ptr!=NULL){
-            values.push_back(ptr->val);
-            ptr=ptr->next;
-        }
-        int i=values.size()-1;
-        ptr=head;
-        while(ptr!=NULL){
-            ptr->val=values[i--];
-            ptr=ptr->next;
-        }
+        auto f=head;
+        auto b=head;
+        helper(f,b,0);
+        
         return head;
+        
     }
 };
