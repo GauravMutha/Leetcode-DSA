@@ -1,23 +1,25 @@
-//Re//
-//using swapping method
+//Revise
 class Solution {
-private:
-    vector<vector<int>>ans;
 public:
-    void helper(int pos,vector<int>& nums){
-        if(pos>=nums.size()){
-            ans.push_back(nums);
+    vector<vector<int>>res;
+    void helper(vector<int>& ds,vector<int>& nums,vector<bool>& visited){
+        if(ds.size()==nums.size()){
+            res.push_back(ds);
             return;
         }
-        for(int i=pos;i<nums.size();i++){
-            swap(nums[i],nums[pos]);
-            helper(pos+1,nums);
-            swap(nums[i],nums[pos]);
+        for(int i=0;i<nums.size();i++){
+            if(visited[i]) continue;
+            visited[i]=true;
+            ds.push_back(nums[i]);
+            helper(ds,nums,visited);
+            visited[i]=false;
+            ds.pop_back();
         }
     }
     vector<vector<int>> permute(vector<int>& nums) {
-        helper(0,nums);
-        
-        return ans;
+        vector<bool>visited(nums.size(),false);
+        vector<int>ds;
+        helper(ds,nums,visited);
+        return res;
     }
 };
