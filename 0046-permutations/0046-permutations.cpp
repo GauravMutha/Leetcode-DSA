@@ -2,24 +2,19 @@
 class Solution {
 public:
     vector<vector<int>>res;
-    void helper(vector<int>& ds,vector<int>& nums,vector<bool>& visited){
-        if(ds.size()==nums.size()){
-            res.push_back(ds);
+    void helper(int ind,vector<int>& nums){
+        if(ind>=nums.size()){
+            res.push_back(nums);
             return;
         }
-        for(int i=0;i<nums.size();i++){
-            if(visited[i]) continue;
-            visited[i]=true;
-            ds.push_back(nums[i]);
-            helper(ds,nums,visited);
-            visited[i]=false;
-            ds.pop_back();
+        for(int i=ind;i<nums.size();i++){
+            swap(nums[ind],nums[i]);
+            helper(ind+1,nums);
+            swap(nums[ind],nums[i]);
         }
     }
     vector<vector<int>> permute(vector<int>& nums) {
-        vector<bool>visited(nums.size(),false);
-        vector<int>ds;
-        helper(ds,nums,visited);
+        helper(0,nums);
         return res;
     }
 };
