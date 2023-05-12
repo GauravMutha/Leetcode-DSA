@@ -1,20 +1,18 @@
-//Backtracking style memoization
-//Alternate implementation
+//Tabulation
+//Space optimization
 class Solution {
 public:
-    int helper(int ind,vector<int>& nums,vector<int>& dp){
-        if(ind<0)
-            return 0;
-        if(dp[ind]!=-1) return dp[ind];
-        
-        int pick=helper(ind-2,nums,dp)+ nums[ind];
-        int notPick=helper(ind-1,nums,dp);
-        
-        dp[ind]= max(pick,notPick);
-        return max(pick,notPick);
-    }
     int rob(vector<int>& nums) {
-        vector<int>dp(nums.size(),-1);
-        return helper(nums.size()-1,nums,dp);
+        if(nums.size()<2) return nums[0];
+        int secondLast=0 , last=nums[0], curr;
+        
+        int res=max(secondLast,last);
+        for(int i=1;i<nums.size();i++){
+            curr=max((nums[i]+secondLast),last);
+            res=max(res,curr);
+            secondLast=last;
+            last=curr;
+        }
+        return last;
     }
 };
