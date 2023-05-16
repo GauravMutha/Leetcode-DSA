@@ -1,15 +1,12 @@
-//using hash table
+//No sorting - Hash table
 class Solution {
 public:
-    vector<int> twoSum(vector<int>& nums, int k) {
+    vector<int> twoSum(vector<int>& nums, int target) {
         unordered_map<long,int>m;
-        long require=0;
-        
         for(int i=0;i<nums.size();i++){
-            require=long(k-nums[i]);
-            if(m.count(require)) 
-                return vector<int>({m[require],i});
-            
+            long require=(long)(target-nums[i]);
+            if(m.find(require)!=m.end())
+                return vector<int>({i,m[require]});
             m[nums[i]]=i;
         }
         
