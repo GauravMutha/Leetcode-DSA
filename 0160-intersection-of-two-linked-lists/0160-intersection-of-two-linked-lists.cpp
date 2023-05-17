@@ -6,33 +6,28 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-//Calculating Differences
+//Better Implementation of the previous logic
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
         if(!headA || !headB) return NULL;
         
-        auto p=headA , q=headB;
-        while(p->next && q->next)
-            p=p->next , q=q->next;
+        int lenA=1,lenB=1;
+        auto a=headA , b=headB;
+        while(a->next) a=a->next , lenA++;
+        while(b->next) b=b->next , lenB++;
         
-        int diff=0;
-        if(p->next==NULL){
-            while(q->next) q=q->next , diff++;
-            if(q!=p) return NULL; //no connection , two separate LL
-            p=headA , q=headB;
-            while(diff--) q=q->next;
-            while(p!=q) p=p->next , q=q->next;
+        if(a!=b) return NULL;
+        
+        int diff=abs(lenA-lenB);
+        a=headA,b=headB;
+        if(lenA>lenB){
+            while(diff--) a=a->next;
         }
-        else if(q->next==NULL){
-            while(p->next) p=p->next , diff++;
-            if(q!=p) return NULL; //no connection , two separate LL
-            p=headA , q=headB;
-            while(diff--) p=p->next;
-            while(p!=q) p=p->next , q=q->next;
+        else if(lenB>lenA){
+            while(diff--) b=b->next;
         }
-        
-        
-        return p;
+        while(a!=b) a=a->next , b=b->next;
+        return a;
     }
 };
