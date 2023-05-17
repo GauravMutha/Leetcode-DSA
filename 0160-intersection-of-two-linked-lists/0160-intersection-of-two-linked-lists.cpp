@@ -6,28 +6,33 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+//Calculating Differences
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        struct ListNode *a=headA , *b=headB;
-        int la=0,lb=0,diff=0;
-        while(a) a=a->next , la++;
-        while(b) b=b->next , lb++;
-        if(a!=b) return NULL;
-        a=headA, b=headB;
-        diff=abs(la-lb);
-        if(la>lb){
-            while(diff--)
-                a=a->next;
+        if(!headA || !headB) return NULL;
+        
+        auto p=headA , q=headB;
+        while(p->next && q->next)
+            p=p->next , q=q->next;
+        
+        int diff=0;
+        if(p->next==NULL){
+            while(q->next) q=q->next , diff++;
+            if(q!=p) return NULL; //no connection , two separate LL
+            p=headA , q=headB;
+            while(diff--) q=q->next;
+            while(p!=q) p=p->next , q=q->next;
         }
-        else {
-            while(diff--)
-                b=b->next;
+        else if(q->next==NULL){
+            while(p->next) p=p->next , diff++;
+            if(q!=p) return NULL; //no connection , two separate LL
+            p=headA , q=headB;
+            while(diff--) p=p->next;
+            while(p!=q) p=p->next , q=q->next;
         }
-        while(a!=b)
-            a=a->next , b=b->next;
-        return a;
+        
+        
+        return p;
     }
 };
-
-//Bit longer but this uses the constant space + O(n) TC
