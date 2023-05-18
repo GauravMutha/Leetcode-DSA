@@ -9,25 +9,21 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Iterative bfs- using queue
+//recursive bfs- without using queue(only implicit recursion stack space)
 class Solution {
 public:
+    void helper(TreeNode* curr,int level,vector<vector<int>>& res){
+        if(curr==NULL) return;
+        if(level<res.size()) res[level].push_back(curr->val);
+        else res.push_back(vector<int>({curr->val}));
+        
+        helper(curr->left,level+1,res);
+        helper(curr->right,level+1,res);
+    }
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>>res;
-        if(!root) return res; 
-        queue<TreeNode*>q;
-        q.push(root);
-        while(!q.empty()){
-            int sz=q.size();
-            vector<int>bag;
-            for(int i=0;i<sz;i++){
-                bag.push_back(q.front()->val);
-                if(q.front()->left) q.push(q.front()->left);
-                if(q.front()->right) q.push(q.front()->right);
-                q.pop();
-            }
-            res.push_back(bag);
-        }
+        int level=0;
+        helper(root,level,res);
         return res;
     }
 };
