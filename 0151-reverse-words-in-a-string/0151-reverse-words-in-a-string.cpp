@@ -1,22 +1,22 @@
-//Slightly better code than previous but still naive
+//In Place
+//2 pass
 class Solution {
 public:
     string reverseWords(string s) {
-        string str,res;
-        int i=s.size()-1;
-        // making sure that we directly start from a character
-        while(i>=0 && s[i]==' ') i--;
-        for(;i>=0;i--){
-            if(s[i]==' '){
-                while(i>=0 && s[i]==' ') i--;
-                if(i<0) break;
-                res+=str;
-                res.push_back(' ');
-                str="";
-             }
-            str=s[i]+str;
+        reverse(s.begin(),s.end());
+        int l=0,r=0,i=0,n=s.size();
+        while(i<n){
+            while(i<n && s[i]==' ') i++;
+            while(i<n && s[i]!=' ') s[r++]=s[i++];
+            
+            if(l!=r){
+                reverse(s.begin()+l,s.begin()+r);
+                s[r++]=' ';
+                l=r;
+            }
+            i++;
         }
-        res+=str;
-        return (res.size()==0)?s:res;
+        if(r>0) s.resize(r-1);
+        return s;
     }
 };
