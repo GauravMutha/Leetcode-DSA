@@ -9,21 +9,25 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
+//Iterative bfs- using queue
 class Solution {
-private:
-    vector<vector<int>>ans;
-    void dfs(TreeNode* curr , int level){
-        if(curr==NULL) return;
-        if(level>=ans.size()) ans.push_back({curr->val});
-        else ans[level].push_back(curr->val);
-        
-        dfs(curr->left,level+1);
-        dfs(curr->right,level+1);
-    }
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
-        dfs(root,0);
-        return ans;
+        vector<vector<int>>res;
+        if(!root) return res; 
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            int sz=q.size();
+            vector<int>bag;
+            for(int i=0;i<sz;i++){
+                bag.push_back(q.front()->val);
+                if(q.front()->left) q.push(q.front()->left);
+                if(q.front()->right) q.push(q.front()->right);
+                q.pop();
+            }
+            res.push_back(bag);
+        }
+        return res;
     }
 };
