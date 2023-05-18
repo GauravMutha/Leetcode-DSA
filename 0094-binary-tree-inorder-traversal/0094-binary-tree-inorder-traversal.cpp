@@ -9,18 +9,25 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//recursive
+//Iterative using stack
 class Solution {
 public:
-    void helper(TreeNode* curr,vector<int>&res){
-        if(curr==NULL) return;
-        helper(curr->left,res);
-        res.push_back(curr->val);
-        helper(curr->right,res);
-    }
     vector<int> inorderTraversal(TreeNode* root) {
         vector<int>res;
-        helper(root,res);
+        stack<TreeNode*>st;
+        auto curr=root;
+        while(curr!=NULL || !st.empty()){
+            if(curr!=NULL){
+                st.push(curr);
+                curr=curr->left;
+            }
+            else{
+                auto node=st.top();
+                st.pop();
+                res.push_back(node->val);
+                curr=node->right;
+            }
+        }
         return res;
     }
 };
