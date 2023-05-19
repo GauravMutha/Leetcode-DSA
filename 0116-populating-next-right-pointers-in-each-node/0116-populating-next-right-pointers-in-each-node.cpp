@@ -15,25 +15,25 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-// #1 Using BFS + Queue(extra space)
+// #2 DFS without extra space (and only recursion stack space)
+
+/*Since it is a perfect binay tree.We do not need to think too 
+much, left child'next connects to right child and right child's 
+next connects to parent->next>left,if parent's next exists,thats it*/
 class Solution {
 public:
     Node* connect(Node* root) {
         if(root==NULL) return NULL;
-        queue<Node*>q;
-        q.push(root);
-        while(!q.empty()){
-            int sz=q.size();
-            Node* prev=NULL;
-            for(int i=0;i<sz;i++){
-                auto curr=q.front();
-                q.pop();
-                curr->next=prev;
-                prev=curr;
-                if(curr->right) q.push(curr->right);
-                if(curr->left) q.push(curr->left);
-            }
+        auto lChild=root->left,rChild=root->right;
+        if(lChild){
+            lChild->next=rChild;
+            if(root->next!=NULL) rChild->next=root->next->left;
+            
+            connect(lChild);
+            connect(rChild);
         }
+        /*since it is pbt,if left child does not exist, we are at
+        (i.e. curr is)first leaf node, at the last level so we return*/
         return root;
     }
 };
