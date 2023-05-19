@@ -15,25 +15,20 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-// #2 DFS without extra space (and only recursion stack space)
-
-/*Since it is a perfect binay tree.We do not need to think too 
-much, left child'next connects to right child and right child's 
-next connects to parent->next>left,if parent's next exists,thats it*/
+//Iterative with no extra space so actual O(1)
 class Solution {
 public:
     Node* connect(Node* root) {
-        if(root==NULL) return NULL;
-        auto lChild=root->left,rChild=root->right;
-        if(lChild){
-            lChild->next=rChild;
-            if(root->next!=NULL) rChild->next=root->next->left;
-            
-            connect(lChild);
-            connect(rChild);
+        auto head=root;
+        for(;root;root=root->left){
+            for(auto curr=root;curr;curr=curr->next){
+                if(curr->left){
+                    curr->left->next=curr->right;
+                    if(curr->next)curr->right->next=curr->next->left;
+                }
+                else break;
+            }
         }
-        /*since it is pbt,if left child does not exist, we are at
-        (i.e. curr is)first leaf node, at the last level so we return*/
-        return root;
+        return head;
     }
 };
