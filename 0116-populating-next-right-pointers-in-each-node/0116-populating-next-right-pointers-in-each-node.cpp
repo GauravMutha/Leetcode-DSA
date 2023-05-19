@@ -15,21 +15,25 @@ public:
         : val(_val), left(_left), right(_right), next(_next) {}
 };
 */
-//ACTUAL O(1) space i.e. not even uses sytem stack as it is an iterative solution
-//Somewhat similar to BFS
+// #1 Using BFS + Queue(extra space)
 class Solution {
 public:
     Node* connect(Node* root) {
-        auto head=root;
-        for(;root;root=root->left){
-            for(auto curr=root;curr;curr=curr->next){
-                if(curr->left){
-                    curr->left->next=curr->right;
-                    if(curr->next) curr->right->next=curr->next->left;
-                }
-                else break;
+        if(root==NULL) return NULL;
+        queue<Node*>q;
+        q.push(root);
+        while(!q.empty()){
+            int sz=q.size();
+            Node* prev=NULL;
+            for(int i=0;i<sz;i++){
+                auto curr=q.front();
+                q.pop();
+                curr->next=prev;
+                prev=curr;
+                if(curr->right) q.push(curr->right);
+                if(curr->left) q.push(curr->left);
             }
         }
-        return head;
+        return root;
     }
 };
