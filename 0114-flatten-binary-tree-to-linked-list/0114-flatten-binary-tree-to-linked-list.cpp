@@ -9,21 +9,26 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Morris Traversal
+//Using extra space
+//Naive
 class Solution {
 public:
-    void flatten(TreeNode* root) {
-        TreeNode* curr=root;
+    void preorder(TreeNode *curr,vector<TreeNode*>& nodesArr){
+        if(curr==NULL) return;
         
-        while(curr){
-            if(curr->left){
-                TreeNode* pre=curr->left;
-                while(pre->right) pre=pre->right;
-                pre->right=curr->right;
-                curr->right=curr->left;
-                curr->left=NULL;
-            }
-            curr=curr->right;
+        nodesArr.push_back(curr);
+        preorder(curr->left,nodesArr);
+        preorder(curr->right,nodesArr);
+    }
+    void flatten(TreeNode* root) {
+        if(root==NULL) return;
+        vector<TreeNode*>nodesArr;
+        preorder(root,nodesArr);
+        for(int i=0;i<nodesArr.size()-1;i++){
+            nodesArr[i]->left=NULL;
+            nodesArr[i]->right=nodesArr[i+1];
         }
+        return;
+        
     }
 };
