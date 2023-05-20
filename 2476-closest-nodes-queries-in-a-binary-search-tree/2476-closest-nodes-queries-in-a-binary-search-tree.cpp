@@ -9,45 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//binary search
-//(mlog(n)) where m is queries size
+/*Previous submission gives TLE , because queries size is big,
+its better that we first create an sorted array of nodes and
+binary search there, , rather than searching tree every time*/
 class Solution {
-private:
-    void inorder(TreeNode *root,vector<int>&nodes){
-        
-        if(!root) return;
-        
-        inorder(root->left,nodes);
-        nodes.push_back(root->val);
-        inorder(root->right,nodes);
-    
-    }
 public:
+    void inorder(TreeNode *curr, vector<int>& res) {
+        if(curr==NULL) return;
+        inorder(curr->left,res);
+        res.push_back(curr->val);
+        inorder(curr->right,res);
+    }
     vector<vector<int>> closestNodes(TreeNode* root, vector<int>& queries) {
+        vector<int>nodesArr;
         vector<vector<int>>res;
-        
-        vector<int>nodes;
-        nodes.push_back(-1);
-        inorder(root,nodes);
-        nodes.push_back(INT_MAX);
-        
-        for(int i=0;i<queries.size();i++){
-            int val=queries[i];
-            vector<int>ans(2);
-            auto indx=lower_bound(begin(nodes),end(nodes),val)-begin(nodes);
+        inorder(root,nodesArr);
+        for(auto q:queries){
             
-            if(nodes[indx]==val){
-                ans[0]=nodes[indx];
-                ans[1]=nodes[indx];
-            }
-            else {
-                ans[0]=nodes[indx-1];
-                ans[1]=(nodes[indx]==INT_MAX) ? -1 : nodes[indx];
-            }
+            int cInd=lower_bound(nodesArr.begin(),nodesArr.end(),q)-nodesArr.begin();
+            int cVal=(cInd>=nodesArr.size())?-1 : nodesArr[cInd];
             
-            res.push_back(ans);
+            int fVal=-1;
+            if(cVal==q) fVal=cVal;
+            else if(cVal==-1) fVal=nodesArr.back();
+            else if(cInd>0) fVal=nodesArr[cInd-1]; 
+            
+            res.push_back({fVal,cVal});
         }
-        
         return res;
     }
 };
