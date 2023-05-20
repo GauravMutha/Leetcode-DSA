@@ -9,26 +9,22 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Using extra space
-//Naive
+//Best Approach
+//Puerly Iterative hence O(1) space
 class Solution {
 public:
-    void preorder(TreeNode *curr,vector<TreeNode*>& nodesArr){
-        if(curr==NULL) return;
-        
-        nodesArr.push_back(curr);
-        preorder(curr->left,nodesArr);
-        preorder(curr->right,nodesArr);
-    }
     void flatten(TreeNode* root) {
         if(root==NULL) return;
-        vector<TreeNode*>nodesArr;
-        preorder(root,nodesArr);
-        for(int i=0;i<nodesArr.size()-1;i++){
-            nodesArr[i]->left=NULL;
-            nodesArr[i]->right=nodesArr[i+1];
+        for(auto curr=root;curr;curr=curr->right){
+            if(curr->left){
+                auto p=curr->left;
+                while(p->right) p=p->right;
+                p->right=curr->right;
+                curr->right=curr->left;
+                curr->left=NULL;
+            }
         }
-        return;
         
+        return;
     }
 };
