@@ -9,22 +9,18 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Best Approach
-//Puerly Iterative hence O(1) space
+//Based on that naive solution but a better,concise, recursive version
+//Uses only implicit space
 class Solution {
 public:
+    TreeNode* prev=NULL;
     void flatten(TreeNode* root) {
         if(root==NULL) return;
-        for(auto curr=root;curr;curr=curr->right){
-            if(curr->left){
-                auto p=curr->left;
-                while(p->right) p=p->right;
-                p->right=curr->right;
-                curr->right=curr->left;
-                curr->left=NULL;
-            }
-        }
+        flatten(root->right);        
+        flatten(root->left);
         
-        return;
+        root->right=prev;
+        root->left=NULL;
+        prev=root;
     }
 };
