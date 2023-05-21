@@ -18,21 +18,28 @@ public:
     }
 };
 */
-//DFS
+//BFS
 class Solution {
-private:
-    unordered_map<Node*,Node*>m;
 public:
     Node* cloneGraph(Node* node) {
         if(node==NULL) return NULL;
-        if(m.find(node)==m.end()){
-            m[node]=new Node(node->val);
-        
-            for(auto adjNode : node->neighbors){
-                m[node]->neighbors.push_back(cloneGraph(adjNode));
+        unordered_map<Node*,Node*>m;
+        auto clonedRoot=new Node(node->val);
+        m[node]=clonedRoot;
+        queue<Node*>q;
+        q.push(node);
+        while(!q.empty()){
+            auto curr=q.front();
+            q.pop();
+            for(auto adjNode: curr->neighbors){
+                if(m.find(adjNode)==m.end()){
+                    auto NewNode=new Node(adjNode->val);
+                    m[adjNode]=NewNode;
+                    q.push(adjNode);
+                }
+                m[curr]->neighbors.push_back(m[adjNode]);
             }
         }
-        
         return m[node];
     }
 };
