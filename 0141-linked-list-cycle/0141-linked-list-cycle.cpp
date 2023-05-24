@@ -6,19 +6,19 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+//using extra space
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        if(head==NULL || head->next==NULL) return false;
-        struct ListNode *fast =head , *slow=fast;
-        do{
-            slow=slow->next;
-            fast=fast->next;
-            if(fast) fast=fast->next;
-        }while(slow && fast && slow != fast);
-        return (fast==slow);
+        
+        unordered_set<ListNode*>st;
+        auto p=head;
+        while(p){
+            int sz=st.size();
+            st.insert(p);
+            if(sz==st.size()) return true;
+            p=p->next;
+        }
+        return false;
     }
 };
-//Two pointers
-
-//SC -> O(1) TC O(N)
