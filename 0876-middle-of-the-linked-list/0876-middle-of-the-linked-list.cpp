@@ -11,7 +11,6 @@
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        if(head==NULL || head->next==NULL) return head;
         auto dummy=new ListNode(-1) , p=dummy,q=dummy;
         dummy->next=head;
         
