@@ -1,21 +1,18 @@
-//Tabulation - Space Optimisation
+//Better code for memoization
 class Solution {
 public:
+    int helper(int m,int n,vector<vector<int>>& dp){
+        if(m<0 || n<0) return 0;
+        if(m==0 && n==0) return 1;
+        if(dp[m][n]!=-1) return dp[m][n];
+        
+        int viaTop=helper(m-1,n,dp);
+        int viaLeft=helper(m,n-1,dp);
+        
+        return dp[m][n]=(viaLeft+viaTop);
+    }
     int uniquePaths(int m, int n) {
-        if(m==1 || n==1) return 1;
-        
-        //initialising of the dp
-        vector<int>dp(n,1);
-        dp[0]=0;
-        
-        for(int i=1;i<m;i++){
-            vector<int>tempDP(n,1);
-            for(int j=1;j<n;j++){
-               tempDP[j]=tempDP[j-1]+dp[j];
-            }
-            dp=move(tempDP);
-        }
-        
-        return dp[n-1];
+        vector<vector<int>>dp(m,vector<int>(n,-1));
+        return helper(m-1,n-1,dp);
     }
 };
