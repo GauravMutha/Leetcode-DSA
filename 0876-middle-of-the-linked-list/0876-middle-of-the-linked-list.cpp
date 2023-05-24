@@ -11,15 +11,16 @@
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        struct ListNode *t,*q,*p;
-        p=q=head;
-        while (p!=NULL && p->next!=NULL){
+        if(head==NULL || head->next==NULL) return head;
+        auto dummy=new ListNode(-1) , p=dummy,q=dummy;
+        dummy->next=head;
+        
+        while(p){
+            p=p->next;
+            if(p) p=p->next;
             q=q->next;
-            p=p->next;
-            p=p->next;
         }
+        
         return q;
     }
 };
-
-//single pass o(n) solution
