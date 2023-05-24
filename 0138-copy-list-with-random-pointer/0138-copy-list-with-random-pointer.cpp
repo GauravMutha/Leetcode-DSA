@@ -13,29 +13,40 @@ public:
     }
 };
 */
+//Without using map
 
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        if(head==NULL) return NULL;
+        Node *p=head,*q;
+        auto dummy= new Node(-1);
+        q=dummy;
+        //inserting new nodes in the same list alternatively
+        while(p){
+            auto temp=p->next;
+            p->next=new Node(p->val);
+            p->next->next=temp;
+            p=temp;
+        }
+        //setting the random pointers
+        p=head;
+        while(p){
+            if(p->random){
+                p->next->random=p->random->next;
+            }
+            p=p->next->next;
+        }
         
-        unordered_map<Node*,Node*>m;
-        Node *curr=head;
-        Node* prev=NULL; 
-
-        while(curr){
-            auto newNode=new Node(curr->val);
-            m[curr]=newNode;
-            if(prev!=NULL) prev->next=m[curr];
-            prev=m[curr];
-            curr=curr->next;
+        //extracting the newly made list
+        p=head;
+        while(p && q){
+            q->next=p->next;
+            q=q->next;
+            
+            p->next=p->next->next;
+            p=p->next;
         }
-        curr=head;
-        while(curr){
-            m[curr]->random=m[curr->random];
-            curr=curr->next;
-        }
-        curr=head;
-        return m[curr];
+        
+        return dummy->next;
     }
 };
