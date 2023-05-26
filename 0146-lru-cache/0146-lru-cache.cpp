@@ -1,43 +1,72 @@
 class LRUCache {
+    
 private:
-    int limit,sz=0;
-    deque<int>q;
-    unordered_map<int,int>m,trash;
+    class Node{
+      public:
+        int key,val;
+        Node *next, *prev;
+        
+        Node(int k,int v){
+            key=k;
+            val=v;
+        }
+    };
+    
+    int limit;
+    unordered_map<int,Node*>m;
+    Node* head=new Node(-1,-1);
+    Node* tail=new Node(-1,-1);
+
+    
 public:
     LRUCache(int capacity) {
         limit=capacity;
-    }
-    
-    int get(int key) {
-        if(m.find(key)==m.end()) return -1;
         
-        if(q.back()!=key){
-            q.push_back(key);
-            trash[key]++;
-        }
-        return m[key];
+        head->next=tail;
+        head->prev=NULL;
+        tail->prev=head;
+        tail->next=NULL;
     }
     
-    void put(int key, int value) {
-        if(m.find(key)==m.end()){
-            m[key]=value;
-            q.push_back(key);
-            sz++;
-            while(sz>limit && q.size()>0){
-                int poppedKey=q.front();
-                q.pop_front();
-                if(trash.find(poppedKey)==trash.end()) sz-- , m.erase(poppedKey);
-                else{
-                    trash[poppedKey]--;
-                    if(trash[poppedKey]==0) trash.erase(poppedKey);
-                }
-            }
+    void addNode(Node* node){
+        auto temp=head->next;
+        node->next=temp;
+        node->prev=head;
+        head->next=node;
+        temp->prev=node;
+    }
+    
+    void deleteNode(Node* delNode){
+        Node* delNodePrev=delNode->prev;
+        Node* delNodeNext=delNode->next;
+        
+        delNodePrev->next=delNodeNext;
+        delNodeNext->prev=delNodePrev;
+    }
+    
+    int get(int k) {
+        if(m.find(k)==m.end()) return -1;
+        
+        Node* resNode=m[k];
+        int retVal=resNode->val;
+        deleteNode(resNode);
+        addNode(resNode);
+        m[k]=head->next;
+        return retVal;
+    }
+    
+    void put(int k, int v) {
+        if(m.find(k)!=m.end()){
+            Node* existingNode=m[k];
+            m.erase(k);
+            deleteNode(existingNode);
         }
-        else{
-            q.push_back(key);
-            m[key]=value;
-            trash[key]++;
+        if(limit==m.size()){
+            m.erase(tail->prev->key);
+            deleteNode(tail->prev);
         }
+        addNode(new Node(k,v));
+        m[k]=head->next;
     }
 };
 
