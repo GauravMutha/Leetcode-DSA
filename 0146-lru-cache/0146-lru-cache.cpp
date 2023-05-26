@@ -49,9 +49,14 @@ public:
         
         Node* resNode=m[k];
         int retVal=resNode->val;
+        
         deleteNode(resNode);
         addNode(resNode);
-        m[k]=head->next;
+        /*Here we do not need to 
+        change or delete in map as
+        deleteNode and addNode
+        are perfomed on node with
+        same address*/
         return retVal;
     }
     
