@@ -9,20 +9,19 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+//More concise
 class Solution {
 public:
-    void preorder(int height,TreeNode* curr,int& maxHeight){
-        if(curr==NULL) return;
-        height+=1;
-        maxHeight=max(maxHeight,height);
+    int preorder(TreeNode* curr){
+        if(curr==NULL) return 0;
         
-        preorder(height,curr->left,maxHeight);
-        preorder(height,curr->right,maxHeight);
+        int leftRet=preorder(curr->left);
+        int rightRet=preorder(curr->right);
+        
+        return (1+max(leftRet,rightRet));
     }
     int maxDepth(TreeNode* root) {
-        int maxHeight=0;
-        preorder(0,root,maxHeight);
-        
-        return maxHeight;
+        if(root==NULL) return 0;
+        return preorder(root);
     }
 };
