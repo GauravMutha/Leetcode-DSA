@@ -21,7 +21,6 @@ public:
         return (1+max(leftRet,rightRet));
     }
     int maxDepth(TreeNode* root) {
-        if(root==NULL) return 0;
         return preorder(root);
     }
 };
