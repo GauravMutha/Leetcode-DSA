@@ -9,25 +9,27 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
 class Solution {
+private:
+    int preorderInd=0;
+    unordered_map<int,int>inorderMap;
 public:
-    unordered_map<int,int>findIn;
-    int i=0;
-    TreeNode* dfs(vector<int>&preorder,int start , int end){
+    TreeNode* helper(int start,int end,vector<int>& preorder){
         if(start>end) return NULL;
+        auto curr=new TreeNode(preorder[preorderInd]);
+        int pos=inorderMap[preorder[preorderInd++]];
         
-        auto node= new TreeNode(preorder[i]);
-        int pos=findIn[preorder[i++]];
-        node->left=dfs(preorder,start,pos-1);
-        node->right=dfs(preorder,pos+1,end);
+        curr->left=helper(start,pos-1,preorder);
+        curr->right=helper(pos+1,end,preorder);
         
-        return node;
+        return curr;
     }
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        for(int i=0;i<inorder.size();i++){
-            findIn[inorder[i]]=i;
-        }
-        return dfs(preorder,0,inorder.size()-1);
+        int n=preorder.size();
+        
+        for(int i=0;i<n;i++)
+            inorderMap[inorder[i]]=i;
+        
+        return helper(0,n-1,preorder);
     }
 };
