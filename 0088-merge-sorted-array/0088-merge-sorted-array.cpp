@@ -19,11 +19,11 @@ public:
             ptr3--;
         }
         
-        while(ptr1>=0){
-            nums1[ptr3]=nums1[ptr1];
-            ptr3--;
-            ptr1--;
-        }
+        /*when ptr2 has gone out of bound
+        and ptr1 is still remaining then
+        ptr1 =ptr3 so no need for managing
+        that condition*/
+        
         while(ptr2>=0){
             nums1[ptr3]=nums2[ptr2];
             ptr3--;
