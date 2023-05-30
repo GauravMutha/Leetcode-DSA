@@ -1,17 +1,21 @@
-//Tabulation
+//Space optimisation
 class Solution {
 public:
     int minimumTotal(vector<vector<int>>& tri) {
         int n=tri.size();
-        vector<vector<int>>dp(n,vector<int>(n,0));
-        //Initialise the last row of dp
-        for(int i=0;i<n;i++) dp[n-1][i]=tri[n-1][i];
-        for(int i=n-2;i>=0;i--){
+        vector<int>dp(n,0);
+        //Initialise the dp with the last row of triangle
+        for(int i=0;i<n;i++) dp[i]=tri[n-1][i];
+        
+        for(int i=n-2;i>=0;i--){      
+            vector<int>temp(i+1,0);
             for(int j=i;j>=0;j--){
-                dp[i][j]=tri[i][j]+min(dp[i+1][j],dp[i+1][j+1]);
+                temp[j]=tri[i][j]+min(dp[j],dp[j+1]);
             }
+            dp.pop_back();
+            dp=move(temp);
         }
         
-        return dp[0][0];
+        return dp[0];
     }
 };
