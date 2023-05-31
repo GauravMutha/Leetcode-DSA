@@ -8,39 +8,28 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+//Recursive
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
-        if(k==1) return head;
+        if(head==NULL) return NULL;
+        ListNode *p=head , *q,*r;
         
-        auto dummy= new ListNode(-1);
-        dummy->next=head;
-        auto tail=dummy,start=dummy,end=dummy;
-        
-        for(int i=0;i<k && end;i++) end=end->next;
-        start=start->next;
-        if(end==NULL) return head;
-        
-        while(end){
-            auto p=start,q=start->next , r=start->next->next;
-            
-            // setting the links for the extreme nodes of the block
-            start->next=end->next;
-            tail->next=end;
-            //main reversal of the block
-            while(p!=end){
-                q->next=p;
-                p=q;
-                q=r;
-                if(r) r=r->next;
-            }
-            swap(start,end);
-            tail=end;
-            
-            //moving start and end to the next block
-            for(int i=0;i<k && end && start;i++) end=end->next , start=start->next;
+        //Lets check there is set of k block ahead or not
+        for(int i=0;i<k;i++){
+            if(p==NULL) return head;
+            else p=p->next;
         }
-        
-        return dummy->next;
+        /*we have set of k block so we reverse it iterati
+        -vely using 3 pointer method q---p---r*/
+        q=NULL , p=head , r=NULL;
+        for(int i=0;i<k;i++){
+            r=p->next;
+            p->next=q;
+            q=p;
+            p=r;        
+        }
+        head->next=reverseKGroup(p,k);
+        return q;
     }
 };
