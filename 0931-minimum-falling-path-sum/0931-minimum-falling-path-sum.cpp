@@ -1,24 +1,28 @@
-//Memoization- reverse direction(from last to first row)
+//Tabulation- from last to first- corresponding to first memoization
 class Solution {
 public:
-    int helper(int row,int col,vector<vector<int>>& dp,vector<vector<int>>& matrix){
-        if(col>=matrix.size() || col<0) return INT_MAX;
-        if(row==0) return matrix[row][col];
-        
-        if(dp[row][col]!=-1) return dp[row][col];
-        
-        int down =helper(row-1,col,dp,matrix);
-        int diaLeft =helper(row-1,col-1,dp,matrix);
-        int diaRight =helper(row-1,col+1,dp,matrix);
-        
-        return dp[row][col]=matrix[row][col]+min(down,min(diaLeft,diaRight));
-    }
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int res=INT_MAX,n=matrix.size();
-        vector<vector<int>>dp(n,vector<int>(n,-1));
-        for(int i=0;i<n;i++){
-            int retValue=helper(n-1,i,dp,matrix);
-            res=min(res,retValue);
+        
+        if(n==1) return matrix[0][0];
+        
+        vector<vector<int>>dp(n,vector<int>(n,0));
+        
+        // initialising dp
+        for(int i=0;i<n;i++) dp[n-1][i]=matrix[n-1][i];
+        
+        
+        for(int i=n-2;i>=0;i--){
+            for(int j=0;j<n;j++){
+                int down=dp[i+1][j];
+                int diaLeft=(j==0)?INT_MAX:dp[i+1][j-1];
+                int diaRight=(j==(n-1))?INT_MAX:dp[i+1][j+1];
+                
+                dp[i][j]=matrix[i][j]+min(down,min(diaLeft,diaRight));
+                
+                //collecting our answer from lastly processed row(0th row)
+                if(i==0) res=min(res,dp[0][j]);
+            }
         }
         return res;
     }
