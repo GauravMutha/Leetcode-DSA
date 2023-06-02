@@ -1,25 +1,22 @@
-//Iterative+Recursive
+//Purely recursive
 class Solution {
 public:
-    bool helper(int row,int col,vector<vector<char>>& board){
-
-        for(int i=row;i<board.size();i++,col=0){
-            for(int j=col;j<board.size();j++){
-                if(board[i][j]!='.') continue;
-                for(char num='1';num<='9';num++){
-                    if(check(num,i,j,board)==false) continue;
-                    board[i][j]=num; 
-                    if(helper(i,j+1 ,board)) return true;  
-                    board[i][j]='.';
-                }
-                
-                return false;
-            }
+    bool helper(int i,int j,vector<vector<char>>& board){
+        if(i>=board.size()) return true;
+        
+        if(j>=board.size()) return helper(i+1,0,board);
+        if(board[i][j]!='.') return helper(i,j+1,board);
+        
+        for(char num='1';num<='9';num++){
+            if(check(num,i,j,board)==false) continue;
+            board[i][j]=num; 
+            if(helper(i,j+1 ,board)) return true;  
+            board[i][j]='.';
         }
-        cout<<"Hello";
-        return true;
+
+        return false;
     }
-    bool check(char num ,int r,int c, vector<vector<char>>board){
+    bool check(char num ,int r,int c, vector<vector<char>>& board){
         int r2=(r/3) *3;     
         int c2=(c/3) *3;
         for(int i=0;i<board.size();i++){
