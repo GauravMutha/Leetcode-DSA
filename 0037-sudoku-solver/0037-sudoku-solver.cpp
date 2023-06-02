@@ -1,42 +1,35 @@
-//Using nested loops without map
-class Solution{ 
-    
-    private:
-        bool doSolve(vector<vector<char>>& board, int row,int col) {
-        for (int i = row; i < 9; i++,col=0) { 
-            for (int j = col; j < 9; j++) {
-                if (board[i][j] != '.') continue;
-                for (char num = '1'; num <= '9'; num++) {
-                    if (isValid(board, i, j, num)) {
-                        board[i][j] = num;
-                        if(j<8){
-                            if (doSolve(board, i,j+1))
-                                return true;
-                        }
-                        else {
-                            if (doSolve(board, i+1,0))
-                                return true;
-                        }
-                        board[i][j] = '.';
-                    }
+//Iterative+Recursive
+class Solution {
+public:
+    bool helper(int row,int col,vector<vector<char>>& board){
+
+        for(int i=row;i<board.size();i++,col=0){
+            for(int j=col;j<board.size();j++){
+                if(board[i][j]!='.') continue;
+                for(char num='1';num<='9';num++){
+                    if(check(num,i,j,board)==false) continue;
+                    board[i][j]=num; 
+                    if(helper(i,j+1 ,board)) return true;  
+                    board[i][j]='.';
                 }
+                
                 return false;
             }
         }
+        cout<<"Hello";
         return true;
     }
-    
-    bool isValid(vector<vector<char>> board, int row, int col, char num) {
-        int blkrow = (row / 3) * 3, blkcol = (col / 3) * 3; // Block no. is i/3, first element is i/3*3
-        for (int i = 0; i < 9; i++)
-            if (board[i][col] == num || board[row][i] == num || 
-                    board[blkrow + i / 3][blkcol + i % 3] == num)
-                return false;
+    bool check(char num ,int r,int c, vector<vector<char>>board){
+        int r2=(r/3) *3;     
+        int c2=(c/3) *3;
+        for(int i=0;i<board.size();i++){
+            if(board[r][i]==num) return false;
+            if(board[i][c]==num) return false;
+            if(board[r2+(i/3)][c2+(i%3)]==num) return false;
+        }
         return true;
     }
-public:
     void solveSudoku(vector<vector<char>>& board) {
-        doSolve(board, 0,0);
+        helper(0,0,board);
     }
-
 };
