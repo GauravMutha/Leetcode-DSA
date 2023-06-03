@@ -1,28 +1,33 @@
+//Using two queues
 class MyStack {
+private:
+    queue<int>q1,q2;
 public:
-    queue<int>q;
     MyStack() {
         
     }
     
     void push(int x) {
-        q.push(x);
-        int val=q.size()-1;
-        while(val--) q.push(q.front()) , q.pop();
+        if(q1.size()==0) q1.push(x);
+        else{
+            q2.push(x);
+            while(q1.size()) q2.push(q1.front()) , q1.pop();
+            swap(q1,q2);
+        }
     }
     
     int pop() {
-        int x=q.front();
-        q.pop();
-        return x;
+        int res=q1.front();
+        q1.pop();
+        return res;
     }
     
     int top() {
-        return q.front();
+        return q1.front();
     }
     
     bool empty() {
-        return q.size()==0;
+        return q1.size()==0;
     }
 };
 
