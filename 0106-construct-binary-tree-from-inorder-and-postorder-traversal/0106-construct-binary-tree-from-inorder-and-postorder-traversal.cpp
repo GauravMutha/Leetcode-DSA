@@ -9,27 +9,28 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//DFS
 class Solution {
 private:
-    unordered_map<int,int>findIn;
+    int i=0;
+    unordered_map<int,int>m;
 public:
-    TreeNode* dfs(vector<int>&postorder,int start,int end,int &postIndex){
-        if(start>end || postIndex<0) return NULL;
-        auto node=new TreeNode(postorder[postIndex]);
-        int pos=findIn[postorder[postIndex--]];
+    TreeNode* helper(int start,int end,vector<int>& postorder){
+        if(start>end) return NULL;
+        auto node=new TreeNode(postorder[i]);
+        int pos=m[postorder[i--]];
         
-        node->right=dfs(postorder,pos+1,end,postIndex);
-        node->left=dfs(postorder,start,pos-1,postIndex);
+        node->right=helper(pos+1,end,postorder);
+        node->left=helper(start,pos-1,postorder);
         
         return node;
     }
     TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
-        vector<int>ans;
-        for(int i=0;i<inorder.size();i++){
-            findIn[inorder[i]]=i;
+        int n=inorder.size();
+        
+        for(int i=0;i<n;i++){
+            m[inorder[i]]=i;
         }
-        int postEnd=postorder.size()-1;
-        return dfs(postorder,0,inorder.size()-1,postEnd);
+        i=n-1;
+        return helper(0,n-1,postorder);
     }
 };
