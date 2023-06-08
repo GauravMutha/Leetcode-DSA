@@ -4,8 +4,6 @@ public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
         int res=INT_MAX,n=matrix.size();
         
-        if(n==1) return matrix[0][0];
-        
         vector<int>dp(n,0);
         
         // initialising dp
@@ -20,12 +18,11 @@ public:
                 int diaRight=(j==(n-1))?INT_MAX:dp[j+1];
                 
                 tempDP[j]=matrix[i][j]+min(down,min(diaLeft,diaRight));
-                
-                //collecting our answer from lastly processed row(0th row)
-                if(i==0) res=min(res,tempDP[j]);
+
             }
             dp=move(tempDP);
         }
+        for(int i=0;i<n;i++) res=min(res,dp[i]);
         return res;
     }
 };
