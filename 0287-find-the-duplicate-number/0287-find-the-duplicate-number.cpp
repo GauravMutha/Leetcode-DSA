@@ -1,11 +1,20 @@
+//Floyd's detection
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        for(int i=0;i<nums.size();){
-            while((nums[i]-1)==i) i++;
-            if(nums[nums[i]-1]==nums[i]) return nums[i];
-            swap(nums[nums[i]-1],nums[i]);
+        int slow=0,fast=0,i=0;
+        do{
+            slow=nums[slow];
+            
+            fast=nums[fast];
+            fast=nums[fast];
+        }while(slow!=fast);
+        
+        slow=0;
+        while(slow!=fast){
+            slow=nums[slow];
+            fast=nums[fast];
         }
-        return 1;
+        return slow;
     }
 };
