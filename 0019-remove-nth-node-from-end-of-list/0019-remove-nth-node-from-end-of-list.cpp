@@ -19,8 +19,9 @@ public:
         
         while(fast && fast->next) slow=slow->next , fast=fast->next;
         
+        auto temp=slow->next;
         slow->next=slow->next->next;
-        
+        delete temp;
         return dummy.next;
         
     }
