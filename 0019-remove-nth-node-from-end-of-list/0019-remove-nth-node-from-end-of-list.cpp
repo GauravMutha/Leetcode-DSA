@@ -8,24 +8,20 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+//Purely iterative
 class Solution {
 public:
-    ListNode* mark=NULL;
-    int count=0;
-    
-    void helper(ListNode* &curr, int n){
-        if(curr==NULL) return;
-        helper(curr->next,n);
-        
-        count++;
-        if(count==(n+1)) mark=curr;
-    }
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        helper(head,n);
-        if(mark==NULL){
-            head=head->next;
-        }
-        else mark->next=mark->next->next;
-        return head;
+        struct ListNode dummy(-1,head) , *fast, *slow;
+        fast=slow=&dummy;
+        
+        while(n-- && fast) fast=fast->next;
+        
+        while(fast && fast->next) slow=slow->next , fast=fast->next;
+        
+        slow->next=slow->next->next;
+        
+        return dummy.next;
+        
     }
 };
