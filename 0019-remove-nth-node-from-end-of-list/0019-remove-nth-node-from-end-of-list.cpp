@@ -10,17 +10,22 @@
  */
 class Solution {
 public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-        struct ListNode dummy(0,head), *f , *b;
-        f=b=&dummy;
+    ListNode* mark=NULL;
+    int count=0;
+    
+    void helper(ListNode* &curr, int n){
+        if(curr==NULL) return;
+        helper(curr->next,n);
         
-        while(f && f->next){
-            if(n-- > 0) f=f->next;
-            else f=f->next , b=b->next;
+        count++;
+        if(count==(n+1)) mark=curr;
+    }
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        helper(head,n);
+        if(mark==NULL){
+            head=head->next;
         }
-        b->next=b->next->next;
-        return dummy.next;
+        else mark->next=mark->next->next;
+        return head;
     }
 };
-
-//Two pointers + one pass solution
