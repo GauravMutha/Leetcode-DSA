@@ -1,15 +1,20 @@
-//Using prefix and suffix array method
+//Withput using extra space
 class Solution {
 public:
     int trap(vector<int>& nums) {
         int n=nums.size(),res=0;
-        vector<int>pre(n,nums[0]) , suff(n,nums[n-1]);
-        for(int i=1,j=n-2;i<n && j>=0;i++,j--){
-            pre[i]=max(pre[i-1],nums[i]);
-            suff[j]=max(suff[j+1],nums[j]);
-        }
+        int l=0,r=n-1 , leftMax=-1,rightMax=-1;
         for(int i=0;i<n;i++){
-            res+=(min(pre[i],suff[i])-nums[i]);
+            if(nums[l]<=nums[r]){
+                if(nums[l]>=leftMax) leftMax=nums[l];
+                else res+=(leftMax-nums[l]);
+                l++;
+            }
+            else{
+                if(nums[r]>=rightMax) rightMax=nums[r];
+                else res+=(rightMax-nums[r]);
+                r--;
+            }
         }
         return res;
     }
