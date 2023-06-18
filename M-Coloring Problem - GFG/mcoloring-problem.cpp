@@ -10,7 +10,7 @@ public:
     // that no two adjacent vertices of graph are coloured with same colour.
     bool isSafe(int node,int color,vector<int>& colorMark,bool graph[101][101],int m,int n){
         for(int k=0;k<n;k++){
-            if(k!=node && graph[k][node]==1 && colorMark[k]==color)
+            if(k!=node && graph[node][k]==1 && colorMark[k]==color)
                 return false;
         }
         return true;
