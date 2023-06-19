@@ -9,16 +9,29 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//More concise
+//Iterative
 class Solution {
 public:
-    bool helper(TreeNode* curr1,TreeNode* curr2){
-        if(curr1==NULL || curr2==NULL) return curr1==curr2;
-        if(curr1->val!=curr2->val) return false;
-        
-        return helper(curr1->left,curr2->right) && helper(curr1->right,curr2->left);
-    }
     bool isSymmetric(TreeNode* root) {
-        return helper(root->left,root->right);
+        queue<TreeNode*>ql,qr;
+        ql.push(root->left);
+        qr.push(root->right);
+        
+        while(ql.size() && qr.size()){
+            auto curr1=ql.front() , curr2=qr.front();
+            ql.pop() , qr.pop();
+            
+            if(curr1==NULL && curr2==NULL) continue;
+            
+            if(curr1==NULL || curr2==NULL || curr1->val!=curr2->val)
+                return false;
+            
+            ql.push(curr1->left);
+            ql.push(curr1->right);
+            qr.push(curr2->right);
+            qr.push(curr2->left);
+        }
+        
+        return true;
     }
 };
