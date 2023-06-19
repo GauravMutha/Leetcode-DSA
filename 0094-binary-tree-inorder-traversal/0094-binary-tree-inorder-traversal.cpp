@@ -9,23 +9,31 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Iterative using stack
+//Morris inorder traversal
+//Threaded binary tree
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int>res;
-        stack<TreeNode*>st;
         auto curr=root;
-        while(curr!=NULL || !st.empty()){
-            if(curr!=NULL){
-                st.push(curr);
-                curr=curr->left;
+        vector<int>res;
+        
+        while(curr){
+            if(curr->left==NULL){
+                res.push_back(curr->val);
+                curr=curr->right;
             }
             else{
-                auto node=st.top();
-                st.pop();
-                res.push_back(node->val);
-                curr=node->right;
+                auto p=curr->left;
+                while(p->right && p->right!=curr) p=p->right;
+                if(p->right==NULL){
+                    p->right=curr;
+                    curr=curr->left;
+                }
+                else{
+                    p->right=NULL;
+                    res.push_back(curr->val);
+                    curr=curr->right;
+                }
             }
         }
         return res;
