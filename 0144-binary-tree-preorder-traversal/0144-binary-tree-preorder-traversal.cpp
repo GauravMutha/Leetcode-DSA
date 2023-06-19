@@ -9,26 +9,33 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Iterative solution apart from the trivial recursive one
+//Morris preorder
+//Threaded binary tree
 class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
-        stack<TreeNode*>st;
-        vector<int>res;
         auto curr=root;
-        while(curr!=NULL || st.size()>0){
-            if(curr!=NULL){
+        vector<int>res;
+        
+        while(curr){
+            if(curr->left==NULL){
                 res.push_back(curr->val);
-                st.push(curr);
-                curr=curr->left;
+                curr=curr->right;
             }
-            else {
-                auto node=st.top();
-                st.pop();
-                curr=node->right;
+            else{
+                auto p=curr->left;
+                while(p->right && p->right!=curr) p=p->right;
+                if(p->right==NULL){
+                    p->right=curr;
+                    res.push_back(curr->val);
+                    curr=curr->left;
+                }
+                else{
+                    p->right=NULL;
+                    curr=curr->right;
+                }
             }
         }
-        
         return res;
     }
 };
