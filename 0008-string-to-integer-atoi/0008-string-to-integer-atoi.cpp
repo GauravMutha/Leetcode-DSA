@@ -1,34 +1,30 @@
 class Solution {
 public:
-    bool breakout(char c,int sign,string& dig,string &zeroes){
-        return (c=='.' || isalpha(c) ||
-                ((dig.size()>0 || zeroes.size()>0 || sign!=-1) && c==' ') ||
-                ((c=='-' || c=='+') && (sign!=-1 || dig.size()>0 || zeroes.size()>0)) );
-    }
     int myAtoi(string s) {
-        string dig="",zeroes="";
-        int sign=-1;
-        double res=0;
+        int i=0,sign;
+        long ans=0;
         
-        for(auto c :s){
-            if(breakout(c,sign,dig,zeroes))
-                break;
-            else if(c!=' '){
-                if(c=='+') sign=1;
-                else if(c=='-') sign=0;
-                else if(isdigit(c)) (c=='0' && dig.size()==0)?zeroes.push_back(c):dig.push_back(c); 
-                if(dig.size()>10) return (sign==0)?INT_MIN:INT_MAX; 
-            }
+        /*trimming the leading whitespaces
+        but we should npt trim leading zeroes
+        because 0000-123 return 0 not -123*/
+        while(i<s.size() && s[i]==' ') i++;
+        s=s.substr(i);
+        sign = (s[0]=='-') ? -1 : 1;
+        
+        /*Now taking sign into account above
+        we now just start focusing on digits*/
+        i=(s[0]=='-' || s[0]=='+') ? 1 : 0;
+        
+        for(;i<s.size();i++){
+            /*since we have dealt with spaces
+            and sign already , anyhting else now
+            other than digit breaks the loop*/
+            if(!isdigit(s[i])) break;
+            ans=ans*10 + (s[i]-'0');
+            if(sign==-1 && -1*ans < INT_MIN) return INT_MIN;
+            if(sign==1 && ans > INT_MAX) return INT_MAX;
         }
-        
-        if(dig.size()==0) return 0;
-        
-        for(auto d:dig)
-            res=res*10.0 + (double)(d-'0');
-        if(sign==0) res=-1.0*res;
-        
-        if(res>INT_MAX) return INT_MAX;
-        else if(res<INT_MIN) return INT_MIN;
-        return res;
+        ans=sign*ans; //assigning the sign to our number
+        return (int)(ans);
     }
 };
