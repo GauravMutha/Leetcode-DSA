@@ -94,22 +94,35 @@ struct Node {
 */
 
 // return the Kth largest element in the given BST rooted at 'root'
+//Morris Traversal
 class Solution
 {
     public:
-    int ans=0,count=0;
-    void helper(Node* curr, int& k){
-        if(curr==NULL) return;
-        helper(curr->right,k);
-        count++;
-        if(count==k) ans=curr->data;
-        else helper(curr->left,k);
-        
-    }
     int kthLargest(Node *root, int k)
     {
-        helper(root,k);
-        return ans;
+       int ans=0,count=0;
+       auto curr=root;
+       while(curr){
+           if(curr->right==NULL){
+               count++;
+               if(count==k) return curr->data;
+               else curr=curr->left;
+           }
+           else{
+               auto p=curr->right;
+               while(p->left && p->left!=curr) p=p->left;
+               if(p->left==NULL){
+                   p->left=curr;
+                   curr=curr->right;
+               }
+               else{
+                   p->left=NULL;
+                   if(++count==k) return curr->data;
+                   curr=curr->left;
+               }
+           }
+       }
+       return -1;
     }
 };
 
