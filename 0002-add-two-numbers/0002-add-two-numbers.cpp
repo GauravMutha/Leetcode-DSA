@@ -8,17 +8,23 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+//Iteratively
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        return recurser(l1,l2,0);
-    }
-    ListNode* recurser(ListNode *l1 , ListNode *l2 , int carry){
-        if(!l1 && !l2 && !carry) return NULL;
+        int val1=0,val2=0,val3,carry=0;
+        struct ListNode *ptr1=l1 , *ptr2=l2 , dummy(-1) , *pre;
+        pre=&dummy;
         
-        int val3=(l1? l1->val : 0) + (l2 ? l2->val : 0) + carry;
-        struct ListNode *curr = new ListNode(val3%10);
-        curr->next=recurser(l1 ? l1->next : NULL,l2 ? l2->next:NULL,val3/10);
-        return curr;
+        while(ptr1 || ptr2 || carry){
+            val1=0,val2=0;
+            if(ptr1) val1=ptr1->val, ptr1=ptr1->next;
+            if(ptr2) val2=ptr2->val, ptr2=ptr2->next;
+            
+            pre->next=new ListNode((val1+val2+carry)%10);
+            pre=pre->next;
+            carry=(val1+val2+carry)/10;
+        }
+        return dummy.next;
     }
 };
