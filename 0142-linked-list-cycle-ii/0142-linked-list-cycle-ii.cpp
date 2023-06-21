@@ -6,18 +6,28 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-//Using map
+//Slow and fast pointers method;
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
-        unordered_map<ListNode*,bool> m;
+        if(head==NULL) return NULL;
         
-        for(auto curr=head;curr;curr=curr->next){
-            int prevSz=m.size();
-            m[curr]=true;
-            if(m.size()==prevSz) return curr;
+        auto fast=head, slow=head;
+        
+        do{
+            slow=slow->next;
+            fast=fast->next;
+            if(fast) fast=fast->next;
+        }while(fast && fast!=slow);
+        
+        if(fast==NULL) return NULL;
+        
+        fast=head;
+        while(slow!=fast){
+            slow=slow->next;
+            fast=fast->next;
         }
         
-        return NULL;
+        return fast;
     }
 };
