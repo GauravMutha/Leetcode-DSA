@@ -8,29 +8,24 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-//Using priority queue + removing pairs and using comparator
-struct compare{
-  bool operator()(const ListNode* l1 , const ListNode* l2){
-      return l1->val>l2->val;
-  } 
-};
+//Using priority queue
 class Solution {
 private:
-    priority_queue <ListNode*, vector<ListNode*>, compare > pq;
+    priority_queue <pair<int,ListNode*>, vector<pair<int,ListNode*>>, greater<pair<int,ListNode*>> > pq;
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        int n=lists.size();
+        int n=lists.size(),value;
         auto dummy=new ListNode(-1) , curr=dummy;
-        for(int i=0;i<n;i++) if(lists[i]) pq.push(lists[i]) , dummy->next=pq.top();
+        for(int i=0;i<n;i++) if(lists[i]) pq.push({lists[i]->val,lists[i]}) , dummy->next=pq.top().second;
         
         while(pq.size()){
-            auto node=pq.top();
+            auto node=pq.top().second;
             pq.pop();
             
             curr->next=node;
             curr=node;
             
-            if(node->next) pq.push(node->next);
+            if(node->next) pq.push({node->next->val,node->next});
         }
         curr->next=NULL;
         return dummy->next;
