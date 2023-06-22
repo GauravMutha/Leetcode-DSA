@@ -8,26 +8,32 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-//Using priority queue
+//Purely Iterative
+//No extra space
 class Solution {
-private:
-    priority_queue <pair<int,ListNode*>, vector<pair<int,ListNode*>>, greater<pair<int,ListNode*>> > pq;
 public:
-    ListNode* mergeKLists(vector<ListNode*>& lists) {
-        int n=lists.size(),value;
-        auto dummy=new ListNode(-1) , curr=dummy;
-        for(int i=0;i<n;i++) if(lists[i]) pq.push({lists[i]->val,lists[i]}) , dummy->next=pq.top().second;
+    ListNode* mergeTwoLists(ListNode* l1,ListNode* l2){
+        if(l1==NULL) return l2;
+        if(l2==NULL) return l1;
         
-        while(pq.size()){
-            auto node=pq.top().second;
-            pq.pop();
-            
-            curr->next=node;
-            curr=node;
-            
-            if(node->next) pq.push({node->next->val,node->next});
+        if(l1->val<=l2->val){
+            l1->next=mergeTwoLists(l1->next,l2);
+            return l1;
         }
-        curr->next=NULL;
-        return dummy->next;
+        else {
+            l2->next=mergeTwoLists(l1,l2->next);
+            return l2;
+        }
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if(lists.empty()) return NULL;
+        int len=lists.size();
+        while(len>1){
+            for(int i=0;i<len/2;i++){
+                lists[i]=mergeTwoLists(lists[i],lists[len-i-1]);
+            }
+            len=(len+1)/2;
+        }
+        return lists.front();
     }
 };
