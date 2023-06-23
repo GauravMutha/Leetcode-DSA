@@ -1,19 +1,14 @@
-//Naive
-//Sorting
+//Without sorting
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
-        
-        if(strs.size()==1) return strs[0];
-        
-        sort(begin(strs),end(strs));
-        int i=0;
-        
-        string str1=strs[0] , str2=strs.back();;
-        for(auto s:strs) cout<<s<<" ";
-        for(i=0;i<str1.size() && i<str2.size();i++)
-            if(str1[i]!=str2[i]) break;
-        cout<<i;
-        return str1.substr(0,i);
+        string ref=strs[0];
+        int ans=strs[0].size();
+        for(int i=0;i<strs.size();i++){
+            int j=0;
+            while(j<(ans,strs[i].size()) && strs[0][j]==strs[i][j]) j++;
+            ans=min(ans,j);
+        }
+        return strs[0].substr(0,ans);
     }
 };
