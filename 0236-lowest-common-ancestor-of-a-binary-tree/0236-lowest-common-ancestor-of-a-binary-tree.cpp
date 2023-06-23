@@ -7,19 +7,40 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-//Optimised DFS postOrder
+//Naive
 class Solution {
+private:
+    unordered_map<int,TreeNode*>parent;
+    vector<TreeNode*>vecP , vecQ;
 public:
+    void parentTracker(TreeNode* curr){
+        if(curr==NULL) return;
+        
+        if(curr->left) parent[curr->left->val] =curr;
+        if(curr->right) parent[curr->right->val]=curr;
+        
+        parentTracker(curr->left);
+        parentTracker(curr->right);
+    }
+    void dfs(TreeNode* curr,vector<TreeNode*>& vec){
+        if(curr==NULL) return;
+        
+        dfs(parent[curr->val],vec);
+        vec.push_back(curr);
+    }
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(!root) return NULL;
-        if(root->val==p->val || root->val==q->val) return root;
+        TreeNode* ans=NULL;
+        parent[root->val]=NULL;
         
-        auto leftRet=lowestCommonAncestor(root->left,p,q);
-        auto rightRet=lowestCommonAncestor(root->right,p,q);
+        parentTracker(root);
         
-        if(leftRet && rightRet) return root;
-        else if(!leftRet && !rightRet) return NULL;
+        dfs(p,vecP);
+        dfs(q,vecQ);
         
-        return leftRet==NULL?rightRet : leftRet;
+        for(int i=0;i<min(vecP.size(),vecQ.size());i++){
+            if(vecP[i]!=vecQ[i]) break;
+            ans=vecP[i];
+        }
+        return ans;
     }
 };
