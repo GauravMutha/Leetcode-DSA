@@ -9,19 +9,23 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//PREORDER
-//MORE CONCISE
-//UPPER BOUNDS LOWER BOUNDS CONCEPT IS USED RATHER THAN LONG_MIN AND PRE
+//Simple Inorder
 class Solution {
 public:
-    bool isValidBST(TreeNode* root) {
-        return dfs(root,NULL,NULL);
-    }
-    bool dfs(TreeNode* root, TreeNode* minNode , TreeNode* maxNode){
-        if(!root) return true;
-        if((minNode&& root->val<=minNode->val)||(maxNode && root->val>=maxNode->val))
-            return false;
+    bool inorder(TreeNode* curr,TreeNode*& pre){
+        if(curr==NULL) return true;
         
-        return dfs(root->left,minNode,root) && dfs(root->right,root,maxNode);
+        if(!inorder(curr->left,pre)) return false;
+        
+        else if(pre!=NULL && pre->val>=curr->val) return false;
+        pre=curr;
+        
+        if(!inorder(curr->right,pre)) return false;
+        
+        return true;
+    }
+    bool isValidBST(TreeNode* root) {
+        TreeNode* pre=NULL;
+        return inorder(root,pre);
     }
 };
