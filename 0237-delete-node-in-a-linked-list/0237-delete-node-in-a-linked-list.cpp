@@ -9,10 +9,15 @@
 class Solution {
 public:
     void deleteNode(ListNode* node) {
-        struct ListNode *temp=node->next;
-        *(node)=*(node->next);
-        delete temp;
+        auto ahead=node->next;
+        while(ahead->next){
+            node->val=ahead->val;
+            node=ahead;
+            ahead=ahead->next;
+        }
+        node->val=ahead->val;
+        node->next=NULL;
+        delete ahead;
+        return;
     }
 };
-
-//O(1) TC  and it also frees up the memory
