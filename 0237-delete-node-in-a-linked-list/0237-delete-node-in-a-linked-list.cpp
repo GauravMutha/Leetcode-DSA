@@ -11,10 +11,10 @@ public:
     void deleteNode(ListNode* node) {
         auto temp=node->next;
         
-        node->val=node->next->val;
-        node->next=node->next->next;
+        *(node)=*(node->next);
         
         delete temp;
+        
         return;
     }
 };
