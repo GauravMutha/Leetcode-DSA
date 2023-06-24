@@ -1,4 +1,5 @@
 //Slight Modification to count inversions in array
+//A bit different way for pair count
 class Solution {
 public:
     int merge(vector<int> &nums, int low, int mid, int high)
@@ -6,13 +7,9 @@ public:
         vector<int>temp;
         int i=low , j=mid+1, count=0;
         //below is the function to count the pairs
-        while(i<=mid && j<=high){
-            long long val=nums[j];
-            if(nums[i]>2*val){
-                count+=(mid-i+1);
-                j++;
-            }
-            else i++;
+         for(i=low;i<=mid;i++){
+            while( j<=high && nums[i]>(2 *(long long)nums[j])) j++;
+            count+=(j-(mid+1));
         }
         
         i=low , j=mid+1;
