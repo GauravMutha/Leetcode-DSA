@@ -9,23 +9,17 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Simple Inorder
+//Preorder
 class Solution {
 public:
-    bool inorder(TreeNode* curr,TreeNode*& pre){
-        if(curr==NULL) return true;
+    bool isValidBST(TreeNode* root ,long long minBound=-1e10, long long maxBound=1e10) {
+        if(root==NULL) return true;
         
-        if(!inorder(curr->left,pre)) return false;
+        if(root->val >= maxBound || root->val<=minBound) return false;
         
-        else if(pre!=NULL && pre->val>=curr->val) return false;
-        pre=curr;
-        
-        if(!inorder(curr->right,pre)) return false;
+        if(!isValidBST(root->left,minBound,(long long)root->val)) return false;
+        if(!isValidBST(root->right,(long long)root->val,maxBound)) return false;
         
         return true;
-    }
-    bool isValidBST(TreeNode* root) {
-        TreeNode* pre=NULL;
-        return inorder(root,pre);
     }
 };
