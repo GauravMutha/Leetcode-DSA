@@ -3,19 +3,21 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         
-        vector<int>res;
+        vector<int>res;        
+        vector<pii>vec;
+
         int n=nums.size();
-        priority_queue<pii,vector<pii>,greater<pii>> minh;
         unordered_map<int,int>m;
         
         for(int i=0;i<n;i++) m[nums[i]]++;
         
-        for(auto &[num,freq]:m){
-            minh.push({freq,num});
-            if(minh.size()>k) minh.pop();
-        }
+        for(auto &[num,freq]:m) vec.push_back({freq,num});
         
-        while(k--) res.push_back(minh.top().second) , minh.pop();
+        sort(begin(vec),end(vec),[](const auto &a,const auto &b){
+            return a.first>b.first;
+        });
+        
+        for(int i=0;k && i<n;i++,k--) res.push_back(vec[i].second);
         
         return res;
     }
