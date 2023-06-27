@@ -9,27 +9,32 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Follow up solution- Also uses stack but SC is O(H) and AMORTIZED tc is O(1) for next() and hasNext()
 class BSTIterator {
-private:
-    stack<TreeNode*>st;    
-    void pushAll(TreeNode* curr){
-        for(;curr;curr=curr->left) st.push(curr);
-    }
 public:
+    vector<int>vec;
+    
+    void inorder(TreeNode* curr){
+        if(curr==NULL) return;
+        
+        inorder(curr->right);
+        vec.push_back(curr->val);
+        inorder(curr->left);
+        
+    }
     BSTIterator(TreeNode* root) {
-        pushAll(root);
+        inorder(root);
     }
     
     int next() {
-        TreeNode* node=st.top();
-        st.pop();
-        pushAll(node->right);
-        return node->val;
+        
+        int x=vec.back();
+        vec.pop_back();
+        
+        return x;
     }
     
     bool hasNext() {
-        return !st.empty();
+        return vec.size();
     }
 };
 
