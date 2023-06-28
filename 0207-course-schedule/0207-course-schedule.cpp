@@ -1,38 +1,40 @@
-//Cycle detection in directed graph
-//Simple DFS
-//This answer is not based on TopoSort criteria/kahn's approach
-//Although we can apply kahn's approach using DFS too.
+typedef vector<bool> vbool;
 class Solution {
 public:
-    bool dfs(int curr,vector<bool>&visited,vector<bool>&pathVis,vector<vector<int>>& graph){
-        visited[curr]=true;
+    bool dfsCycleDetection(int curr,vbool &vis,vbool &pathVis,vector<vector<int>>& graph){
+        
+        vis[curr]=true;
         pathVis[curr]=true;
         
-        for(auto adjNode: graph[curr]){
-            if(visited[adjNode]==true && pathVis[adjNode]==true)
-                return false;
-            else if(visited[adjNode]==false){
-                if(!dfs(adjNode,visited,pathVis,graph)) return false;
+        for(auto adj:graph[curr]){
+        
+            if(vis[adj]==false){
+                if(dfsCycleDetection(adj,vis,pathVis,graph)) 
+                    return true;
             }
+            
+            else if(pathVis[adj]==true) return true;
         }
         pathVis[curr]=false;
-        return true;
+        return false;
     }
-    bool canFinish(int n, vector<vector<int>>& pre) {
-        int topSortedCount=0; //count nodes that are sorted topologically
+    bool canFinish(int n, vector<vector<int>>& edges) {
+        vbool vis(n,false),pathVis(n,false);
+        
         vector<vector<int>>graph(n);
-        vector<bool>visited(n,false),pathVisited(n,false);
-        for(int i=0;i<pre.size();i++){
-            int u=pre[i][0] , v=pre[i][1];
+        //making graph
+        for(int i=0;i<edges.size();i++){
+            int u=edges[i][0] , v=edges[i][1];
             graph[v].push_back(u);
         }
+        
         for(int i=0;i<n;i++){
-            if(!visited[i]){
-                if(!dfs(i,visited,pathVisited,graph))
+            if(vis[i]==false){
+            //if cycleDetection returns true , it means we CANNOT complete courses
+                if(dfsCycleDetection(i,vis,pathVis,graph)) 
                     return false;
             }
         }
-        
         return true;
     }
 };
