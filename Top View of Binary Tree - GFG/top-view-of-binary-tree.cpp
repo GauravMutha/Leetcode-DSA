@@ -102,27 +102,35 @@ class Solution
     public:
     //Function to return a list of nodes visible from the top view 
     //from left to right in Binary Tree.
-    void preorder(Node* curr,int row,int col,map<int,pair<int,int>>& m){
-        if(curr==NULL) return;
-            
-        if(m.find(col)==m.end() || row<=m[col].second) m[col]={curr->data,row};
-            
-        preorder(curr->right,row+1,col+1,m);
-        preorder(curr->left,row+1,col-1,m);
-    }
     vector<int> topView(Node *root)
     {
         
-        vector<int>res;
-        map<int,pair<int,int>>m;
-        preorder(root,0,0,m);
+            vector<int>res;
+            map<int,int>m;
+            queue<pair<Node*,int>>q;
+            q.push({root,0});
         
-        for(auto it=m.begin();it!=m.end();it++){
-            res.push_back(it->second.first);
+            while(!q.empty()){
+                int sz=q.size();
+                for(int i=0;i<sz;i++){
+                
+                    auto p=q.front();
+                    auto node=p.first;
+                    int align=p.second;
+                    q.pop();
+                    if(m.find(align)==m.end()) m[align]=node->data;
+                
+                    if(node->left) q.push({node->left,align-1});
+                    if(node->right) q.push({node->right,align+1});
+                }
+            }
+            for(auto it=m.begin();it!=m.end();it++){
+                res.push_back(it->second);
+            }
+        
+            return res;
+        
         }
-        
-        return res;
-    }
 
 };
 
