@@ -17,9 +17,7 @@ public:
         
         if(root->val >= maxBound || root->val<=minBound) return false;
         
-        if(!isValidBST(root->left,minBound,(long long)root->val)) return false;
-        if(!isValidBST(root->right,(long long)root->val,maxBound)) return false;
-        
-        return true;
+        return (isValidBST(root->left,minBound,(long long)root->val) &&
+               isValidBST(root->right,(long long)root->val,maxBound)) ; 
     }
 };
