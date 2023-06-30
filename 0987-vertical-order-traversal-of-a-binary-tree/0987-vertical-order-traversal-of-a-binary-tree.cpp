@@ -11,27 +11,19 @@
  */
 class Solution {
 public:
+    void helper(TreeNode* curr , int row , int col,map<int,map<int,multiset<int>>>& mo){
+        if(curr==NULL) return;
+        
+        mo[col][row].insert(curr->val);
+        
+        helper(curr->left,row+1,col-1,mo);
+        helper(curr->right,row+1,col+1,mo);
+    }
     vector<vector<int>> verticalTraversal(TreeNode* root) {
         vector<vector<int>>res;
         map<int,map<int,multiset<int>>>mo;
-        queue<pair<TreeNode*,pair<int,int>>>q;
-        
-        q.push({root,{0,0}});
-        
-        while(q.size()){
-            int sz=q.size();
-            for(int i=0;i<sz;i++){
-                auto node=q.front().first;
-                int row=q.front().second.first , col=q.front().second.second;
-                
-                q.pop();
-                
-                mo[col][row].insert(node->val);
-                
-                if(node->left) q.push({node->left,{row+1,col-1}});
-                if(node->right) q.push({node->right,{row+1,col+1}});
-            }
-        }
+
+        helper(root,0,0,mo);
         
         for(auto &[col,mi]:mo){
             vector<int>vec;
