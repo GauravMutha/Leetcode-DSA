@@ -1,40 +1,29 @@
-typedef vector<bool> vbool;
 class Solution {
 public:
-    bool dfsCycleDetection(int curr,vbool &vis,vbool &pathVis,vector<vector<int>>& graph){
-        
-        vis[curr]=true;
-        pathVis[curr]=true;
-        
-        for(auto adj:graph[curr]){
-        
-            if(vis[adj]==false){
-                if(dfsCycleDetection(adj,vis,pathVis,graph)) 
-                    return true;
-            }
-            
-            else if(pathVis[adj]==true) return true;
-        }
-        pathVis[curr]=false;
-        return false;
-    }
-    bool canFinish(int n, vector<vector<int>>& edges) {
-        vbool vis(n,false),pathVis(n,false);
-        
+    bool canFinish(int n, vector<vector<int>>& prereq) {
         vector<vector<int>>graph(n);
-        //making graph
-        for(int i=0;i<edges.size();i++){
-            int u=edges[i][0] , v=edges[i][1];
+        queue<int>q;
+        vector<int>indeg(n);
+        int topoSorted=0;
+        
+        for(int i=0;i<prereq.size();i++){
+            int u=prereq[i][0] , v=prereq[i][1];
             graph[v].push_back(u);
+            indeg[u]++;
         }
         
-        for(int i=0;i<n;i++){
-            if(vis[i]==false){
-            //if cycleDetection returns true , it means we CANNOT complete courses
-                if(dfsCycleDetection(i,vis,pathVis,graph)) 
-                    return false;
+        for(int i=0;i<n;i++) if(indeg[i]==0) q.push(i);
+        
+        while(!q.empty()){
+            int curr=q.front();
+            q.pop();
+            topoSorted++;          
+            for(auto &adjNode:graph[curr]){
+                indeg[adjNode]--;
+                if(indeg[adjNode]==0) q.push(adjNode);
             }
         }
-        return true;
+        
+        return topoSorted==n;
     }
 };
