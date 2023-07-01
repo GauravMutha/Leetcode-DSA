@@ -9,25 +9,30 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//BFS
 class Solution {
 public:
     int widthOfBinaryTree(TreeNode* root) {
-        queue<pair<TreeNode*,long long>>q;
-        q.push({root,0});
-        pair<TreeNode*,long long> curr;
         long long res=1;
+        queue<pair<TreeNode*,long long>>q;
+        
+        q.push({root,(long long)0});
+        
         while(!q.empty()){
+            
             int sz=q.size();
-            long long start=q.front().second , end=q.back().second;
+            long long start=q.front().second , end= q.back().second;
             res=max(res,end-start+1);
+            
             for(int i=0;i<sz;i++){
-                curr=q.front() , q.pop();
-                long long idx=curr.second-start;
                 
-                if(curr.first->left) q.push({curr.first->left , (long long)2*idx+1});
-                if(curr.first->right) q.push({curr.first->right,(long long)2*idx+2});
+                auto node=q.front().first;
+                long long ind=q.front().second-start;
+                q.pop();
+                
+                if(node->left) q.push({node->left,(long long)2*ind+1});
+                if(node->right) q.push({node->right,(long long)2*ind+2});
             }
+        
         }
         return (int)res;
     }
