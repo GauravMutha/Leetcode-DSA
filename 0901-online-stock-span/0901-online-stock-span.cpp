@@ -1,22 +1,23 @@
 class StockSpanner {
-public:
+private:
     stack<pair<int,int>>st;
-    StockSpanner() {
-        
-    }
+    int ind; //we are making prices a zero indexed sequence
+public:
+    StockSpanner() {ind=-1;}
     
     int next(int price) {
-        int count=0;
-        while(!st.empty() && st.top().first<price){
-            count+=st.top().second; 
+        int res=0;
+        ind++;
+        while(st.size() && st.top().first<=price)
             st.pop();
-        }
-        if(st.empty()) st.push({price,count+1});
-        else{
-            if(st.top().first>price) st.push({price,count+1});
-            else st.top().second+=(count+1);
-        }
-        return (st.top().second);
+        
+        if(st.empty())
+            res=ind+1;
+        else
+            res=ind-st.top().second;
+        
+        st.push({price,ind});
+        return res;
     }
 };
 
