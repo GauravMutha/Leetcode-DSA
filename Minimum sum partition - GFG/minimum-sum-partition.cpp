@@ -10,13 +10,12 @@ class Solution{
   public:
 	int minDifference(int arr[], int n)  {
 	    int k=accumulate(arr,arr+n,0), res=INT_MAX;
-	    
-	    vector<vector<bool>>dp(n,vector<bool>(k+1,false));
+	    vector<vector<bool>>dp(n,vector<bool>(k/2+1,false));
         for(int i=0;i<n;i++) dp[i][0]=true;
-        if(arr[0]<=k) dp[0][arr[0]]=true;
+        if(arr[0]<=(k/2)) dp[0][arr[0]]=true;
         
         for(int ind=1;ind<n;ind++){
-            for(int target=1;target<=k;target++){
+            for(int target=1;target<=(k/2);target++){
                 bool notPick= dp[ind-1][target];
                 bool pick=false;
                 if(arr[ind]<=target) pick= dp[ind-1][target-arr[ind]];
