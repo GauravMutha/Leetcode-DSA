@@ -1,4 +1,4 @@
-//memoization
+//tabulation
 class Solution {
 public:
     bool helper(int ind, int target,vector<vector<int>>& dp,vector<int>& nums){
@@ -15,10 +15,24 @@ public:
     }
     bool canPartition(vector<int>& nums) {
         int n=nums.size();
+        
         int total=accumulate(nums.begin(),nums.end(),0);
         if(total%2) return false; //two equal integers cannot add upto an odd number
-        vector<vector<int>>dp(n,vector<int>(total/2+1,-1));
+        int k=total/2;
         
-        return helper(n-1,total/2,dp,nums);
+        vector<vector<bool>>dp(n,vector<bool>(k+1,false));
+        for(int i=0;i<n;i++) dp[i][0]=true;
+        if(nums[0]<=k) dp[0][nums[0]]=true;
+        
+        for(int ind=1;ind<n;ind++){
+            for(int target=1;target<=k;target++){
+                bool notPick= dp[ind-1][target];
+                bool pick=false;
+                if(nums[ind]<=target) pick= dp[ind-1][target-nums[ind]];
+
+                dp[ind][target]= (pick || notPick);
+            }
+        }
+        return dp[n-1][k];
     }
 };
