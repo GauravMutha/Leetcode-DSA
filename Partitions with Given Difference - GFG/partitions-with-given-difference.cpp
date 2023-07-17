@@ -3,37 +3,32 @@
 using namespace std;
 
 // } Driver Code Ends
-
-//Memeoization
 class Solution {
   private:
     int mod=1000000007;
   public:
-        int helper(int ind, int target, vector<int> &nums,vector<vector<int>>& dp){
-	    
-	    if(ind==0){
-	        if(target==0 && nums[0]==0) return 2;
-	        if(target==0 || nums[0]==target) return 1;
-	        return 0;
-	    }
-    
-	    if(dp[ind][target]!=-1) return dp[ind][target];
-    
-	    int notPick=helper(ind-1,target,nums,dp);
-	    int pick=0;
-	    if(nums[ind]<=target) pick=helper(ind-1,target-nums[ind],nums,dp);
-    
-	    return dp[ind][target]=(pick+notPick)%mod;
-    }
     int countPartitions(int n, int d, vector<int>& nums) {
         
         int total=accumulate(begin(nums),end(nums),0);
-        if( (total-d)%2 || (total-d)<0 ) return false;
+        if( (total-d)%2 || (total-d)<0 ) return 0;
         int target=(total-d)/2;
 	    
-	    vector<vector<int>>dp(n,vector<int>(total+1,-1));
+	    vector<vector<int>>dp(n,vector<int>(target+1,0));
+
+	    if(nums[0]==0) dp[0][0]=2;
+	    else dp[0][0]=1;
+	    if(nums[0]!=0 && nums[0]<=target) dp[0][nums[0]]=1;
 	
-	    return helper(n-1,target,nums,dp);
+	    for(int ind=1;ind<n;ind++){
+		    for(int k=0;k<=target;k++){
+			    int notPick=dp[ind-1][k];
+			    int pick=0;
+			    if(nums[ind]<=k) pick=dp[ind-1][k-nums[ind]];
+
+			    dp[ind][k]=(pick+notPick)%mod;
+		    }
+	    }
+	    return dp[n-1][target];
     }
 };
 
