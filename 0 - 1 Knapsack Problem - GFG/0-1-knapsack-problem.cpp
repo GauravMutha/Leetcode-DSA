@@ -5,43 +5,28 @@ using namespace std;
 
 // } Driver Code Ends
 
-//Memoization
+//Space optimisation
 class Solution
 {
     public:
-    int res=-1;
-    int helper(int ind,int cap,int wt[],int val[],vector<vector<int>>& dp){
-        if(ind==0){
-            if(wt[0]<=cap){
-                return val[0];
-            }
-            else return 0;
-        }
-        
-        if(dp[ind][cap]!=-1) return dp[ind][cap];
-
-	    int notPick=0+helper(ind-1,cap,wt,val,dp);
-	    int pick=INT_MIN;
-	    if(wt[ind]<=cap) pick=val[ind]+helper(ind-1,cap-wt[ind],wt,val,dp);
-
-	    return dp[ind][cap]=max(pick,notPick);
-    }
     int knapSack(int cap, int wt[], int val[], int n) 
     {
-	    vector<vector<int>>dp(n,vector<int>(cap+1,0));
-	    for(int w=wt[0];w<=cap;w++) dp[0][w]=val[0];
+	    vector<int>dp(cap+1,0);
+	    for(int w=wt[0];w<=cap;w++) dp[w]=val[0];
 	    
 	    for(int ind=1;ind<n;ind++){
+	        vector<int>tempDP(cap+1,0);
 	        for(int w=0;w<=cap;w++){
-	            int notPick=dp[ind-1][w];
+	            int notPick=dp[w];
 	            int pick=INT_MIN;
-	            if(wt[ind]<=w)pick=val[ind]+dp[ind-1][w-wt[ind]];
+	            if(wt[ind]<=w) pick=val[ind]+dp[w-wt[ind]];
 	            
-	            dp[ind][w]=max(pick,notPick);
+	            tempDP[w]=max(pick,notPick);
 	        }
+	        dp=move(tempDP);
 	    }
 	    
-	    return dp[n-1][cap];
+	    return dp[cap];
     }
 };
 
