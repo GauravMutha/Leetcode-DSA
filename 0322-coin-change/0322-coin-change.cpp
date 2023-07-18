@@ -2,6 +2,7 @@
 class Solution {
 public:
     int helper(int ind,int amount,vector<int>& coins,vector<vector<int>>& dp){
+        if(amount==0) return 0;
         if(ind==0){
             if((amount%coins[0])==0) return (amount/coins[0]);
             else return 1e9;
