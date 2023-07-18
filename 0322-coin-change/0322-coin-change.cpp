@@ -1,26 +1,31 @@
-//memoization
+//Tabulation
 class Solution {
 public:
-    int helper(int ind,int amount,vector<int>& coins,vector<vector<int>>& dp){
-        if(amount==0) return 0;
-        if(ind==0){
-            if((amount%coins[0])==0) return (amount/coins[0]);
-            else return 1e9;
+    int coinChange(vector<int>& coins, int amount) {
+        
+        int n=coins.size();
+        vector<vector<int>>dp(n,vector<int>(amount+1,0));
+        
+        for(int a=0;a<=amount;a++){
+            if((a%coins[0])==0) 
+                dp[0][a]=(a/coins[0]);
+            else dp[0][a]=1e9;
         }
         
-        if(dp[ind][amount]!=-1) return dp[ind][amount];
+        for(int ind=1;ind<n;ind++){
+            for(int a=0;a<=amount;a++){
+                
+                int notPick=0+dp[ind-1][a];
+                
+                int pick=INT_MAX;
+                if(coins[ind]<=a) pick=1+dp[ind][a-coins[ind]];
         
-        int notPick=helper(ind-1,amount,coins,dp);
-        int pick=INT_MAX;
-        if(coins[ind]<=amount) pick=1+helper(ind,amount-coins[ind],coins,dp);
+                dp[ind][a]=min(pick,notPick);
+            }
+        }
         
-        return dp[ind][amount]=min(pick,notPick);
-    }
-    int coinChange(vector<int>& coins, int amount) {
-        int n=coins.size();
-        vector<vector<int>>dp(n,vector<int>(amount+1,-1));
-        int res= helper(n-1,amount,coins,dp);
+        if(dp[n-1][amount]>=1e9) return -1;
         
-        return (res==1e9) ? -1 : res;
+        return dp[n-1][amount];
     }
 };
