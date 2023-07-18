@@ -1,28 +1,24 @@
 //Somewhat follows "subset sum equals k",but here there is no notPick condition
 //Simple memoization
 //Using offset to handle negative indexes
-
-//Starting from 0th index
 class Solution {
 public:
-    int helper(int ind,int sum,int target,vector<int>& nums,vector<vector<int>>& dp){
-        if(ind==nums.size()){
-            return (sum==target);
-        }
+    int helper(int ind,int target,vector<int>& nums,vector<vector<int>>& dp){
+        if(ind<0) return (target==0);
         
-        if(dp[ind][sum+1000]!=-1)
-            return dp[ind][sum+1000];
+        if(dp[ind][target+20000]!=-1)
+            return dp[ind][target+20000];
         
         int pickPos=0,pickNeg=0;
         
-        pickPos=helper(ind+1,sum+nums[ind],target,nums,dp);
-        pickNeg=helper(ind+1,sum-nums[ind],target,nums,dp);
+        pickPos=helper(ind-1,target-nums[ind],nums,dp);
+        pickNeg=helper(ind-1,target+nums[ind],nums,dp);
         
-        return dp[ind][sum+1000]=(pickPos+pickNeg);
+        return dp[ind][target+20000]=(pickPos+pickNeg);
     }
     int findTargetSumWays(vector<int>& nums, int target) {
         int n=nums.size();
-        vector<vector<int>>dp(21,vector<int>(2001,-1));
-        return helper(0,0,target,nums,dp);
+        vector<vector<int>>dp(21,vector<int>(40001,-1));
+        return helper(n-1,target,nums,dp);
     }
 };
