@@ -11,29 +11,27 @@ using namespace std;
 //Similar to unbounded knapsack
 //Treat it as collecting the pieces to make n inches long rod and trying to get the maximum price
 
-//Memoization
+//Space optimisation
 class Solution{
   public:
-    int helper(int ind,int length,int price[],vector<vector<int>>& dp){
+    int cutRod(int price[], int length) {
+        vector<int>dp(length+1,0);
+        for(int l=1;l<=length;l++) dp[l]=l*price[0];
         
-        if(ind==0){
-            int pieceLength=ind+1; //1 inch length, that is.
-            if(pieceLength<=length) return length*price[0];
-            return 0;
+        for(int ind=1;ind<length;ind++){
+            vector<int> tempDP(length+1,0);
+            for(int l=1;l<=length;l++){
+                int notPick=0+dp[l];
+                int pick=INT_MIN , pieceLength=ind+1;
+                
+                if(pieceLength<=l) pick= price[ind]+tempDP[l-pieceLength];
+                
+                tempDP[l]=max(pick,notPick);
+            }
+            dp=move(tempDP);
         }
         
-        if(dp[ind][length]!=-1) return dp[ind][length];
-        
-        int notPick=0+helper(ind-1,length,price,dp);
-        int pick = INT_MIN , pieceLength=ind+1;
-        if(pieceLength<=length) pick=price[ind]+helper(ind,length-(pieceLength),price,dp);
-        
-        return dp[ind][length]=max(pick,notPick);
-    }
-    int cutRod(int price[], int n) {
-        vector<vector<int>>dp(n,vector<int>(n+1,-1));
-        
-        return helper(n-1,n,price,dp);
+        return dp[length];
     }
 };
 
