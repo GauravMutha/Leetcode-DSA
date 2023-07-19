@@ -1,26 +1,31 @@
-//Memoization
+//Tabulation
 //Almost ditto similar to coin change-I (DP-22)
 class Solution {
 public:
-    int helper(int ind,int amount,vector<int>& coins,vector<vector<int>>& dp){
-        if(amount==0) return 1;
-        if(ind==0){
-            if((amount%coins[0])==0) return 1;
-            else return 0;
+    int change(int amount, vector<int>& coins) {
+        
+        int n=coins.size();
+        vector<vector<int>>dp(n,vector<int>(amount+1,0));
+        
+        for(int a=0;a<=amount;a++){
+            if((a%coins[0])==0) 
+                dp[0][a]=1;
+            else dp[0][a]=0;
         }
         
-        if(dp[ind][amount]!=-1) return dp[ind][amount];
+        for(int ind=1;ind<n;ind++){
+            for(int a=0;a<=amount;a++){
+                
+                int notPick=0+dp[ind-1][a];
+                
+                int pick=0;
+                if(coins[ind]<=a) pick=dp[ind][a-coins[ind]];
         
-        int notPick=helper(ind-1,amount,coins,dp);
-        int pick=0;
-        if(coins[ind]<=amount) pick=helper(ind,amount-coins[ind],coins,dp);
+                dp[ind][a]=(pick+notPick);
+            }
+        }
         
-        return dp[ind][amount]=(pick+notPick);
-    }
-    
-    int change(int amount, vector<int>& coins) {
-        int n=coins.size();
-        vector<vector<int>>dp(n,vector<int>(amount+1,-1));
-        return helper(n-1,amount,coins,dp);
+        
+        return dp[n-1][amount];
     }
 };
