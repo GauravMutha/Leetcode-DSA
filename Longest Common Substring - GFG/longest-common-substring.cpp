@@ -4,23 +4,23 @@ using namespace std;
 
 // } Driver Code Ends
 
-//Tabulation
+//Space optimisation
 class Solution{
     public:
     
     int longestCommonSubstr (string text1, string text2, int n1, int n2)
     {
-        vector<vector<int>> dp(n1+1,vector<int>(n2+1,0));
+        vector<int>dp (n2+1,0);
         int ans=0;
         
         for(int ind1=1;ind1<=n1;ind1++){
+            vector<int>tempDP(n2+1,0);
             for(int ind2=1;ind2<=n2;ind2++){
-                int count=0;
-                if(text1[ind1-1]==text2[ind2-1]){
-                    dp[ind1][ind2]=1+dp[ind1-1][ind2-1];
-                    ans=max(ans,dp[ind1][ind2]);
-                }
+                if(text1[ind1-1]!=text2[ind2-1]) continue;
+                tempDP[ind2]=1+dp[ind2-1];
+                ans=max(ans,tempDP[ind2]);
             }
+            dp=move(tempDP);
         }
         
         return ans;
