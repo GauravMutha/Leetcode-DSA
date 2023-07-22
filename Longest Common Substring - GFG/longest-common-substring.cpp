@@ -20,7 +20,6 @@ class Solution{
                     dp[ind1][ind2]=1+dp[ind1-1][ind2-1];
                     ans=max(ans,dp[ind1][ind2]);
                 }
-                else dp[ind1][ind2]=0;
             }
         }
         
