@@ -1,4 +1,4 @@
-//Tabulation
+//Space optimisation
 //We had to use double as some testcases were giving overflow issues
 class Solution {
 public:
@@ -6,24 +6,27 @@ public:
     int numDistinct(string s, string t) {
         int n=s.size() , m=t.size();
         
-        vector<vector<double>> dp(n+1,vector<double>(m+1,0));
+        vector<double>dp(m+1,0);
         
         //initialising the dp
-        for(int i=0;i<=n;i++) dp[i][0]=1;
+        dp[0]=1;
         
         for(int ind1=1;ind1<=n;ind1++){
+            vector<double>tempDP(m+1,0);
+            tempDP[0]=1;
             for(int ind2=1;ind2<=m;ind2++){
                 
                 double count=0.0;
                 
-                if(s[ind1-1]==t[ind2-1]) count=dp[ind1-1][ind2-1]+dp[ind1-1][ind2];
-                else count=dp[ind1-1][ind2];
+                if(s[ind1-1]==t[ind2-1]) count=dp[ind2-1]+dp[ind2];
+                else count=dp[ind2];
                 
-                dp[ind1][ind2]=count;
+                tempDP[ind2]=count;
                 
             }
+            dp=move(tempDP);
         }
         
-        return (int)dp[n][m];
+        return (int)dp[m];
     }
 };
