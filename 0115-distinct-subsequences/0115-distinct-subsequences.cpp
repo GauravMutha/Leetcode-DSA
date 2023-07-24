@@ -1,4 +1,4 @@
-//Space optimisation
+//Only 1 Array Space optimisation
 //We had to use double as some testcases were giving overflow issues
 class Solution {
 public:
@@ -12,19 +12,16 @@ public:
         dp[0]=1;
         
         for(int ind1=1;ind1<=n;ind1++){
-            vector<double>tempDP(m+1,0);
-            tempDP[0]=1;
-            for(int ind2=1;ind2<=m;ind2++){
+            for(int ind2=m;ind2>=1;ind2--){
                 
                 double count=0.0;
                 
                 if(s[ind1-1]==t[ind2-1]) count=dp[ind2-1]+dp[ind2];
                 else count=dp[ind2];
                 
-                tempDP[ind2]=count;
+                dp[ind2]=count;
                 
             }
-            dp=move(tempDP);
         }
         
         return (int)dp[m];
