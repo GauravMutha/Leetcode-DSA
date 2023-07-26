@@ -2,6 +2,7 @@
 when we sell we go to ind+2*/
 
 //Tabulation (but with index shifting instead of any initialisation of dp)
+//Bit more concise
 
 class Solution {
 public:
@@ -11,25 +12,15 @@ public:
         vector<vector<int>>dp(n+2,vector<int>(2,0));
         
         for(int ind=n-1;ind>=0;ind--){
-            for(int canBuy=0;canBuy<=1;canBuy++){
-                
-                int profit=0;
-                
-                if(canBuy==1){
-                    int buy=-prices[ind]+dp[ind+1][0];
-                    int skipBuying=dp[ind+1][1];
             
-                    profit=max(buy,skipBuying);
-                }
-                else{
-                    int sell=+prices[ind]+dp[ind+2][1];
-                    int skipSelling=dp[ind+1][0];
+            int buy=-prices[ind]+dp[ind+1][0];
+            int skipBuying=dp[ind+1][1];
+            dp[ind][1]=max(buy,skipBuying);
             
-                    profit=max(sell,skipSelling);
-                }
-                
-                dp[ind][canBuy]=profit;
-            }
+            int sell=+prices[ind]+dp[ind+2][1];
+            int skipSelling=dp[ind+1][0];
+            dp[ind][0]=max(sell,skipSelling);
+            
         }
         
         return dp[0][1];
