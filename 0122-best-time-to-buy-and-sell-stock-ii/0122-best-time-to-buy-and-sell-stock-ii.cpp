@@ -1,33 +1,39 @@
 //DP
-//Memoization
+//Tabulation
 class Solution {
 public:
-    int helper(int ind,int canBuy,vector<int>& prices,vector<vector<int>>& dp){
-        if(ind==(prices.size())) return 0;
-        
-        if(dp[ind][canBuy]!=-1) return dp[ind][canBuy];
-        
-        int profit=0;
-        if(canBuy==1){
-            int buy=-prices[ind]+helper(ind+1,0,prices,dp);
-            int skipBuying=helper(ind+1,1,prices,dp);
-            
-            profit=max(buy,skipBuying);
-        }
-        else{
-            int sell=+prices[ind]+helper(ind+1,1,prices,dp);
-            int skipSelling=helper(ind+1,0,prices,dp);
-            
-            profit=max(sell,skipSelling);
-        }
-        
-        return dp[ind][canBuy]=profit;
-    }
     
     int maxProfit(vector<int>& prices) {
-        int n=prices.size();
-        vector<vector<int>>dp(n,vector<int>(2,-1));
         
-        return helper(0,1,prices,dp);
+        int n=prices.size();
+        vector<vector<int>>dp(n,vector<int>(2,0));
+        
+        //initialising dp
+        dp[n-1][1]=0;
+        dp[n-1][0]=prices[n-1];
+        
+        for(int ind=n-2;ind>=0;ind--){
+            for(int canBuy=0;canBuy<=1;canBuy++){
+                
+                int profit=0;
+                
+                if(canBuy==1){
+                    int buy=-prices[ind]+dp[ind+1][0];
+                    int skipBuying=dp[ind+1][1];
+            
+                    profit=max(buy,skipBuying);
+                }
+                else{
+                    int sell=+prices[ind]+dp[ind+1][1];
+                    int skipSelling=dp[ind+1][0];
+            
+                    profit=max(sell,skipSelling);
+                }
+                
+                dp[ind][canBuy]=profit;
+            }
+        }
+        
+        return dp[0][1];
     }
 };
