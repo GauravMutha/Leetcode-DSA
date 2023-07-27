@@ -1,17 +1,18 @@
 //Memoization
-//From last index
+//From first index
 class Solution {
 public:
     
     int helper(int ind,int preInd,vector<int>& nums,vector<vector<int>>& dp){
         
-        if(ind<0) return 0;
+        if(ind>=nums.size()) return 0;
+        
         if(dp[ind][preInd+1]!=-1) return dp[ind][preInd+1];
         
         int pick=0;
         
-        if(preInd==-1 || nums[ind]<nums[preInd]) pick=1+helper(ind-1,ind,nums,dp);
-        int notPick=helper(ind-1,preInd,nums,dp);
+        if(preInd==-1 || nums[ind]>nums[preInd]) pick=1+helper(ind+1,ind,nums,dp);
+        int notPick=helper(ind+1,preInd,nums,dp);
         
         return dp[ind][preInd+1]=max(pick,notPick);
     }
@@ -20,6 +21,6 @@ public:
         int n=nums.size();
         vector<vector<int>>dp(n,vector<int>(n+1,-1));
         
-        return helper(n-1,-1,nums,dp);
+        return helper(0,-1,nums,dp);
     }
 };
