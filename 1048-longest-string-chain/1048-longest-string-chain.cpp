@@ -1,4 +1,4 @@
-//Memoization
+//Tabulation
 
 class Solution {
 public:
@@ -18,24 +18,11 @@ public:
         return true;
         
     }
-    int helper(int ind,int preInd,vector<string>& words,vector<vector<int>>& dp){
-        
-        if(ind>=words.size()) return 0;
-        
-        if(dp[ind][preInd+1]!=-1) return dp[ind][preInd+1];
-        
-        int pick=0;
-        
-        if(preInd==-1 || check(words[preInd],words[ind])) 
-            pick=1+helper(ind+1,ind,words,dp);
-        int notPick=helper(ind+1,preInd,words,dp);
-        
-        return dp[ind][preInd+1]=max(pick,notPick);
-    }
+    
     int longestStrChain(vector<string>& words) {
         
-        int n=words.size(),res=1;
-        vector<vector<int>>dp(n,vector<int>(n+1,-1));
+        int n=words.size();
+        vector<vector<int>>dp(n+1,vector<int>(n+1,0));
         
         //writing cmp function to sort the words in increasing order of sizes
         auto cmp = [](const std::string& a, const std::string& b) {
@@ -44,7 +31,19 @@ public:
         sort(words.begin(),words.end(),cmp);
         
         
-        return helper(0,-1,words,dp);
+        for(int ind=n-1;ind>=0;ind--){
+            for(int preInd=ind-1;preInd>=-1;preInd--){
+                
+                int pick=0;
+                if(preInd==-1 || check(words[preInd],words[ind])) 
+                    pick=1+dp[ind+1][ind+1];
+                int notPick=dp[ind+1][preInd+1];
+                
+                dp[ind][preInd+1]=max(pick,notPick);
+            }
+        }
+        
+        return dp[0][0];
         
     }
 };
