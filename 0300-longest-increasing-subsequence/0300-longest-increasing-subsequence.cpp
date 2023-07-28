@@ -1,21 +1,21 @@
-//Tabulation 2.0
-//Using hash
+//Bianry search
 
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
         
         int n=nums.size(),res=1;
-        vector<int>dp (n,1);
+        vector<int>vec{nums[0]};
         
-        for(int ind=0;ind<n;ind++){
-            for(int pre=0;pre<ind;pre++){
-                if(nums[pre]<nums[ind])
-                    dp[ind]=max(1+dp[pre],dp[ind]);
+        for(int i=1;i<n;i++){
+            
+            if(nums[i]>vec.back()) vec.push_back(nums[i]);
+            else{
+                int x=lower_bound(vec.begin(),vec.end(),nums[i])-vec.begin();
+                vec[x]=nums[i];
             }
-            res=max(res,dp[ind]);
         }
         
-        return res;
+        return vec.size();
     }
 };
