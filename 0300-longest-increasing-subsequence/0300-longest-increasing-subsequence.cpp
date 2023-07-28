@@ -1,28 +1,21 @@
-//Space optimisation
-//As per first to last memo
+//Tabulation 2.0
+//Using hash
+
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
         
-        int n=nums.size();
-        vector<int>dp (n+1,0);
+        int n=nums.size(),res=1;
+        vector<int>dp (n,1);
         
-        for(int ind=n-1;ind>=0;ind--){
-            
-            vector<int>tempDP(n+1,0);
-            
-            for(int preInd=ind-1;preInd>=-1;preInd--){
-                
-                int pick=0;
-                if(preInd==-1 || nums[ind]>nums[preInd]) pick=1+dp[ind+1];
-                int notPick=dp[preInd+1];
-                
-                tempDP[preInd+1]=max(pick,notPick);
+        for(int ind=0;ind<n;ind++){
+            for(int pre=0;pre<ind;pre++){
+                if(nums[pre]<nums[ind])
+                    dp[ind]=max(1+dp[pre],dp[ind]);
             }
-            
-            dp=move(tempDP);
+            res=max(res,dp[ind]);
         }
         
-        return dp[0];
+        return res;
     }
 };
