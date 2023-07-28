@@ -1,4 +1,4 @@
-//Tabulation
+//Space optimisation
 
 class Solution {
 public:
@@ -22,7 +22,7 @@ public:
     int longestStrChain(vector<string>& words) {
         
         int n=words.size();
-        vector<vector<int>>dp(n+1,vector<int>(n+1,0));
+        vector<int>dp (n+1,0);
         
         //writing cmp function to sort the words in increasing order of sizes
         auto cmp = [](const std::string& a, const std::string& b) {
@@ -30,20 +30,22 @@ public:
         };
         sort(words.begin(),words.end(),cmp);
         
-        
         for(int ind=n-1;ind>=0;ind--){
+            
+            vector<int>tempDP(n+1,0);
+            
             for(int preInd=ind-1;preInd>=-1;preInd--){
                 
                 int pick=0;
-                if(preInd==-1 || check(words[preInd],words[ind])) 
-                    pick=1+dp[ind+1][ind+1];
-                int notPick=dp[ind+1][preInd+1];
+                if(preInd==-1 || check(words[preInd],words[ind])) pick=1+dp[ind+1];
+                int notPick=dp[preInd+1];
                 
-                dp[ind][preInd+1]=max(pick,notPick);
+                tempDP[preInd+1]=max(pick,notPick);
             }
+            
+            dp=move(tempDP);
         }
         
-        return dp[0][0];
-        
+        return dp[0];
     }
 };
