@@ -7,30 +7,29 @@ using namespace std;
 // } Driver Code Ends
 // User function Template for C++
 
-//Memoization
+//Tabulation
 class Solution{
 public:
-    int helper(int i,int j,int arr[],vector<vector<int>>& dp){
-        
-        if(i==j) return 0;
-        
-        if(dp[i][j]!=-1) return dp[i][j];
-        
-        int minSteps=1e9;
-        for(int k=i;k<j;k++){
-            
-            int steps=arr[i-1]*arr[k]*arr[j]+helper(i,k,arr,dp)+helper(k+1,j,arr,dp);
-            
-            minSteps=min(minSteps,steps);
-            
-        }
-        
-        return dp[i][j]=minSteps;
-    }
+
     int matrixMultiplication(int N, int arr[])
     {
-        vector<vector<int>> dp(N,vector<int>(N,-1));
-        return helper(1,N-1,arr,dp);
+        vector<vector<int>> dp(N,vector<int>(N,0));
+        
+        for(int i=N-1;i>=1;i--){
+            for(int j=i+1;j<N;j++){
+                int minSteps=1e9;
+                for(int k=i;k<j;k++){
+            
+                    int steps=arr[i-1]*arr[k]*arr[j]+dp[i][k]+dp[k+1][j];
+            
+                    minSteps=min(minSteps,steps);
+            
+                }
+                dp[i][j]=minSteps;
+            }
+        }
+        
+        return dp[1][N-1];
     }
 };
 
