@@ -1,31 +1,39 @@
 class LRUCache {
-    
 private:
+    
     class Node{
-      public:
-        int key,val;
-        Node *next, *prev;
-        
-        Node(int k,int v){
-            key=k;
-            val=v;
-        }
+        public:
+            int key,val;
+            Node* next , *prev;
+            Node(int k,int v){
+                key=k;
+                val=v;
+            }
     };
     
     int limit;
     unordered_map<int,Node*>m;
     Node* head=new Node(-1,-1);
     Node* tail=new Node(-1,-1);
-
     
 public:
     LRUCache(int capacity) {
+        
         limit=capacity;
         
         head->next=tail;
-        head->prev=NULL;
-        tail->prev=head;
         tail->next=NULL;
+        tail->prev=head;
+        head->prev=NULL;
+    }
+    
+    void deleteNode(Node* node){
+        
+        auto behind=node->prev;
+        auto ahead=node->next;
+        
+        behind->next=ahead;
+        ahead->prev=behind;
     }
     
     void addNode(Node* node){
@@ -36,42 +44,37 @@ public:
         temp->prev=node;
     }
     
-    void deleteNode(Node* delNode){
-        Node* delNodePrev=delNode->prev;
-        Node* delNodeNext=delNode->next;
+    int get(int key) {
         
-        delNodePrev->next=delNodeNext;
-        delNodeNext->prev=delNodePrev;
-    }
-    
-    int get(int k) {
-        if(m.find(k)==m.end()) return -1;
+        if(m.find(key)==m.end()) return -1;
         
-        Node* resNode=m[k];
-        int retVal=resNode->val;
+        auto node=m[key];
+        int retVal=node->val;
         
-        deleteNode(resNode);
-        addNode(resNode);
-        /*Here we do not need to 
-        change or delete in map as
-        deleteNode and addNode
-        are perfomed on node with
-        same address*/
+        deleteNode(node);
+        addNode(node);
+        
         return retVal;
     }
     
-    void put(int k, int v) {
-        if(m.find(k)!=m.end()){
-            Node* existingNode=m[k];
-            m.erase(k);
-            deleteNode(existingNode);
+    void put(int key, int value) {
+        if(m.find(key)!=m.end()){
+            
+            auto node=m[key];
+            m.erase(key);
+            
+            deleteNode(node);
         }
-        if(limit==m.size()){
+        if(m.size()==limit){
+            
             m.erase(tail->prev->key);
+            
             deleteNode(tail->prev);
         }
-        addNode(new Node(k,v));
-        m[k]=head->next;
+        
+        auto freshNode=new Node(key,value);
+        addNode(freshNode);
+        m[key]=head->next;
     }
 };
 
