@@ -1,43 +1,20 @@
-//Binary search
+//Without bonary search
+//Only greedy
+//O(n)
 class Solution {
 public:
-    bool check(vector<long long>& preSum,int groups){
-        
-        for(int i=preSum.size()-1;i>=0 && groups;i--){
-            
-            //sum of all avialable elements till this index
-            long long sum=(long long)groups*(long long)(groups+1)/2;
-            
-            if((i+1)>=groups && preSum[i]>=sum)
-                groups--;
-            
-            else return false;
-        }
-        
-        return true;
-    }
     int maxIncreasingGroups(vector<int>& limits) {
+        
         sort(limits.begin(),limits.end());
-        int low=1 , high=limits.size() , n=limits.size();
         
-        vector<long long>pre(n);
-        pre[0]=limits[0];
-        for(int i=1;i<limits.size();i++)
-            pre[i]=pre[i-1]+limits[i];
+        long long count=0,sum=0;
         
-        int ans=0;
-        
-        while(low<=high){
-            
-            int mid=low+(high-low)/2;
-            
-            if(check(pre,mid)){
-                ans=mid;
-                low=mid+1;
-            }
-            else high=mid-1;
+        for(int i=0;i<limits.size();i++){
+            long long group=count+1; //it is the group we are checking about
+            sum+=(long long)limits[i];
+            if(sum>=(long long)(group*(group+1)/2)) count++;
         }
         
-        return ans;
+        return (long long)count;
     }
 };
