@@ -1,19 +1,24 @@
 class Solution {
 public:
-    int countStudents(vector<int>& stu, vector<int>& sand) {
-        int count[2]={} , len=sand.size() ,ind=0;
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        int zPickers=0,onePickers=0 , n=sandwiches.size();
         
-        for(auto type : stu) count[type]++;
-        
-        for(auto type : sand){
-            if(count[type]) count[type]-- , ind++;
-            else break;
+        for(int i=0;i<n;i++){
+            if(students[i]==1) onePickers++;
+            else zPickers++;
         }
         
-        return len-ind;
+        for(int i=0;i<n;i++){
+            
+            if(sandwiches[i]==0 && zPickers==0) 
+                return (n-i);
+            else if(sandwiches[i]==1 && onePickers==0) 
+                return (n-i);
+            
+            if(sandwiches[i]==0) zPickers--;
+            else onePickers--;
+        }
+        
+        return 0;
     }
 };
-
-//Order of students does not matter
-//SC-->O(1)
-//TC-->O(n)
