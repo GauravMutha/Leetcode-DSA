@@ -12,19 +12,15 @@ using namespace std;
 
 class Solution{
   public:
-    int missingNumber(vector<int>& arr, int n) {
-        vector<bool>hash(n+1,false);
+    int missingNumber(vector<int>& nums, int n) {
+        int xor1toN=1 , numsXor=1;
         
-        for(int i=0;i<n;i++){
-            if(arr[i]>=hash.size()) continue;
-            hash[arr[i]]=true;
+        for(int i=0;i<nums.size();i++){
+            xor1toN^=(i+1);
+            numsXor^=nums[i];
         }
-        
-        for(int i=1;i<hash.size();i++){
-            if(hash[i]==false) return i;
-        }
-        
-        return n;
+        xor1toN^=n;
+        return (xor1toN^numsXor);
     }
 };
 
