@@ -21,7 +21,7 @@ public:
         return dp[ind]=min({cost_one,cost_week,cost_month});
     }
     int mincostTickets(vector<int>& days, vector<int>& costs) {
-        vector<int>dp(367,-1);
+        vector<int>dp(366,-1);
         return helper(0,dp,days,costs);
     }
 };
