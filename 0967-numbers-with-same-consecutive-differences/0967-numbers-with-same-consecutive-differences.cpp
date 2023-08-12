@@ -1,35 +1,30 @@
-//bfs using queue
 class Solution {
 public:
-    vector<int> numsSameConsecDiff(int n, int k) {
-        vector<int>ans;
-        queue<int>q;
-        for(int i=1;i<=9;i++) q.push(i);
-        n--;
-        while(n--){
-            int qSz=q.size();
-            for(int i=0;i<qSz;i++){
-                int num=q.front();
-                q.pop();
-                int lastDig=num%10 , newDig=-1;
-                
-                if((lastDig-k)>=0){
-                    newDig=lastDig-k;
-                    q.push(num*10 + newDig);
-                }
-                /*For n-2,k=0 testcase , not
-                applying k!=0 condition results
-                in duplicate value insertion as
-                1-0 and 1+0  both gives 1 as newDig*/
-                if((lastDig+k)<=9 && k!=0){ 
-                    newDig=lastDig+k;
-                    q.push(num*10 + newDig);
-                }
-            }
+    void helper(int num,int digSz,int n,int k,vector<int>& res){
+        if(n==digSz){
+            res.push_back(num);
+            return;
         }
         
-        while(!q.empty()) ans.push_back(q.front()) , q.pop();
-        
-        return ans;
+        for(int i=0;i<=9;i++){
+            
+            if(digSz==0 && i==0) continue;
+            if(digSz==0 || abs((num%10)-i)==k){
+                
+                num*=10;
+                num+=i;
+                digSz++;
+                
+                helper(num,digSz,n,k,res);
+                
+                num/=10;
+                digSz--;
+            }
+        }
+    }
+    vector<int> numsSameConsecDiff(int n, int k) {
+        vector<int>res;
+        helper(0,0,n,k,res);
+        return res;
     }
 };
