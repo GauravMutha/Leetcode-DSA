@@ -1,22 +1,26 @@
-//TC-->O(N)
-//SC--> O(1)
 class Solution {
 public:
-    int leastInterval(vector<char>& tasks, int n) {
+    int leastInterval(vector<char>& tasks, int idle) {
+        priority_queue<int>maxh;
         vector<int>hash(26,0);
-        int max=0 , maxCount=0;
-        for(auto &c : tasks){
-            hash[c-'A']++;
-            if(max==hash[c-'A']) maxCount++;
-            else if(hash[c-'A'] > max) max=hash[c-'A'] , maxCount=1;
+        int k=0,extra=0,ans=0;
+        
+        for(auto c :tasks) hash[c-'A']++;
+        for(int i=0;i<hash.size();i++) if(hash[i]) maxh.push(hash[i]);
+        
+        while(maxh.size()){
+            k=min(idle+1,(int)maxh.size());
+            
+            vector<int>temp;
+            for(int i=0;i<k;i++) 
+                temp.push_back(maxh.top()) , maxh.pop();
+            for(int i=0;i<temp.size();i++) 
+                if((temp[i]-1)>0) maxh.push(temp[i]-1);
+            
+            extra=(maxh.empty())?0:idle+1-k;
+            ans+=(k+extra);
         }
         
-        int partCount=max-1;
-        int partLength=n-(maxCount-1);
-        int emptySlots=partCount*partLength;
-        int availableTasks=tasks.size() - max*maxCount;
-        int idleSlots= ((emptySlots-availableTasks)<= 0)?0:emptySlots-availableTasks;
-        
-        return tasks.size()+idleSlots;
+        return ans;
     }
 };
