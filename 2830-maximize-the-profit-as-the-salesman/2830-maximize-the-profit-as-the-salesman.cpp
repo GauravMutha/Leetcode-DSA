@@ -1,5 +1,5 @@
 //Memoization
-//Implementing Upper bound
+//Implementing Upper bound Differently
 class Solution {
 public:
     int helper(int ind,vector<vector<int>>& offers,vector<int>& dp){
@@ -12,13 +12,13 @@ public:
         
         while (low <= high) {
             int mid = (low+high)/2;
-            if (offers[mid][0] > offers[ind][1]) {
-                high = mid - 1;
-                nextInd = mid;
-            } else {
+            if (offers[mid][0] <= offers[ind][1]) {
                 low = mid + 1;
+            } else {
+                high = mid - 1;
             }
         }
+        nextInd=low;
         
         int notPick=helper(ind+1,offers,dp);
         int pick=offers[ind][2]+helper(nextInd,offers,dp);
