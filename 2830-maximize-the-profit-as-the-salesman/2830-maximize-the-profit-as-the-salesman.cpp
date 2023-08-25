@@ -1,5 +1,5 @@
 //Memoization
-//Implementing Upper bound Differently
+//Using STL for Upper bound directly
 class Solution {
 public:
     int helper(int ind,vector<vector<int>>& offers,vector<int>& dp){
@@ -7,18 +7,13 @@ public:
         
         if(dp[ind]!=-1) return dp[ind];
         
-        int nextInd=offers.size() , low=ind+1,high=offers.size()-1;
         
         
-        while (low <= high) {
-            int mid = (low+high)/2;
-            if (offers[mid][0] <= offers[ind][1]) {
-                low = mid + 1;
-            } else {
-                high = mid - 1;
-            }
-        }
-        nextInd=low;
+        auto nextInd = std::upper_bound(offers.begin() + ind + 1, offers.end(), offers[ind][1],
+                           [](int val, const std::vector<int>& a) {
+                               return val < a[0];
+                           }) - offers.begin();
+
         
         int notPick=helper(ind+1,offers,dp);
         int pick=offers[ind][2]+helper(nextInd,offers,dp);
