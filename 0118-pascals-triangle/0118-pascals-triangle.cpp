@@ -1,3 +1,4 @@
+//For daily problem
 //Simple iterative
 class Solution {
 public:
