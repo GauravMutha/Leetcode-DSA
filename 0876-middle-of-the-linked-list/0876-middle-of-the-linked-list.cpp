@@ -8,18 +8,21 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+//Striver 79
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
-        auto dummy=new ListNode(-1) , p=dummy,q=dummy;
-        dummy->next=head;
         
-        while(p){
-            p=p->next;
-            if(p) p=p->next;
-            q=q->next;
+        auto fast=head;
+        auto slow =head;
+        
+        
+        while(fast && fast->next){
+            slow=slow->next;
+            fast=fast->next;
+            if(fast) fast=fast->next;
         }
         
-        return q;
+        return slow;
     }
 };
