@@ -1,49 +1,32 @@
-//BFS
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int m=grid.size() , n=grid[0].size() ,freshCount=0,time=0;
+        int dir[5]={0,1,0,-1,0};
+        int time=0, fresh=0, m=grid.size(), n=grid[0].size();
         queue<pair<int,int>>q;
         
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
                 if(grid[i][j]==2) q.push({i,j});
-                else if(grid[i][j]==1) freshCount++;
+                else if(grid[i][j]==1) fresh++;
             }
         }
         
-        while(q.size() && freshCount){
+        while(q.size() && fresh){
             int sz=q.size();
             time++;
-            
-            for(int i=0;i<sz;i++){
+            while(sz--){
+                auto cell=q.front(); q.pop();
                 
-                int r=q.front().first , c=q.front().second;
-                q.pop();
-                
-                if(r+1<m  && grid[r+1][c]==1){
-                    grid[r+1][c]=2;
-                    q.push({r+1,c});
-                    freshCount--;
-                }
-                if(c+1<n  && grid[r][c+1]==1){
-                    grid[r][c+1]=2;
-                    q.push({r,c+1});
-                    freshCount--;
-                }
-                if(r-1>=0  && grid[r-1][c]==1){
-                    grid[r-1][c]=2;
-                    q.push({r-1,c});
-                    freshCount--;
-                }
-                if(c-1>=0  && grid[r][c-1]==1){
-                    grid[r][c-1]=2;
-                    q.push({r,c-1});
-                    freshCount--;
+                for(int k=0;k<4;k++){
+                    int r=cell.first+dir[k], c= cell.second+dir[k+1];
+                    if(r<0 || c<0 || r>=m || c>=n || grid[r][c]==0 || grid[r][c]==2) continue;
+                    fresh--;
+                    grid[r][c]=2;
+                    q.push({r,c});
                 }
             }
         }
-        if(freshCount) return -1;
-        return time;
+        return (fresh>0) ? -1 : time;
     }
 };
