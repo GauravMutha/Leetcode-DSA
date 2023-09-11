@@ -9,22 +9,22 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Similar to maximum sum path
+//Striver sheet
 class Solution {
-private:
-    int maxSum1=-1;
 public:
-    int helper(TreeNode* curr){
-        if(curr==NULL) return 0;
-        int leftRet=helper(curr->left);
-        int rightRet=helper(curr->right);
+    int domePath=-1;
+    int helper(TreeNode* root){
         
-        maxSum1=max(maxSum1,leftRet+rightRet);
+        if(root==NULL) return 0;
         
-        return 1+max(leftRet,rightRet);
+        int leftRet=helper(root->left);
+        int rightRet=helper(root->right);
+        
+        domePath=max(domePath,leftRet+rightRet);
+        
+        return (1+max(leftRet,rightRet));
     }
     int diameterOfBinaryTree(TreeNode* root) {
-        int maxSum2=helper(root);
-        return max(maxSum1,maxSum2-1);
+        return max(helper(root)-1,domePath);
     }
 };
