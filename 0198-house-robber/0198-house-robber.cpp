@@ -1,6 +1,7 @@
+//Striver sheet
 class Solution {
 public:
-    int helper(int ind,vector<int>& nums,vector<int> &dp){
+    int helper(int ind,vector<int>& nums,vector<int>& dp){
         if(ind>=nums.size()) return 0;
         
         if(dp[ind]!=-1) return dp[ind];
@@ -11,7 +12,8 @@ public:
         return dp[ind]=max(pick,notPick);
     }
     int rob(vector<int>& nums) {
-        vector<int>dp(nums.size(),-1);
+        int n=nums.size();
+        vector<int>dp(n,-1);
         return helper(0,nums,dp);
     }
 };
