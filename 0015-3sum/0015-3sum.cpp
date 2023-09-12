@@ -1,35 +1,25 @@
 class Solution {
-private:
-    int n=0;
-    vector<vector<int>>res;
-    unordered_map<int,int>m;
 public:
-    void twoSum(int start,vector<int>& nums,int target){
-        
-        for(int i=start;i<n-1;i++){
-            int target2=target-nums[i];
-            if(i>start && nums[i]==nums[i-1] ||
-               m.find(target2)==m.end()||
-               m[target2]<=i) 
-                continue;
-            
-            
-            res.push_back(vector<int>{-target,nums[i],target2});
-        }
-    }
     vector<vector<int>> threeSum(vector<int>& nums) {
-        
         sort(nums.begin(),nums.end());
-        n=nums.size();
-        for(int i=0;i<n;i++) m[nums[i]]=i;
-        
-        int target=0;
-        for(int i=0;i<n-2;i++){
+        vector<vector<int>>res;
+        for(int i=0;i<nums.size()-2;i++){
             if(nums[i]>0) break;
             if(i>0 && nums[i]==nums[i-1]) continue;
-            twoSum(i+1,nums,target-nums[i]);
+            int target=0-nums[i];
+            int l=i+1, r=nums.size()-1;
+            
+            while(l<r){
+                if((nums[l]+nums[r])<target) l++;
+                else if((nums[l]+nums[r])>target) r--;
+                else {
+                    vector<int>triplets={nums[i],nums[l],nums[r]};
+                    res.push_back(triplets);
+                    while(l<r && nums[l]==triplets[1]) l++;
+                    while(l<r && nums[r]==triplets[2]) r--;
+                }
+            }
         }
-        
         return res;
     }
 };
