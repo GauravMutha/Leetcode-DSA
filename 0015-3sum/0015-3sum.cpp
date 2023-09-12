@@ -2,11 +2,9 @@ class Solution {
 private:
     int n=0;
     vector<vector<int>>res;
+    unordered_map<int,int>m;
 public:
     void twoSum(int start,vector<int>& nums,int target){
-        
-        unordered_map<int,int>m;
-        for(int i=0;i<n;i++) m[nums[i]]=i;
         
         for(int i=start;i<n-1;i++){
             int target2=target-nums[i];
@@ -20,8 +18,11 @@ public:
         }
     }
     vector<vector<int>> threeSum(vector<int>& nums) {
+        
         sort(nums.begin(),nums.end());
         n=nums.size();
+        for(int i=0;i<n;i++) m[nums[i]]=i;
+        
         int target=0;
         for(int i=0;i<n-2;i++){
             if(nums[i]>0) break;
