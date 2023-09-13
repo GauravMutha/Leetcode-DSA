@@ -6,18 +6,21 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
-//without using extra space
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        auto dummy=new ListNode(-1),p=dummy,q=dummy;
-        dummy->next=head;
-        while(p){
-            p=p->next;
-            if(p) p=p->next;
-            q=q->next;
-            if((p==q ) && p && q) return true;
+        if(head==NULL) return false;
+        auto fast=head;
+        auto slow=head;
+        
+        do{ 
+            slow=slow->next;
+            fast=fast->next;
+            if(fast) fast=fast->next;
+            
         }
-        return false;
+        while(fast && slow && fast!=slow);
+        if(fast==NULL) return false;
+        return true;
     }
 };
