@@ -1,17 +1,20 @@
 class Solution {
 public:
-    int trap(vector<int>& heights) {
-        int res=0,n=heights.size();
-        vector<int>prefix(n,heights[0]),suffix(n,heights.back());
+    int trap(vector<int>& nums) {
+        int res=0,n=nums.size(),l=0,r=n-1,leftMax=-1,rightMax=-1;
         
-        for(int i=1,j=n-2;i<n && j>=0;i++,j--){
-            prefix[i]=max(prefix[i-1],heights[i]);
-            suffix[j]=max(suffix[j+1],heights[j]);
+        for(int i=0;i<n;i++){
+            if(nums[l]<=nums[r]){
+                if(nums[l]>=leftMax) leftMax=nums[l];
+                else res+=(leftMax-nums[l]);
+                l++;
+            }
+            else{
+                if(nums[r]>=rightMax) rightMax=nums[r];
+                else res+=(rightMax-nums[r]);
+                r--;
+            }
         }
-        
-        for(int i=1;i<n-1;i++)
-            res+=(min(prefix[i],suffix[i])-heights[i]);
-        
         return res;
     }
 };
