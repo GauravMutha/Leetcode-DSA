@@ -9,29 +9,24 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
-//Slightly different implementation of previous code
 class Solution {
-private:
-    int maxSum1=INT_MIN,maxSum2=INT_MIN;
 public:
-    int helper(TreeNode* curr){
-        if(curr==NULL) return 0;
+    int maxSum=INT_MIN;
+    int helper(TreeNode* node){
+        if(node==NULL) return 0;
         
-        int leftRet=helper(curr->left);
-        int rightRet=helper(curr->right);
+        int leftRet=helper(node->left);
+        int rightRet=helper(node->right);
+        int maxLR=max(leftRet, rightRet);
         
-        int maxOfLR=max(leftRet,rightRet);
-        int max_nodeIncluded=max(curr->val,curr->val+maxOfLR);
-        int max_nodeExcluded=curr->val+leftRet+rightRet;
+        int nonDomeSum=max(maxLR+node->val,node->val);
+        int domeSum=node->val+leftRet+rightRet;
         
-        maxSum1=max(maxSum1,max_nodeIncluded);
-        maxSum2=max(maxSum2,max_nodeExcluded);
-        
-        return max_nodeIncluded;
-        
+        maxSum=max(maxSum,max(domeSum,nonDomeSum));
+        return nonDomeSum;
     }
     int maxPathSum(TreeNode* root) {
         helper(root);
-        return max(maxSum1,maxSum2);
+        return maxSum;
     }
 };
