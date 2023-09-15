@@ -1,56 +1,32 @@
-//kruskal
-//using a vector then sorting it instead of heap that gave TLE
+typedef pair<int,int>pii;
 class Solution {
 public:
+    int getDist(int curr,int next,vector<vector<int>>& p){
+        return (abs(p[curr][0]-p[next][0])+abs(p[curr][1]-p[next][1]));
+    }
     int minCostConnectPoints(vector<vector<int>>& points) {
-        int n=points.size(),dist=0,res=0;
-        vector<vector<int>>edges;
         
-        vector<int>parent(n),rank(n,0);
-        for(int i=0;i<n;i++) parent[i]=i;
+        int n=points.size(), connected=0, curr=0,res=0;
+        priority_queue<pii,vector<pii>,greater<pii>>pq;
+        vector<bool>visited(n,false);
         
-        for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                dist=abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1]);
-                
-                edges.push_back(vector<int>({dist,i,j}));
-            }
-        }
-        
-        sort(edges.begin(), edges.end());
-        
-        for(int i=0;i<edges.size();i++){
-            int dist=edges[i][0] , u=edges[i][1] , v=edges[i][2];
+        while(++connected<n){
             
-            if(doUnion(u,v,parent,rank)) res+=dist;
+            visited[curr]=true;
+            
+            for(int next=0;next<n;next++){
+                if(visited[next]==true) continue;
+                int dist=getDist(curr,next,points);
+                pq.push({dist,next});
+            }
+            
+            while(visited[pq.top().second]) pq.pop();
+            int shortestDist=pq.top().first;
+            res+=shortestDist;
+            curr=pq.top().second;
+            pq.pop();
         }
+        
         return res;
-    }
-    
-    int findParent(int node,vector<int>& parent){
-        if(parent[node]==node){
-            return node;
-        }
-        
-        int temp=findParent(parent[node],parent);
-        parent[node]=temp;
-        return temp;
-    }
-    
-    bool doUnion(int x,int y,vector<int>& parent,vector<int>& rank){
-        int xParent=findParent(x,parent);
-        int yParent=findParent(y,parent);
-        
-        if(xParent==yParent)
-            return false;
-        
-        if(rank[xParent]<rank[yParent])
-            parent[xParent]=yParent;
-        else if(rank[yParent]<rank[xParent])
-            parent[yParent]=xParent;
-        else 
-            parent[yParent]=xParent , rank[xParent]++;
-        
-        return true;
     }
 };
