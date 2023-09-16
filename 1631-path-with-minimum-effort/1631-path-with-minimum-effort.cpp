@@ -1,36 +1,37 @@
-//Djisktra
-typedef pair<int,pair<int,int>> pip;
+//BInary Search
 class Solution {
 public:
-    int minimumEffortPath(vector<vector<int>>& heights) {
-        int m=heights.size();
-        int n=heights[0].size();
-        priority_queue<pip,vector<pip>,greater<pip>> pq;
-        vector<vector<int>>dist(m,vector<int>(n,1e9));
-        dist[0][0]=0;
-        pq.push({0,{0,0}});
+    int m=0,n=0;
+    int dir[5]={0,-1,0,1,0};
+    bool dfs(int i,int j, int prev, int target,vector<vector<bool>>& vis,vector<vector<int>>& grid){
         
-        int dir[5]={0,-1,0,1,0};
+        if(i<0 || j<0 || i>=m || j>=n || vis[i][j] || abs(grid[i][j]-prev)>target) return false;
         
-        while(pq.size()){
+        vis[i][j]=true;
+        if(i==m-1 && j==n-1) return true;
+        
+        int curr=grid[i][j];
+        return ( dfs(i,j+1,curr,target,vis,grid)||
+                dfs(i+1,j,curr,target,vis,grid) || 
+                dfs(i-1,j,curr,target,vis,grid) || 
+                dfs(i,j-1,curr,target,vis,grid) );
+    }
+    
+    int minimumEffortPath(vector<vector<int>>& grid) {
+        
+        m=grid.size();
+        n=grid[0].size();
+        
+        int low=0, high=1e6;
+        
+        while(low<high){
             
-            auto p=pq.top();
-            pq.pop();
-            
-            int diff=p.first;
-            int row=p.second.first;
-            int col=p.second.second;
-            
-            if(row==m-1 && col==n-1) return diff;
-            
-            for(int k=0;k<=3;k++){
-                int newr=row+dir[k] , newc=col+dir[k+1];
-                if(newr<0 || newc<0 || newr>=m || newc>=n) continue;
-                int newEffort=max(abs(heights[newr][newc]-heights[row][col]),diff);
-                if(newEffort<dist[newr][newc]) dist[newr][newc]=newEffort, pq.push({newEffort,{newr,newc}});
-            }
+            int mid=low+(high-low)/2;
+            vector<vector<bool>>vis(m,vector<bool>(n,false));
+            if(dfs(0,0,grid[0][0],mid,vis,grid)) high=mid;
+            else low=mid+1;
         }
         
-        return 0;
+        return low;
     }
 };
