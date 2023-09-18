@@ -1,35 +1,39 @@
-//Time Complexity Optimised
 class Solution {
 private:
     vector<vector<string>>res;
 public:
-    void helper(int col,vector<string>& board,int n,vector<int>&leftCheck,vector<int>&upDiaCheck,vector<int>&downDiaCheck){
+    bool safe(int row, int col, vector<string>& board, int n){
+        int dupRow=row, dupCol=col;
+        
+        while(dupCol>=0) if(board[dupRow][dupCol--]=='Q') return false;
+        dupCol=col;
+        while(dupCol>=0 && dupRow>=0) 
+            if(board[dupRow--][dupCol--]=='Q') return false;
+        dupCol=col, dupRow=row;
+        while(dupRow<n && dupCol>=0)
+            if(board[dupRow++][dupCol--]=='Q') return false;
+        
+        return true;
+    }
+    void helper(int col,vector<string>& board,int n){
         if(col==n){
             res.push_back(board);
             return;
         }
         
         for(int row=0;row<n;row++){
-            if(leftCheck[row]==0 && upDiaCheck[n - 1 + col - row]==0 && downDiaCheck[row+col]==0){
+            if(safe(row,col,board,n)) {
                 board[row][col]='Q';
-                leftCheck[row]=1;
-                upDiaCheck[n - 1 + col - row]=1;
-                downDiaCheck[row+col]=1;
-                
-                helper(col+1,board,n,leftCheck,upDiaCheck,downDiaCheck);
-                
+                helper(col+1,board,n);
                 board[row][col]='.';
-                leftCheck[row]=0;
-                upDiaCheck[n - 1 + col - row]=0;
-                downDiaCheck[row+col]=0;
             }
         }
+        
         return;
     }
     vector<vector<string>> solveNQueens(int n) {
-        vector < string > board(n,string(n,'.'));
-        vector<int>leftCheck(n,0),upDiaCheck(2*n-1,0),downDiaCheck(2*n-1,0);
-        helper(0,board,n,leftCheck,upDiaCheck,downDiaCheck);
+        vector<string>board(n,string(n,'.'));
+        helper(0,board,n);
         return res;
     }
 };
