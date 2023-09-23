@@ -1,4 +1,4 @@
-//Memo
+//Tabu
 class Solution {
 public:
     bool check(string &s1 , string &s2){
@@ -32,13 +32,24 @@ public:
     }
     int longestStrChain(vector<string>& words) {
         int n=words.size();
-        vector<vector<int>>dp(n,vector<int>(n+1,-1));
+        vector<vector<int>>dp(n+1,vector<int>(n+1,0));
         
         auto cmp=[](const string &a , const string &b){
             return a.length()<b.length();
         };
         
         sort(words.begin(),words.end(),cmp);
+        
+        for(int ind=n-1;ind>=0;ind--){
+            for(int pre=ind-1;pre>=-1;pre--){
+                int pick=0;
+                if(pre==-1 || check(words[pre],words[ind]))
+                    pick=1+dp[ind+1][ind+1];
+                int notPick=dp[ind+1][pre+1];
+    
+                dp[ind][pre+1]=max(pick,notPick);
+            }
+        }
         
         return helper(0,-1,words,dp);
     
